@@ -7,7 +7,7 @@ export const ContactPage: React.FC = () => {
   const { t, locale } = useI18n();
 
   return (
-    <div className="pt-32 pb-24 max-w-6xl mx-auto p-inline-safe space-y-12">
+    <div className="pt-20 sm:pt-24 pb-20 max-w-6xl mx-auto p-inline-safe space-y-12">
       {/* Title */}
       <div className="space-y-4 text-start max-w-2xl">
         <h1 className="text-3xl sm:text-5xl font-extrabold text-ink tracking-tight">
@@ -33,7 +33,7 @@ export const ContactPage: React.FC = () => {
                   <Mail className="w-4 h-4" />
                 </div>
                 <div>
-                  <div className="text-xs text-mute font-mono">البريد الإلكتروني</div>
+                  <div className="text-xs text-mute font-mono">{locale === "ar" ? "البريد الإلكتروني" : "Email"}</div>
                   <a href="mailto:contact@andev.dz" className="text-ink font-semibold hover:text-accent">
                     contact@andev.dz
                   </a>
@@ -44,7 +44,7 @@ export const ContactPage: React.FC = () => {
                   <MessageSquare className="w-4 h-4" />
                 </div>
                 <div>
-                  <div className="text-xs text-mute font-mono">واتساب للأعمال</div>
+                  <div className="text-xs text-mute font-mono">{locale === "ar" ? "واتساب للأعمال" : "WhatsApp"}</div>
                   <a
                     href="https://wa.me/213550123456"
                     target="_blank"
@@ -61,7 +61,7 @@ export const ContactPage: React.FC = () => {
                   <MapPin className="w-4 h-4" />
                 </div>
                 <div>
-                  <div className="text-xs text-mute font-mono">الموقع الجغرافي</div>
+                  <div className="text-xs text-mute font-mono">{locale === "ar" ? "الموقع الجغرافي" : "Location"}</div>
                   <span className="text-ink font-semibold">
                     {locale === "ar" ? "الجزائر العاصمة، الجزائر" : "Algiers, Algeria"}
                   </span>

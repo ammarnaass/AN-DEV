@@ -15,7 +15,7 @@ export const BlogPage: React.FC = () => {
   });
 
   return (
-    <div className="pt-32 pb-24 max-w-4xl mx-auto p-inline-safe space-y-12 text-start">
+    <div className="pt-20 sm:pt-24 pb-20 max-w-4xl mx-auto p-inline-safe space-y-12 text-start">
       {/* Header */}
       <div className="space-y-4 max-w-2xl">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-line bg-surface text-xs font-mono text-accent">

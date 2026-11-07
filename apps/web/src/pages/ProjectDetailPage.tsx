@@ -61,7 +61,7 @@ export const ProjectDetailPage: React.FC = () => {
   const nextProject = currentIndex >= 0 && currentIndex < allProjects.length - 1 ? allProjects[currentIndex + 1] : null;
 
   return (
-    <article className="pt-32 pb-24 max-w-4xl mx-auto p-inline-safe space-y-12 text-start">
+    <article className="pt-20 sm:pt-24 pb-20 max-w-4xl mx-auto p-inline-safe space-y-12 text-start">
       {/* Back button */}
       <div>
         <Link

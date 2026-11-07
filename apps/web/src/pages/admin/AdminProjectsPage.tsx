@@ -128,7 +128,7 @@ export const AdminProjectsPage: React.FC = () => {
                     </td>
                     <td className="p-4 text-center">
                       <span className="text-xs font-mono text-mute">
-                        {p.featured ? "★ مميز" : "—"}
+                        {p.featured ? "★ مميز" : "-"}
                       </span>
                     </td>
                     <td className="p-4 text-center">

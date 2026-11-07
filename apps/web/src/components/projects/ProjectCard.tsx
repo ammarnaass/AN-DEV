@@ -31,21 +31,23 @@ export const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
           />
         ) : null}
         <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/20 to-transparent opacity-80" />
-        {project.featured && (
-          <span className="absolute top-3 end-3 px-2.5 py-0.5 rounded-full text-xs font-mono font-semibold bg-accent text-[#050816] shadow-sm">
-            {locale === "ar" ? "مميز" : "Featured"}
-          </span>
-        )}
       </Link>
 
       {/* Card Content */}
       <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
         <div className="space-y-2">
-          <Link to={`/projects/${project.slug}`}>
-            <h3 className="text-lg font-bold text-ink group-hover:text-accent transition-colors line-clamp-1">
-              {title}
-            </h3>
-          </Link>
+          <div className="flex items-center justify-between gap-2">
+            <Link to={`/projects/${project.slug}`} className="flex-1">
+              <h3 className="text-lg font-bold text-ink group-hover:text-accent transition-colors line-clamp-1">
+                {title}
+              </h3>
+            </Link>
+            {project.featured && (
+              <span className="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-accent/15 text-accent border border-accent/30 flex-shrink-0">
+                {locale === "ar" ? "مميز" : "Featured"}
+              </span>
+            )}
+          </div>
           <p className="text-mute text-sm line-clamp-2 leading-relaxed">
             {summary}
           </p>

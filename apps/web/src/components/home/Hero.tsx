@@ -9,7 +9,7 @@ export const Hero: React.FC = () => {
   const { t, isRtl } = useI18n();
 
   return (
-    <section className="relative pt-32 pb-20 overflow-hidden">
+    <section className="relative pt-20 sm:pt-24 pb-16 overflow-hidden">
       <div className="max-w-6xl mx-auto p-inline-safe">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           {/* Left Column: Heading & CTAs */}

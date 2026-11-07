@@ -8,7 +8,7 @@ export const NotFoundPage: React.FC = () => {
   const { locale } = useI18n();
 
   return (
-    <div className="pt-36 pb-24 max-w-lg mx-auto p-inline-safe text-center space-y-6">
+    <div className="pt-24 pb-20 max-w-lg mx-auto p-inline-safe text-center space-y-6">
       {/* Terminal Block */}
       <div dir="ltr" className="rounded-card border border-primary/40 bg-surface p-5 text-start font-mono text-xs shadow-glow">
         <div className="flex items-center gap-1.5 pb-3 border-b border-line mb-3 text-mute">

@@ -43,7 +43,7 @@ export const PostDetailPage: React.FC = () => {
   const body = locale === "ar" ? post.body_md_ar : post.body_md_en;
 
   return (
-    <article className="pt-32 pb-24 max-w-2xl mx-auto p-inline-safe space-y-8 text-start">
+    <article className="pt-20 sm:pt-24 pb-20 max-w-2xl mx-auto p-inline-safe space-y-8 text-start">
       {/* Back to Blog */}
       <div>
         <Link

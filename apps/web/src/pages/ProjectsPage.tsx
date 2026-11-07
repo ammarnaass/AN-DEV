@@ -37,7 +37,7 @@ export const ProjectsPage: React.FC = () => {
   });
 
   return (
-    <div className="pt-32 pb-24 max-w-6xl mx-auto p-inline-safe space-y-12">
+    <div className="pt-20 sm:pt-24 pb-20 max-w-6xl mx-auto p-inline-safe space-y-12">
       {/* Header */}
       <div className="space-y-4 text-start max-w-2xl">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-line bg-surface text-xs font-mono text-accent">
@@ -64,7 +64,7 @@ export const ProjectsPage: React.FC = () => {
               onClick={() => setActiveFilter(f.id)}
               className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all select-none ${
                 isSelected
-                  ? "bg-primary text-[#050816] shadow-sm font-bold"
+                  ? "bg-primary text-white shadow-sm font-bold"
                   : "bg-surface border border-line text-mute hover:text-ink hover:border-accent/40"
               }`}
             >
