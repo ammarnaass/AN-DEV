@@ -3,6 +3,7 @@ import fastifyCookie from "@fastify/cookie";
 import fastifyCors from "@fastify/cors";
 import { initDb } from "./db";
 import { authRoutes } from "./routes/auth";
+import { inquiryRoutes } from "./routes/inquiries";
 import path from "path";
 
 export interface BuildAppOptions extends FastifyServerOptions {
@@ -35,8 +36,9 @@ export async function buildApp(opts: BuildAppOptions = {}): Promise<FastifyInsta
     return { status: "ok", timestamp: new Date().toISOString() };
   });
 
-  // Register auth routes
+  // Register routes
   await app.register(authRoutes, { prefix: "/api/auth" });
+  await app.register(inquiryRoutes, { prefix: "/api" });
 
   return app;
 }
