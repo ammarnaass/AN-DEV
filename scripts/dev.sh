@@ -15,3 +15,4 @@ WEB_PID=$!
 trap "kill $API_PID $WEB_PID 2>/dev/null" EXIT INT TERM
 
 wait
+
