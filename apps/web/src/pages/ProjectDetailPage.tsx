@@ -5,7 +5,7 @@ import { useI18n } from "../lib/i18n";
 import { apiFetch } from "../lib/api";
 import { Project } from "@andev/shared";
 import { TechChip } from "../components/ui/TechChip";
-import { Button } from "../ui/Button";
+import { Button } from "../components/ui/Button";
 import { ArrowLeft, ArrowRight, ExternalLink, Github, ChevronLeft, ChevronRight, X } from "lucide-react";
 
 export const ProjectDetailPage: React.FC = () => {

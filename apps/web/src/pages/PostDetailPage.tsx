@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useI18n } from "../lib/i18n";
 import { apiFetch } from "../lib/api";
 import { Post } from "@andev/shared";
-import { ArrowLeft, ArrowRight, Calendar, BookOpen } from "lucide-react";
+import { ArrowLeft, ArrowRight, Calendar } from "lucide-react";
 
 export const PostDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();

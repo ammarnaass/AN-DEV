@@ -18,3 +18,4 @@ export const ProjectSchema = z.object({
 });
 
 export type ProjectInput = z.infer<typeof ProjectSchema>;
+

@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "../../lib/api";
 import { Inquiry } from "@andev/shared";
 import { Button } from "../../components/ui/Button";
-import { Mail, Clock, MessageSquare, Check, X, Edit3 } from "lucide-react";
+import { Mail, X } from "lucide-react";
 
 export const AdminInquiriesPage: React.FC = () => {
   const queryClient = useQueryClient();

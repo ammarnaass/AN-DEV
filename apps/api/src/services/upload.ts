@@ -33,3 +33,4 @@ export async function processAndSaveImage(
     height: metadata.height || 0
   };
 }
+

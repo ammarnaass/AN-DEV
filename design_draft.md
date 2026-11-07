@@ -169,29 +169,6 @@ andev/
 
 --------------------------------------------------------------------------------
 
-## Alternatives Considered
-
-### Alternative A: Full-Stack Next.js / Remix SSR with Embedded SQLite
-
-*   **Pros**: Single combined repository and process; native server-side rendering out of the box for search engine indexing.
-*   **Cons**: Higher memory footprint on entry-level VPS hosting (typically 1GB RAM); heavier build pipelines; tighter coupling between client asset hydration and API process crashes.
-*   **Reason for Rejection**: `Rejected by author: A decoupled Vite React SPA paired with a dedicated Fastify daemon delivers lower operational memory usage (< 60MB), deterministic static file caching via reverse proxy, and faster developer iteration without SSR hydration overhead.`
-
-### Alternative B: Third-Party Backend-as-a-Service (Supabase / Firebase) or Heavy Headless CMS (Strapi)
-
-*   **Pros**: Pre-packaged administrative dashboard and automated CRUD endpoints without authoring API routes.
-*   **Cons**: Introduces vendor lock-in and potential recurring foreign currency costs; Strapi requires substantial CPU and RAM (> 1GB); generic administration UI lacks the cohesive AN DEV developer-focused design system.
-*   **Reason for Rejection**: `Rejected by author: Introducing external SaaS dependencies or heavy CMS containers contradicts the goal of a lean, self-contained, low-cost platform easily managed and backed up as a single SQLite file.`
-
-### Alternative C: Pure Static Site Generator (Astro / Hugo) with Git-based CMS
-
-*   **Pros**: Extreme simplicity for serving public pages; near-zero attack surface.
-*   **Cons**: Incapable of receiving and triaging client inquiries privately without relying on third-party form processing services; cannot maintain dynamic private inquiry states (`new`, `in_progress`, `closed`) or internal notes without exposing data in git repositories.
-*   **Reason for Rejection**: `Rejected by author: Fails core functional requirements F3, F4, and F7 for confidential lead capture, pipeline status tracking, and private administrative notes.`
-
-
---------------------------------------------------------------------------------
-
 ## Non-Functional Requirements
 
 ### Security & Privacy

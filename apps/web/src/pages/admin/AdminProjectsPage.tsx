@@ -4,7 +4,7 @@ import { apiFetch } from "../../lib/api";
 import { Project } from "@andev/shared";
 import { Button } from "../../components/ui/Button";
 import { AdminProjectEditModal } from "./AdminProjectEditModal";
-import { Plus, Edit, Trash2, Eye, EyeOff, ExternalLink } from "lucide-react";
+import { Plus, Edit, Trash2, Eye, EyeOff } from "lucide-react";
 
 export const AdminProjectsPage: React.FC = () => {
   const queryClient = useQueryClient();

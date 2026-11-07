@@ -52,3 +52,4 @@ export const MetaTags: React.FC<MetaTagsProps> = ({
 
   return null;
 };
+

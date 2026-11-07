@@ -4,7 +4,7 @@ import { useI18n } from "../lib/i18n";
 import { apiFetch } from "../lib/api";
 import { Project } from "@andev/shared";
 import { ProjectCard } from "../components/projects/ProjectCard";
-import { Button } from "../ui/Button";
+import { Button } from "../components/ui/Button";
 import { Layers } from "lucide-react";
 
 export const ProjectsPage: React.FC = () => {

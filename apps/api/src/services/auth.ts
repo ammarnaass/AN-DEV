@@ -58,3 +58,4 @@ export async function destroySession(sessionId: string): Promise<void> {
   const db = getDb();
   db.delete(sessions).where(eq(sessions.id, sessionId)).run();
 }
+

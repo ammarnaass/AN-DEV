@@ -7,7 +7,9 @@ import fs from "fs";
 let sqliteDb: Database.Database | null = null;
 
 export function initDb(dbPath?: string) {
-  const resolvedPath = dbPath || process.env.DATABASE_PATH || path.resolve(process.cwd(), "data/andev.db");
+  const rootDir = process.cwd().includes("apps") ? path.resolve(process.cwd(), "../..") : process.cwd();
+  const defaultPath = path.resolve(rootDir, "data/andev.db");
+  const resolvedPath = dbPath || process.env.DATABASE_PATH || defaultPath;
   
   const dir = path.dirname(resolvedPath);
   if (!fs.existsSync(dir)) {
@@ -111,3 +113,4 @@ export function getDb() {
 }
 
 export { schema };
+

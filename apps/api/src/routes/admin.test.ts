@@ -73,3 +73,4 @@ describe("Admin Management API", () => {
     expect(stats.published_projects).toBeDefined();
   });
 });
+

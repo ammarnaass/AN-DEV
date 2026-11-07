@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Project, ProjectInput } from "@andev/shared";
 import { Button } from "../../components/ui/Button";
 import { apiFetch } from "../../lib/api";
-import { X, Upload, Check } from "lucide-react";
+import { X, Upload } from "lucide-react";
 
 interface AdminProjectEditModalProps {
   project?: Project | null;

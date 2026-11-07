@@ -22,3 +22,4 @@ describe("InquiryForm", () => {
     expect(screen.getByLabelText(/تفاصيل الفكرة/i)).toBeDefined();
   });
 });
+

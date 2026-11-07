@@ -1,7 +1,7 @@
 import React from "react";
 import { useI18n } from "../lib/i18n";
 import { InquiryForm } from "../components/contact/InquiryForm";
-import { Mail, Phone, MapPin, MessageSquare, Clock, ShieldCheck } from "lucide-react";
+import { Mail, MapPin, MessageSquare, Clock, ShieldCheck } from "lucide-react";
 
 export const ContactPage: React.FC = () => {
   const { t, locale } = useI18n();

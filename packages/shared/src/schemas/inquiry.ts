@@ -19,3 +19,4 @@ export const UpdateInquirySchema = z.object({
 });
 
 export type UpdateInquiryInput = z.infer<typeof UpdateInquirySchema>;
+

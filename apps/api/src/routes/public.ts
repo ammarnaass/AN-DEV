@@ -136,3 +136,4 @@ export async function publicRoutes(app: FastifyInstance) {
     return reply.send({ success: true });
   });
 }
+

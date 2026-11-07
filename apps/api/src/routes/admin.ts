@@ -213,3 +213,4 @@ export async function adminRoutes(app: FastifyInstance) {
     return reply.send({ success: true });
   });
 }
+

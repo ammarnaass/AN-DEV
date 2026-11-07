@@ -51,3 +51,4 @@ describe("Public Content API", () => {
     expect(res.statusCode).toBe(200);
   });
 });
+

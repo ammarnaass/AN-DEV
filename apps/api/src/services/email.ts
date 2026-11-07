@@ -46,3 +46,4 @@ ${inquiry.message}
     console.log(`[Notification] New inquiry from ${inquiry.name} (${inquiry.email}): ${inquiry.project_type}`);
   }
 }
+

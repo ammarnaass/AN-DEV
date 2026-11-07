@@ -11,3 +11,4 @@ export const PostSchema = z.object({
 });
 
 export type PostInput = z.infer<typeof PostSchema>;
+

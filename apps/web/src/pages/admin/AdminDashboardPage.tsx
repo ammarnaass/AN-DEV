@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { apiFetch } from "../../lib/api";
 import { AdminStats, Inquiry } from "@andev/shared";
-import { MessageSquare, FolderKanban, Eye, Clock, ArrowLeft } from "lucide-react";
+import { MessageSquare, FolderKanban, Eye, ArrowLeft } from "lucide-react";
 
 export const AdminDashboardPage: React.FC = () => {
   const { data: stats } = useQuery<AdminStats>({

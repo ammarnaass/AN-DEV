@@ -5,7 +5,7 @@ import { Hero } from "../components/home/Hero";
 import { Services } from "../components/home/Services";
 import { Process } from "../components/home/Process";
 import { ProjectCard } from "../components/projects/ProjectCard";
-import { Button } from "../ui/Button";
+import { Button } from "../components/ui/Button";
 import { useI18n } from "../lib/i18n";
 import { apiFetch } from "../lib/api";
 import { Project } from "@andev/shared";

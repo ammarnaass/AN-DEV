@@ -10,3 +10,4 @@ export const TechChip: React.FC<{ label: string; className?: string }> = ({ labe
     </span>
   );
 };
+

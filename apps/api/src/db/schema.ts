@@ -77,3 +77,4 @@ export const page_views = sqliteTable("page_views", {
   day: text("day").notNull(), // YYYY-MM-DD
   count: integer("count").notNull().default(1)
 });
+

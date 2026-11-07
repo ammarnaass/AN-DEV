@@ -234,3 +234,4 @@ export const InquiryForm: React.FC = () => {
     </form>
   );
 };
+

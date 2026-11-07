@@ -1,9 +1,7 @@
 import { z } from "zod";
-import { InquirySchema, UpdateInquirySchema } from "./schemas/inquiry";
+import { InquirySchema } from "./schemas/inquiry";
 import { ProjectSchema } from "./schemas/project";
 import { PostSchema } from "./schemas/post";
-import { LoginSchema } from "./schemas/auth";
-import { SettingsSchema } from "./schemas/settings";
 
 export type Inquiry = z.infer<typeof InquirySchema> & {
   id: number;
@@ -46,3 +44,4 @@ export type AdminStats = {
   total_posts: number;
   views_last_30_days: number;
 };
+

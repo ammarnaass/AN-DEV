@@ -46,3 +46,4 @@ export const Logo: React.FC<{ className?: string; size?: number }> = ({ classNam
     </div>
   );
 };
+

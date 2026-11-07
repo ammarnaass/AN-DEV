@@ -47,3 +47,4 @@ export const GlowingCodeBlock: React.FC<{ className?: string }> = ({ className =
     </div>
   );
 };
+
