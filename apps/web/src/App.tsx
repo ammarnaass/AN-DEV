@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { I18nProvider } from "./lib/i18n";
@@ -33,6 +33,18 @@ const queryClient = new QueryClient({
 const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
   const isAdmin = location.pathname.startsWith("/admin");
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    if (!isAdmin) {
+      // F10: Cookieless aggregate page view counter
+      fetch("/api/views", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ path: location.pathname }),
+      }).catch(() => {});
+    }
+  }, [location.pathname, isAdmin]);
 
   return (
     <div className="flex flex-col min-h-screen">
