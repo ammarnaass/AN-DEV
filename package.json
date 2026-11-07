@@ -1,0 +1,21 @@
+{
+  "name": "andev-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "test": "vitest run",
+    "build": "npm run build --workspaces --if-present",
+    "dev:api": "npm run dev --workspace=@andev/api",
+    "dev:web": "npm run dev --workspace=@andev/web",
+    "seed": "npm run seed --workspace=@andev/api"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2",
+    "vitest": "^3.0.5"
+  }
+}
+
