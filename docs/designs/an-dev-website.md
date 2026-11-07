@@ -1,0 +1,299 @@
+# AN DEV Website v1.0
+
+*   **Author:** Ammar
+*   **Status:** Approved
+*   **Date:** 2026-11-07
+
+--------------------------------------------------------------------------------
+
+## Overview
+
+AN DEV is a software development agency in Algeria building bespoke web applications, mobile apps, and backend systems. This project establishes the official bilingual digital platform (Arabic RTL default, English LTR) with a Vite + React client, Fastify + SQLite API, and an administrative control panel for managing inquiries and portfolio case studies.
+
+## The Problem
+
+The existing site is an unmanaged static webpage. It cannot collect structured project inquiries, track sales pipelines, update client case studies, or record aggregate visitor metrics without manual code modification and server redeployments.
+
+## Goals
+
+*   **Lead Acquisition**: Capture inbound project inquiries via a validated form with honeypot spam protection, SQLite persistence, and email notification, targeting >= 10 inquiries/month within 3 months.
+*   **Portfolio Showcase**: Publish 6 complete project case studies at launch with bilingual summaries, technical tags, and screenshots.
+*   **Autonomous Administration**: Enable administrative management of projects, inquiry tracking, and site settings via a protected web interface in < 5 minutes per update.
+*   **Performance & SEO**: Reach >= 90 Lighthouse mobile score, sub-2s initial load on 4G, and structured Open Graph and sitemap metadata.
+
+## Non-Goals
+
+*   Payment gateway integrations, invoicing, or escrow handling.
+*   Public client accounts, customer authentication, or client portals.
+*   In-app real-time live chat or automated chatbot widgets.
+*   Native mobile applications.
+
+## Open Questions
+
+*   **Question 1**: Should the contact page include direct WhatsApp and Telegram click-to-chat links alongside the form to accommodate regional conversion patterns in Algeria?
+*   **Question 2**: Should the Markdown blog (P2) be included in the v1 deployment or phased immediately after the core conversion funnel (P0)?
+
+## Critical User Journeys (CUJs)
+
+### CUJ 1: Prospective Client Submits Project Inquiry
+*   **Given**: An anonymous visitor arrives on the homepage (`/`) or contact page (`/contact`).
+*   **When**: The visitor selects project type (web/mobile/system), enters contact information, describes their project, leaves the hidden honeypot field untouched, and submits.
+*   **Then**: The API validates inputs via Zod, hashes the IP address for rate limiting, persists the record with status `new`, triggers an admin email notification, and displays a confirmation message with a 2-business-day response guarantee.
+
+### CUJ 2: Administrator Reviews and Updates Inquiries
+*   **Given**: Ammar navigates to `/admin/login` and enters valid credentials.
+*   **When**: Ammar authenticates, opens `/admin/inquiries`, filters by status `new`, opens an inquiry, updates status to `in_progress`, and adds internal notes.
+*   **Then**: The session cookie (`HttpOnly; Secure; SameSite=Lax`) authorizes the patch request, the database updates the status and note, and the inquiries table refreshes.
+
+### CUJ 3: Prospective Client Explores Portfolio
+*   **Given**: A visitor seeks proof of technical capability and navigates to `/projects`.
+*   **When**: The visitor filters by category (e.g. `mobile`) and clicks a project card.
+*   **Then**: The client routes to `/projects/:slug`, rendering bilingual details (Challenge, Solution, Results), tech chips, and an image gallery with zoomable screenshots.
+
+--------------------------------------------------------------------------------
+
+## Technical Plan (Architecture)
+
+### 1. High-Level Architecture Diagram
+
+```mermaid
+flowchart TD
+    Client["Client Browser (React SPA + Vite)"]
+    Proxy["Reverse Proxy / Static File Server (Caddy/Nginx)"]
+    Fastify["Node.js API Server (Fastify + TypeScript)"]
+    Drizzle["Drizzle ORM Engine"]
+    SQLite[("SQLite Database (data/andev.db - WAL Mode)")]
+    Uploads["Static Uploads Storage (uploads/*.webp)"]
+    SMTP["Nodemailer SMTP Service"]
+
+    Client -->|HTTPS / Static Assets| Proxy
+    Client -->|HTTPS /api/* REST Requests| Fastify
+    Fastify -->|Zod Validation & Auth Middleware| Drizzle
+    Drizzle -->|SQL Queries| SQLite
+    Fastify -->|Image Processing via Sharp| Uploads
+    Fastify -->|Inquiry Notifications| SMTP
+```
+
+### 2. Monorepo Structure & Boundary Design
+
+```text
+andev/
+├── apps/
+│   ├── web/                    # Vite + React 19 + TypeScript frontend
+│   │   ├── src/
+│   │   │   ├── components/     # UI components, layout, forms
+│   │   │   ├── pages/          # Home, Projects, Details, Contact, Admin
+│   │   │   ├── lib/            # i18n context, API client, query client
+│   │   │   └── tokens.css      # CSS variables for design system tokens
+│   │   └── vite.config.ts
+│   └── api/                    # Fastify backend service
+│       ├── src/
+│       │   ├── db/             # Drizzle schemas, migrations, seed data
+│       │   ├── routes/         # Public, Auth, Inquiries, Admin routes
+│       │   ├── services/       # Argon2 auth, Sharp WebP, Nodemailer
+│       │   └── app.ts          # Fastify application factory
+│       └── tsconfig.json
+├── packages/
+│   └── shared/                 # Shared Zod schemas and TypeScript interfaces
+│       └── src/
+│           ├── schemas/        # InquirySchema, ProjectSchema, AuthSchema
+│           └── types.ts
+├── data/                       # andev.db (persistent SQLite volume)
+├── uploads/                    # Generated WebP images
+└── package.json                # Workspaces root
+```
+
+### 3. Database Schema Design (Drizzle + SQLite)
+
+*   `admins`: `id` (integer primary key), `email` (text unique), `password_hash` (text), `created_at` (text).
+*   `sessions`: `id` (text primary key UUID), `admin_id` (foreign key -> admins.id), `expires_at` (text).
+*   `projects`: `id` (integer primary key), `slug` (text unique), `title_ar` (text), `title_en` (text), `summary_ar` (text), `summary_en` (text), `body_ar` (text), `body_en` (text), `tech_json` (text JSON string array), `cover_image` (text), `live_url` (text nullable), `repo_url` (text nullable), `featured` (integer boolean), `published` (integer boolean), `sort_order` (integer), `created_at` (text), `updated_at` (text).
+*   `project_images`: `id` (integer primary key), `project_id` (foreign key -> projects.id cascade), `path` (text), `alt_ar` (text), `alt_en` (text), `sort_order` (integer).
+*   `inquiries`: `id` (integer primary key), `name` (text), `email` (text), `project_type` (text: 'web' | 'mobile' | 'system' | 'other'), `budget_range` (text nullable), `message` (text), `status` (text default 'new': 'new' | 'in_progress' | 'closed'), `admin_note` (text nullable), `ip_hash` (text), `created_at` (text).
+*   `posts`: `id` (integer primary key), `slug` (text unique), `title_ar` (text), `title_en` (text), `body_md_ar` (text), `body_md_en` (text), `published` (integer boolean), `published_at` (text).
+*   `settings`: `key` (text primary key), `value` (text).
+*   `page_views`: `id` (integer primary key), `path` (text), `day` (text YYYY-MM-DD), `count` (integer default 1).
+
+### 4. API Endpoints Catalog
+
+*   **Public Services**:
+    *   `GET /api/projects`: List published projects ordered by `sort_order`.
+    *   `GET /api/projects/:slug`: Get published project details and associated images.
+    *   `GET /api/posts`: List published blog articles.
+    *   `GET /api/posts/:slug`: Get article Markdown content.
+    *   `GET /api/settings/public`: Return agency public contact numbers, email, and social links.
+    *   `POST /api/inquiries`: Submit project lead (validated by Zod, checks honeypot, rate-limited by hashed IP, triggers notification).
+    *   `POST /api/views`: Increment non-identifying aggregate daily page view counter.
+*   **Authentication**:
+    *   `POST /api/auth/login`: Validate credentials against `admins` via Argon2, issue HttpOnly `andev_session` cookie (valid for 7 days).
+    *   `POST /api/auth/logout`: Destroy active session record and clear cookie.
+    *   `GET /api/auth/me`: Return authenticated admin profile.
+*   **Administration (`/api/admin/*`, Requires Session PreHandler)**:
+    *   `GET /api/admin/stats`: Aggregate count of new inquiries, published projects, total articles, and 30-day view totals.
+    *   `GET /api/admin/inquiries`: Query inquiries with optional status filter (`new`, `in_progress`, `closed`).
+    *   `PATCH /api/admin/inquiries/:id`: Update status and internal admin note.
+    *   `POST /api/admin/projects`: Create project record with bilingual fields and tech tags.
+    *   `PUT /api/admin/projects/:id`: Update project record.
+    *   `DELETE /api/admin/projects/:id`: Remove project record and delete associated media files.
+    *   `POST /api/admin/uploads`: Multipart image upload; automatically optimizes to WebP via Sharp and returns asset path.
+    *   `PUT /api/admin/settings`: Update configurable agency parameters.
+
+### 5. Design System Tokens & RTL Support
+
+```css
+:root {
+  --bg: #050816;
+  --surface: #0B1430;
+  --line: #1A2850;
+  --ink: #E6E6E6;
+  --mute: #8D99B3;
+  --primary: #0D6EFD;
+  --accent: #00C3FF;
+  --ok: #10B981;
+  --warn: #F59E0B;
+  --err: #EF4444;
+}
+
+[data-theme="light"] {
+  --bg: #F4F7FD;
+  --surface: #FFFFFF;
+  --line: #C9D6F2;
+  --ink: #0B1226;
+  --mute: #4B5878;
+  --accent: #0087B8;
+}
+```
+*   **Bi-directional Logic**: Managed via `dir="rtl"` (Arabic) and `dir="ltr"` (English) using CSS logical properties (`margin-inline`, `padding-inline`, `border-inline-start`) to maintain symmetry across both languages without duplication.
+
+--------------------------------------------------------------------------------
+
+## Alternatives Considered
+
+### Alternative A: Full-Stack Next.js / Remix SSR with Embedded SQLite
+
+*   **Pros**: Single combined repository and process; native server-side rendering out of the box for search engine indexing.
+*   **Cons**: Higher memory footprint on entry-level VPS hosting (typically 1GB RAM); heavier build pipelines; tighter coupling between client asset hydration and API process crashes.
+*   **Reason for Rejection**: `Rejected by author: A decoupled Vite React SPA paired with a dedicated Fastify daemon delivers lower operational memory usage (< 60MB), deterministic static file caching via reverse proxy, and faster developer iteration without SSR hydration overhead.`
+
+### Alternative B: Third-Party Backend-as-a-Service (Supabase / Firebase) or Heavy Headless CMS (Strapi)
+
+*   **Pros**: Pre-packaged administrative dashboard and automated CRUD endpoints without authoring API routes.
+*   **Cons**: Introduces vendor lock-in and potential recurring foreign currency costs; Strapi requires substantial CPU and RAM (> 1GB); generic administration UI lacks the cohesive AN DEV developer-focused design system.
+*   **Reason for Rejection**: `Rejected by author: Introducing external SaaS dependencies or heavy CMS containers contradicts the goal of a lean, self-contained, low-cost platform easily managed and backed up as a single SQLite file.`
+
+### Alternative C: Pure Static Site Generator (Astro / Hugo) with Git-based CMS
+
+*   **Pros**: Extreme simplicity for serving public pages; near-zero attack surface.
+*   **Cons**: Incapable of receiving and triaging client inquiries privately without relying on third-party form processing services; cannot maintain dynamic private inquiry states (`new`, `in_progress`, `closed`) or internal notes without exposing data in git repositories.
+*   **Reason for Rejection**: `Rejected by author: Fails core functional requirements F3, F4, and F7 for confidential lead capture, pipeline status tracking, and private administrative notes.`
+
+--------------------------------------------------------------------------------
+
+## Non-Functional Requirements
+
+### Security & Privacy
+*   **Password Hashing**: Administrative credentials hashed via Argon2id with recommended parameters (`memoryCost: 65536, timeCost: 3`).
+*   **Session Management**: Random UUID tokens stored in the SQLite `sessions` table and transmitted via `HttpOnly`, `SameSite=Lax`, and `Secure` cookies with 7-day expiration.
+*   **Data Protection & Privacy**: Zero tracking cookies. IP addresses are hashed using SHA-256 with a daily rotating salt before storing in `inquiries.ip_hash` for abuse throttling; raw IP addresses are discarded immediately.
+*   **Input Sanitization & Schema Validation**: Strict Zod validation on every public and administrative endpoint before data reaches the ORM layer.
+*   **Abuse Prevention**: Honeypot form field (`honeypot`) rejecting automated bot submissions, accompanied by in-memory rate limiting (max 5 inquiry submissions per 15-minute window per IP hash).
+
+### Performance & Latency
+*   **Asset Delivery & Code Splitting**: Frontend bundle code-split by route (Home, Projects, Details, Contact, Admin) using React dynamic imports. Target initial gzipped JavaScript bundle < 80kB.
+*   **Optimized Media**: All project portfolio screenshots converted to modern WebP format via Sharp, served with immutable cache headers (`Cache-Control: public, max-age=31536000, immutable`).
+*   **Database Concurrency**: SQLite configured in Write-Ahead Logging (`WAL`) mode with synchronous normal (`PRAGMA synchronous = NORMAL;`) allowing non-blocking concurrent reads while background transactions commit.
+
+### Accessibility & Internationalization
+*   **WCAG 2.1 AA Compliance**: Color contrast ratio >= 4.5:1 across both Dark and Light color palettes.
+*   **Keyboard & Screen Reader Navigability**: Interactive elements feature visible focus rings (`--accent`) and semantic ARIA landmarks.
+*   **Native Bi-directional Layout**: Bidirectional CSS logical properties (`margin-inline`, `padding-inline`, `inset-inline-start`) driven by dynamic HTML `dir="rtl"` (Arabic) and `dir="ltr"` (English).
+
+--------------------------------------------------------------------------------
+
+## Detailed Implementation Plan
+
+### Target Files to Create/Modify
+
+#### 1. Monorepo Configuration & Shared Module
+*   `package.json` (Create): Root workspaces declaration (`apps/*`, `packages/*`), build and test scripts.
+*   `packages/shared/package.json` (Create): Package manifest declaring `@andev/shared` exports for browser and node runtimes.
+*   `packages/shared/tsconfig.json` (Create): Strict TypeScript compiler configuration for the shared module.
+*   `packages/shared/src/schemas/inquiry.ts` (Create): Zod schema for project inquiries validating name, email, project type, message length, and honeypot emptiness.
+*   `packages/shared/src/schemas/project.ts` (Create): Zod validation schemas for project creation, bilingual attributes, tech tag arrays, and status toggles.
+*   `packages/shared/src/schemas/auth.ts` (Create): Zod schema for administrative authentication credentials.
+*   `packages/shared/src/types.ts` (Create): TypeScript type definitions derived from Zod schemas for shared frontend/backend type safety.
+*   `packages/shared/src/index.ts` (Create): Public entry point exporting schemas and types.
+
+#### 2. Backend Service (`apps/api`)
+*   `apps/api/package.json` (Create): Fastify dependencies (`fastify`, `@fastify/cookie`, `@fastify/cors`, `@fastify/multipart`, `drizzle-orm`, `better-sqlite3`, `argon2`, `sharp`, `zod`).
+*   `apps/api/tsconfig.json` (Create): Node.js TypeScript configuration targeting ES2022.
+*   `apps/api/src/db/schema.ts` (Create): Drizzle ORM relational tables definition (`admins`, `sessions`, `projects`, `project_images`, `inquiries`, `posts`, `settings`, `page_views`).
+*   `apps/api/src/db/index.ts` (Create): SQLite database connection pool initializing `better-sqlite3` and configuring `WAL` mode.
+*   `apps/api/src/db/seed.ts` (Create): Initial seed data establishing default admin credentials, system settings, and 6 showcase AN DEV portfolio projects.
+*   `apps/api/src/services/auth.ts` (Create): Argon2 hashing/verification and cryptographic session management.
+*   `apps/api/src/services/upload.ts` (Create): Sharp pipeline converting uploaded project media into optimized WebP assets in `uploads/`.
+*   `apps/api/src/services/email.ts` (Create): Nodemailer notification transport alerting administrators upon new inquiry submissions.
+*   `apps/api/src/plugins/auth.ts` (Create): Fastify preHandler hook validating session cookies for protected `/api/admin/*` routes.
+*   `apps/api/src/routes/auth.ts` (Create): Handlers for `/api/auth/login`, `/api/auth/logout`, and `/api/auth/me`.
+*   `apps/api/src/routes/inquiries.ts` (Create): Public handler for `POST /api/inquiries` with honeypot verification and rate limiting.
+*   `apps/api/src/routes/public.ts` (Create): Handlers for `GET /api/projects`, `GET /api/projects/:slug`, `GET /api/posts`, `GET /api/settings/public`, and `POST /api/views`.
+*   `apps/api/src/routes/admin.ts` (Create): Administrative CRUD routes for projects, inquiries review/notes, file uploads, and settings.
+*   `apps/api/src/app.ts` (Create): Fastify application factory wiring plugins, routes, and error handlers.
+*   `apps/api/src/server.ts` (Create): Server entry point binding Fastify to host and port.
+
+#### 3. Frontend Web Client (`apps/web`)
+*   `apps/web/package.json` (Create): React 19, Vite, Tailwind CSS, Lucide React, and TanStack Query dependencies.
+*   `apps/web/vite.config.ts` (Create): Vite configuration with React plugin and development reverse-proxy to the Fastify API.
+*   `apps/web/index.html` (Create): HTML shell with Cairo & Inter web font imports and default Arabic RTL metadata.
+*   `apps/web/src/tokens.css` (Create): Design token CSS variables for dark and light color systems, elevation, and borders.
+*   `apps/web/src/index.css` (Create): Tailwind directives, font assignments, and global reset rules.
+*   `apps/web/src/lib/i18n.tsx` (Create): Context provider managing active locale (`ar` | `en`), dictionary strings, and document `dir` switching.
+*   `apps/web/src/lib/api.ts` (Create): Type-safe HTTP client wrapping Fetch for communication with `/api/*`.
+*   `apps/web/src/components/layout/Navbar.tsx` (Create): Sticky header with logo, navigation links, locale toggle, and mobile menu.
+*   `apps/web/src/components/layout/Footer.tsx` (Create): Footer with branding, links, contact details, and copyright.
+*   `apps/web/src/components/layout/Logo.tsx` (Create): Scalable SVG logo conforming to AN DEV visual guidelines.
+*   `apps/web/src/components/ui/Button.tsx` (Create): Button component supporting primary gradient, outline, and danger variants with loading spinner.
+*   `apps/web/src/components/ui/TechChip.tsx` (Create): Technical pill chip with subtle border and LTR monospace typography.
+*   `apps/web/src/components/ui/GlowingCodeBlock.tsx` (Create): Terminal-themed code block with blue glow shadow for Hero section.
+*   `apps/web/src/components/home/Hero.tsx` (Create): Hero banner with compelling call to action and code block visual.
+*   `apps/web/src/components/home/Services.tsx` (Create): Services overview rows (Web, Mobile, Custom Systems).
+*   `apps/web/src/components/home/Process.tsx` (Create): 3-step structured development workflow (1 أفكار, 2 تطوير, 3 إطلاق).
+*   `apps/web/src/components/projects/ProjectCard.tsx` (Create): Portfolio card with 16:10 cover image, bilingual synopsis, and tech tags.
+*   `apps/web/src/components/contact/InquiryForm.tsx` (Create): Validated lead form with honeypot field, feedback alerts, and direct WhatsApp links.
+*   `apps/web/src/pages/HomePage.tsx` (Create): Public landing page integrating Hero, Services, Featured Projects, Process, and CTA.
+*   `apps/web/src/pages/ProjectsPage.tsx` (Create): Portfolio catalogue with category filtering and empty state handling.
+*   `apps/web/src/pages/ProjectDetailPage.tsx` (Create): Deep-dive case study page with Challenge/Solution/Results breakdown and image gallery.
+*   `apps/web/src/pages/ContactPage.tsx` (Create): Dedicated inquiry page with agency contact coordinates and form.
+*   `apps/web/src/pages/NotFoundPage.tsx` (Create): Terminal-styled 404 page with return-to-home navigation.
+*   `apps/web/src/pages/admin/AdminLoginPage.tsx` (Create): Administrative sign-in form with session establishment.
+*   `apps/web/src/pages/admin/AdminLayout.tsx` (Create): Protected layout with responsive sidebar/bottom-bar navigation and authentication guard.
+*   `apps/web/src/pages/admin/AdminDashboardPage.tsx` (Create): Metrics overview and recent activity stream.
+*   `apps/web/src/pages/admin/AdminInquiriesPage.tsx` (Create): Inquiries triage table with status chips, details modal, and note editor.
+*   `apps/web/src/pages/admin/AdminProjectsPage.tsx` (Create): Portfolio manager with drag-and-drop sort order and publish/hide toggles.
+*   `apps/web/src/pages/admin/AdminProjectEditModal.tsx` (Create): Bilingual project editor with image uploader.
+*   `apps/web/src/pages/admin/AdminSettingsPage.tsx` (Create): Site settings editor for contact coordinates and SEO defaults.
+*   `apps/web/src/App.tsx` (Create): Application router wiring public and admin routes.
+
+--------------------------------------------------------------------------------
+
+## Verification Plan
+
+### Automated Test Suite
+*   **Shared Validation Tests**:
+    *   `packages/shared/src/schemas/inquiry.test.ts`: Verify valid submissions pass; assert that non-empty honeypot fields fail validation.
+    *   `packages/shared/src/schemas/project.test.ts`: Verify bilingual fields and required technical array attributes.
+*   **API Integration Tests**:
+    *   `apps/api/src/routes/auth.test.ts`: Verify login with valid credentials issues cookie; verify invalid credentials return 401.
+    *   `apps/api/src/routes/inquiries.test.ts`: Verify inquiry persistence in SQLite and honeypot rejection.
+    *   `apps/api/src/routes/admin.test.ts`: Verify unauthenticated access returns 401; verify status updates and admin notes.
+*   **Frontend Component Tests**:
+    *   `apps/web/src/components/ui/Button.test.tsx`: Verify variant styling and disabled spinner state.
+    *   `apps/web/src/components/contact/InquiryForm.test.tsx`: Verify client-side field validation and error messaging.
+
+### End-to-End & Build Verification
+*   **Full Build Command**: Execute `npm run build` at repository root to ensure zero TypeScript compile errors across `@andev/shared`, `apps/api`, and `apps/web`.
+*   **End-to-End Workflow (`tests/e2e/workflow.test.ts`)**: Programmatically submit inquiry from public client -> verify SQLite persistence -> login to admin -> update inquiry status -> create new project -> verify appearance on public `/api/projects`.
+
+--------------------------------------------------------------------------------
+
+*Drafted with EGM*
