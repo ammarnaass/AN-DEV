@@ -76,7 +76,7 @@ export const AdminLayout: React.FC = () => {
                   to={item.href}
                   className={`flex items-center justify-between px-3.5 py-2.5 rounded-lg text-sm font-semibold transition-colors ${
                     isActive
-                      ? "bg-primary text-[#050816] font-bold shadow-sm"
+                      ? "bg-primary text-white font-bold shadow-sm"
                       : "text-mute hover:text-ink hover:bg-surface"
                   }`}
                 >
