@@ -1,10 +1,12 @@
 import fastify, { FastifyInstance, FastifyServerOptions } from "fastify";
 import fastifyCookie from "@fastify/cookie";
 import fastifyCors from "@fastify/cors";
+import fastifyMultipart from "@fastify/multipart";
 import { initDb } from "./db";
 import { authRoutes } from "./routes/auth";
 import { inquiryRoutes } from "./routes/inquiries";
 import { publicRoutes } from "./routes/public";
+import { adminRoutes } from "./routes/admin";
 import path from "path";
 
 export interface BuildAppOptions extends FastifyServerOptions {
@@ -32,6 +34,13 @@ export async function buildApp(opts: BuildAppOptions = {}): Promise<FastifyInsta
     credentials: true
   });
 
+  // Register Multipart for file uploads
+  await app.register(fastifyMultipart, {
+    limits: {
+      fileSize: 10 * 1024 * 1024 // 10MB
+    }
+  });
+
   // Health check
   app.get("/health", async () => {
     return { status: "ok", timestamp: new Date().toISOString() };
@@ -41,6 +50,7 @@ export async function buildApp(opts: BuildAppOptions = {}): Promise<FastifyInsta
   await app.register(authRoutes, { prefix: "/api/auth" });
   await app.register(inquiryRoutes, { prefix: "/api" });
   await app.register(publicRoutes, { prefix: "/api" });
+  await app.register(adminRoutes, { prefix: "/api/admin" });
 
   return app;
 }
