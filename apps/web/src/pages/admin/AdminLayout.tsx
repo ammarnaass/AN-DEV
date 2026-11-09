@@ -2,8 +2,16 @@ import React from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { apiFetch } from "../../lib/api";
-import { Logo } from "../../components/layout/Logo";
-import { LayoutDashboard, MessageSquare, FolderKanban, Settings, LogOut, ArrowRight } from "lucide-react";
+import {
+  LayoutDashboard,
+  MessageSquare,
+  FolderKanban,
+  Settings,
+  LogOut,
+  ExternalLink,
+  Database,
+  ShieldCheck
+} from "lucide-react";
 
 export const AdminLayout: React.FC = () => {
   const location = useLocation();
@@ -32,8 +40,8 @@ export const AdminLayout: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-bg text-mute text-sm font-mono">
-        جاري التحقق من الجلسة...
+      <div className="min-h-screen flex items-center justify-center bg-background text-text-muted text-sm font-mono">
+        جاري التحقق من صلاحيات الجلسة...
       </div>
     );
   }
@@ -44,29 +52,62 @@ export const AdminLayout: React.FC = () => {
   }
 
   const navItems = [
-    { href: "/admin", label: "نظرة عامة", icon: <LayoutDashboard className="w-4 h-4" /> },
+    {
+      href: "/admin",
+      label: "لوحة التحكم الرئيسية",
+      icon: <LayoutDashboard className="w-4 h-4" />
+    },
     {
       href: "/admin/inquiries",
-      label: "الطلبات",
+      label: "إدارة طلبات المشاريع",
       icon: <MessageSquare className="w-4 h-4" />,
       badge: stats?.new_inquiries || 0
     },
-    { href: "/admin/projects", label: "المشاريع", icon: <FolderKanban className="w-4 h-4" /> },
-    { href: "/admin/settings", label: "الإعدادات", icon: <Settings className="w-4 h-4" /> }
+    {
+      href: "/admin/projects",
+      label: "إدارة المشاريع والأعمال",
+      icon: <FolderKanban className="w-4 h-4" />
+    },
+    {
+      href: "/admin/settings",
+      label: "إعدادات الموقع والنظام",
+      icon: <Settings className="w-4 h-4" />
+    }
   ];
 
   return (
-    <div className="min-h-screen bg-bg flex flex-col md:flex-row text-ink">
-      {/* Desktop Sidebar */}
-      <aside className="hidden md:flex flex-col w-64 border-e border-line bg-surface/60 p-5 justify-between">
+    <div className="min-h-screen bg-background flex flex-col md:flex-row text-text-primary">
+      {/* Desktop Sidebar (w-72) */}
+      <aside className="hidden md:flex flex-col w-72 border-e border-line bg-surface p-5 justify-between select-none shrink-0">
         <div className="space-y-6">
+          {/* Header */}
           <div className="pb-4 border-b border-line flex items-center justify-between">
-            <Logo size={32} />
-            <Link to="/" title="العودة للموقع" className="p-1 rounded text-mute hover:text-accent">
-              <ArrowRight className="w-4 h-4" />
-            </Link>
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-primary-container text-white font-mono font-bold flex items-center justify-center text-sm shadow-[0_0_12px_rgba(13,110,253,0.35)]">
+                AN
+              </div>
+              <div className="flex flex-col text-start">
+                <span className="font-bold text-sm text-text-primary tracking-tight">
+                  AN DEV Core
+                </span>
+                <span className="text-[11px] font-mono text-text-muted">
+                  نظام إدارة الوكالة
+                </span>
+              </div>
+            </div>
+            <div className="w-2.5 h-2.5 rounded-full bg-status-ok animate-pulse" title="System Operational" />
           </div>
 
+          {/* Litestream Live Pill */}
+          <div className="px-3 py-2 rounded-lg bg-surface-container border border-line flex items-center justify-between text-xs font-mono">
+            <div className="flex items-center gap-2 text-text-muted">
+              <Database className="w-3.5 h-3.5 text-secondary" />
+              <span>Litestream SQLite</span>
+            </div>
+            <span className="text-status-ok font-bold">نشط</span>
+          </div>
+
+          {/* Nav Items */}
           <nav className="space-y-1.5 text-start">
             {navItems.map(item => {
               const isActive = location.pathname === item.href;
@@ -74,10 +115,10 @@ export const AdminLayout: React.FC = () => {
                 <Link
                   key={item.href}
                   to={item.href}
-                  className={`flex items-center justify-between px-3.5 py-2.5 rounded-lg text-sm font-semibold transition-colors ${
+                  className={`flex items-center justify-between px-3.5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
                     isActive
-                      ? "bg-primary text-white font-bold shadow-sm"
-                      : "text-mute hover:text-ink hover:bg-surface"
+                      ? "bg-primary-container text-white font-bold shadow-[0_0_12px_rgba(13,110,253,0.35)]"
+                      : "text-text-muted hover:text-text-primary hover:bg-surface-container"
                   }`}
                 >
                   <div className="flex items-center gap-3">
@@ -85,7 +126,7 @@ export const AdminLayout: React.FC = () => {
                     <span>{item.label}</span>
                   </div>
                   {item.badge !== undefined && item.badge > 0 ? (
-                    <span className="px-2 py-0.5 rounded-full text-xs font-mono font-bold bg-accent text-[#050816]">
+                    <span className="px-2 py-0.5 rounded-full text-xs font-mono font-bold bg-secondary text-surface">
                       {item.badge}
                     </span>
                   ) : null}
@@ -95,56 +136,42 @@ export const AdminLayout: React.FC = () => {
           </nav>
         </div>
 
-        {/* Admin User info & Logout */}
+        {/* Admin User info & Return to site */}
         <div className="pt-4 border-t border-line space-y-3 text-start">
-          <div className="text-xs text-mute truncate font-mono">
-            {authData.admin.email}
+          <div className="p-3 rounded-lg bg-surface-container border border-line space-y-1">
+            <div className="flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-secondary" />
+              <span className="text-xs font-bold text-text-primary">عمار (Ammar Naas)</span>
+            </div>
+            <div className="text-[11px] font-mono text-text-muted truncate">
+              {authData.admin.email}
+            </div>
           </div>
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 text-xs font-semibold text-err hover:underline"
-          >
-            <LogOut className="w-3.5 h-3.5" />
-            <span>تسجيل الخروج</span>
-          </button>
+
+          <div className="flex items-center gap-2">
+            <Link
+              to="/"
+              target="_blank"
+              className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg bg-surface-container border border-line text-xs font-semibold text-text-muted hover:text-text-primary transition-colors"
+            >
+              <ExternalLink className="w-3.5 h-3.5 text-secondary" />
+              <span>زيارة الموقع</span>
+            </Link>
+            <button
+              onClick={handleLogout}
+              className="p-2 rounded-lg bg-surface-container border border-line text-text-muted hover:text-status-err transition-colors"
+              title="تسجيل الخروج"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 pb-16 md:pb-6">
-        <header className="h-14 border-b border-line bg-surface/40 px-6 flex items-center justify-between">
-          <span className="text-xs font-mono text-mute">لوحة الإدارة · AN DEV</span>
-          <Link to="/" className="text-xs text-accent hover:underline">
-            معاينة الموقع العام ←
-          </Link>
-        </header>
-        <main className="flex-1 p-6 sm:p-8 max-w-6xl mx-auto w-full">
-          <Outlet />
-        </main>
-      </div>
-
-      {/* Mobile Bottom Navigation Bar */}
-      <nav className="md:hidden fixed bottom-0 start-0 end-0 z-40 bg-surface border-t border-line h-16 flex items-center justify-around px-2">
-        {navItems.map(item => {
-          const isActive = location.pathname === item.href;
-          return (
-            <Link
-              key={item.href}
-              to={item.href}
-              className={`flex flex-col items-center justify-center gap-1 text-[11px] font-medium p-1 relative ${
-                isActive ? "text-accent font-bold" : "text-mute"
-              }`}
-            >
-              {item.icon}
-              <span>{item.label}</span>
-              {item.badge !== undefined && item.badge > 0 ? (
-                <span className="absolute top-0 end-1 w-2 h-2 rounded-full bg-accent" />
-              ) : null}
-            </Link>
-          );
-        })}
-      </nav>
+      <main className="flex-1 p-4 sm:p-8 lg:p-10 overflow-y-auto">
+        <Outlet />
+      </main>
     </div>
   );
 };
-

@@ -1,26 +1,31 @@
 :root, [data-theme="dark"] {
-  --bg: #050816;
+  --bg: #0f1321;
   --surface: #0B1430;
+  --surface-elevated: #101D42;
+  --surface-container: #1b1f2e;
   --line: #1A2850;
+  --line-subtle: #121E3E;
   --ink: #E6E6E6;
   --mute: #8D99B3;
   --primary: #0D6EFD;
   --accent: #00C3FF;
-  --ok: #10B981;
-  --warn: #F59E0B;
-  --err: #EF4444;
+  --ok: #00E5A3;
+  --warn: #FFB020;
+  --err: #FF486A;
 }
 
 [data-theme="light"] {
   --bg: #F4F7FD;
   --surface: #FFFFFF;
+  --surface-elevated: #F8FAFC;
+  --surface-container: #EDF2F7;
   --line: #C9D6F2;
+  --line-subtle: #E2E8F0;
   --ink: #0B1226;
   --mute: #4B5878;
   --primary: #0D6EFD;
   --accent: #0087B8;
-  --ok: #10B981;
-  --warn: #F59E0B;
-  --err: #EF4444;
+  --ok: #059669;
+  --warn: #D97706;
+  --err: #DC2626;
 }
-

@@ -1,87 +1,93 @@
 import React from "react";
+import { Compass, Code2, Rocket } from "lucide-react";
 import { useI18n } from "../../lib/i18n";
-import { Compass, Cpu, Rocket } from "lucide-react";
 
 export const Process: React.FC = () => {
-  const { t, locale } = useI18n();
+  const { locale } = useI18n();
 
   const steps = [
     {
-      icon: <Compass className="w-5 h-5 text-accent" />,
-      tag_ar: "تخطيط واستكشاف",
-      tag_en: "Discovery & Architecture",
-      title: t("process.1.title"),
-      desc: t("process.1.desc")
+      num: "01",
+      tag: "// ANALYZE & SPECIFY",
+      icon: Compass,
+      title: locale === "ar" ? "أفكار وتخطيط" : "Analyze & Architecture",
+      desc: locale === "ar"
+        ? "تحليل المتطلبات وصياغة المعمارية التقنية، اختيار حزم التكنولوجيا المناسبة، وهيكلة واجهات المستخدم والمخططات البيانية بدقة شاملة."
+        : "Deep requirements discovery, technical architecture planning, stack selection, and high-fidelity wireframing.",
+      accentClass: "text-primary/30"
     },
     {
-      icon: <Cpu className="w-5 h-5 text-primary" />,
-      tag_ar: "تطوير واختبار مستمر",
-      tag_en: "Agile Engineering & QA",
-      title: t("process.2.title"),
-      desc: t("process.2.desc")
+      num: "02",
+      tag: "// IMPLEMENT & VERIFY",
+      icon: Code2,
+      title: locale === "ar" ? "تطوير واختبار" : "Build & Test Rigorously",
+      desc: locale === "ar"
+        ? "كتابة كود نظيف وقابل للصيانة، اختبارات آلية للوظائف والأمان، مراجعات معمارية مستمرة، وضمان استجابة وتوافق فائق مع جميع الشاشات."
+        : "Maintainable clean code, automated unit & integration testing, strict security audits, and continuous peer review.",
+      accentClass: "text-secondary/30"
     },
     {
-      icon: <Rocket className="w-5 h-5 text-accent" />,
-      tag_ar: "إطلاق وتوسّع",
-      tag_en: "Deployment & Scale",
-      title: t("process.3.title"),
-      desc: t("process.3.desc")
+      num: "03",
+      tag: "// SHIP & MAINTAIN",
+      icon: Rocket,
+      title: locale === "ar" ? "إطلاق ومتابعة" : "Deploy & Monitor Live",
+      desc: locale === "ar"
+        ? "نشر حتمي على خوادم الإنتاج والـ Edge، مراقبة استباقية لمعدلات الأداء والاستقرار، ودعم فني مستمر لضمان استدامة النظام."
+        : "Automated containerized deployment, zero-downtime migrations, live telemetry, and proactive operational support.",
+      accentClass: "text-status-ok/30"
     }
   ];
 
   return (
-    <section className="py-20 border-t border-line">
-      <div className="max-w-6xl mx-auto p-inline-safe">
-        {/* Section Header */}
-        <div className="space-y-2 mb-12 text-start">
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-ink">
-            {t("process.title")}
-          </h2>
-          <p className="text-mute text-sm">
-            {locale === "ar"
-              ? "تسلسل هندسي واضح ومحدد من الفكرة إلى الإنتاج والمتابعة"
-              : "A transparent, structured engineering lifecycle from vision to production"}
-          </p>
-        </div>
+    <section className="w-full px-4 sm:px-6 lg:px-8 py-20 max-w-7xl mx-auto">
+      {/* Header */}
+      <div className="flex flex-col items-center text-center gap-2 mb-12">
+        <span className="font-mono text-xs sm:text-sm text-secondary">
+          03 // ENGINEERING METHODOLOGY
+        </span>
+        <h2 className="text-3xl sm:text-4xl font-extrabold text-text-primary tracking-tight">
+          {locale === "ar" ? "مراحل العمل الهندسية" : "Engineering Methodology"}
+        </h2>
+        <p className="text-text-muted text-sm sm:text-base max-w-xl">
+          {locale === "ar"
+            ? "مسار عمل منهجي يضمن تحويل الرؤية المجردة إلى منتج ملموس بأعلى درجات الانضباط والجاهزية."
+            : "A disciplined, step-by-step pipeline ensuring transparent execution from blueprint to production readiness."}
+        </p>
+      </div>
 
-        {/* Process Flow with Progressive Pipeline Rhythm */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
-          {steps.map((step, idx) => (
+      {/* 3 Sequential Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+        {steps.map(s => {
+          const IconComp = s.icon;
+          return (
             <div
-              key={idx}
-              className="p-6 sm:p-7 rounded-card border border-line bg-surface/40 hover:border-accent/40 hover:bg-surface/60 transition-all text-start relative group flex flex-col justify-between"
+              key={s.num}
+              className="p-6 sm:p-8 rounded-xl bg-surface border border-line hover:border-secondary/40 transition-all duration-300 relative flex flex-col gap-4 shadow-sm"
             >
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="p-2.5 rounded-lg border border-line bg-surface group-hover:border-accent/40 transition-colors">
-                    {step.icon}
-                  </div>
-                  <span className="text-[11px] font-mono font-medium text-mute uppercase tracking-wider">
-                    {locale === "ar" ? step.tag_ar : step.tag_en}
-                  </span>
+              <div className="flex items-center justify-between">
+                <span className={`font-mono text-3xl sm:text-4xl font-extrabold ${s.accentClass}`}>
+                  {s.num}
+                </span>
+                <div className="w-12 h-12 rounded-lg bg-surface-container border border-line flex items-center justify-center text-secondary">
+                  <IconComp className="w-6 h-6" />
                 </div>
+              </div>
 
-                <h3 className="text-lg font-bold text-ink group-hover:text-primary transition-colors">
-                  {step.title}
+              <div className="flex flex-col gap-1.5">
+                <h3 className="text-lg sm:text-xl font-bold text-text-primary">
+                  {s.title}
                 </h3>
-
-                <p className="text-mute text-sm leading-relaxed">
-                  {step.desc}
+                <p className="text-text-muted text-sm leading-relaxed">
+                  {s.desc}
                 </p>
               </div>
 
-              {/* Progress indicator bar on card bottom */}
-              <div className="pt-6">
-                <div className="h-0.5 w-full bg-line rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-gradient-to-r from-primary to-accent transition-all duration-300"
-                    style={{ width: `${(idx + 1) * 33.33}%` }}
-                  />
-                </div>
+              <div className="mt-auto pt-4 border-t border-line font-mono text-xs text-text-muted">
+                <span>{s.tag}</span>
               </div>
             </div>
-          ))}
-        </div>
+          );
+        })}
       </div>
     </section>
   );

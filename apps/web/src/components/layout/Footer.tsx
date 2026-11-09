@@ -2,116 +2,130 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useI18n } from "../../lib/i18n";
 import { Logo } from "./Logo";
-import { Mail, Phone, MapPin, Github, Linkedin } from "lucide-react";
+import { Mail, Phone, MapPin, Github, Linkedin, ShieldCheck } from "lucide-react";
 
 export const Footer: React.FC = () => {
   const { t, locale } = useI18n();
 
   return (
-    <footer className="border-t border-line bg-surface/40 pt-16 pb-12 mt-20">
-      <div className="max-w-6xl mx-auto p-inline-safe">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-line">
-          {/* Col 1: Brand & Tagline */}
-          <div className="md:col-span-2 space-y-4">
-            <Logo size={40} />
-            <p className="text-mute text-sm max-w-sm leading-relaxed">
+    <footer className="w-full bg-surface-container-lowest border-t border-line mt-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-line">
+          {/* Col 1: Brand & Operational Status */}
+          <div className="lg:col-span-5 flex flex-col gap-4">
+            <Logo size={38} />
+            <p className="text-text-muted text-sm max-w-md leading-relaxed">
               {locale === "ar"
-                ? "شركة برمجيات جزائرية متخصصة في بناء تطبيقات الويب والموبايل والأنظمة السحابية المتقدمة وفق أعلى معايير الجودة."
-                : "Algerian software agency engineering high-performance web, mobile, and custom systems built for scale and reliability."}
+                ? "نبني حلولاً رقمية وتطبيقات قابلة للتوسع بدقة هندسية عالية - الجزائر. تجربة برمجية متقدمة تواكب التطور السحابي والخوارزمي بأعلى معايير الجودة."
+                : "Algerian software agency engineering high-performance web, mobile, and custom systems built for scale and reliability with mathematical precision."}
             </p>
-            <div className="flex items-center gap-3 pt-2 text-mute">
-              <a
-                href="https://github.com/an-dev"
-                target="_blank"
-                rel="noreferrer"
-                className="p-2 rounded border border-line hover:text-accent hover:border-accent/40 transition-colors"
-                aria-label="GitHub"
-              >
-                <Github className="w-4 h-4" />
-              </a>
-              <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noreferrer"
-                className="p-2 rounded border border-line hover:text-accent hover:border-accent/40 transition-colors"
-                aria-label="LinkedIn"
-              >
-                <Linkedin className="w-4 h-4" />
-              </a>
+            <div className="flex items-center gap-2 pt-1">
+              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-surface-container border border-line text-secondary font-mono text-xs">
+                <span className="w-2 h-2 rounded-full bg-status-ok animate-pulse" />
+                <span>{locale === "ar" ? "الجزائر العاصمة | أنظمة نشطة" : "Algiers Hub | Active Systems"}</span>
+              </span>
             </div>
           </div>
 
-          {/* Col 2: Navigation */}
-          <div className="space-y-3">
-            <h4 className="text-xs font-mono uppercase tracking-widest text-accent font-semibold">
-              {locale === "ar" ? "روابط سريعة" : "Navigation"}
+          {/* Col 2: Navigation Links */}
+          <div className="lg:col-span-3 flex flex-col gap-3">
+            <h4 className="text-xs font-mono uppercase tracking-widest text-secondary font-bold">
+              {locale === "ar" ? "روابط سريعة" : "Quick Links"}
             </h4>
-            <ul className="space-y-2 text-sm text-mute">
+            <ul className="space-y-2 text-sm text-text-muted">
               <li>
-                <Link to="/" className="hover:text-accent transition-colors">
+                <Link to="/" className="hover:text-text-primary transition-colors">
                   {t("nav.home")}
                 </Link>
               </li>
               <li>
-                <Link to="/projects" className="hover:text-accent transition-colors">
+                <Link to="/#services" className="hover:text-text-primary transition-colors">
+                  {t("nav.services")}
+                </Link>
+              </li>
+              <li>
+                <Link to="/projects" className="hover:text-text-primary transition-colors">
                   {t("nav.projects")}
                 </Link>
               </li>
               <li>
-                <Link to="/blog" className="hover:text-accent transition-colors">
+                <Link to="/blog" className="hover:text-text-primary transition-colors">
                   {t("nav.blog")}
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="hover:text-accent transition-colors">
+                <Link to="/contact" className="hover:text-text-primary transition-colors">
                   {t("nav.contact")}
-                </Link>
-              </li>
-              <li>
-                <Link to="/admin/login" className="hover:text-accent transition-colors text-xs opacity-75">
-                  {locale === "ar" ? "لوحة الإدارة" : "Admin Login"}
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Col 3: Contact coordinates */}
-          <div className="space-y-3">
-            <h4 className="text-xs font-mono uppercase tracking-widest text-accent font-semibold">
-              {locale === "ar" ? "تواصل مباشر" : "Direct Contact"}
+          {/* Col 3: Direct Contact Coordinates */}
+          <div className="lg:col-span-4 flex flex-col gap-3">
+            <h4 className="text-xs font-mono uppercase tracking-widest text-secondary font-bold">
+              {locale === "ar" ? "بيانات التواصل والمقر" : "Direct Coordinates"}
             </h4>
-            <ul className="space-y-2.5 text-sm text-mute">
-              <li className="flex items-center gap-2">
-                <Mail className="w-4 h-4 text-primary flex-shrink-0" />
-                <a href="mailto:contact@andev.dz" className="hover:text-accent transition-colors">
+            <ul className="space-y-2.5 text-sm text-text-muted">
+              <li className="flex items-center gap-2.5">
+                <Mail className="w-4 h-4 text-secondary shrink-0" />
+                <a href="mailto:contact@andev.dz" className="hover:text-text-primary transition-colors">
                   contact@andev.dz
                 </a>
               </li>
-              <li className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-primary flex-shrink-0" />
-                <a href="https://wa.me/213550123456" target="_blank" rel="noreferrer" className="hover:text-accent transition-colors" dir="ltr">
+              <li className="flex items-center gap-2.5">
+                <Phone className="w-4 h-4 text-secondary shrink-0" />
+                <a href="https://wa.me/213550123456" target="_blank" rel="noreferrer" className="hover:text-text-primary transition-colors" dir="ltr">
                   +213 550 12 34 56
                 </a>
               </li>
-              <li className="flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-primary flex-shrink-0" />
-                <span>{locale === "ar" ? "الجزائر العاصمة، الجزائر" : "Algiers, Algeria"}</span>
+              <li className="flex items-center gap-2.5">
+                <MapPin className="w-4 h-4 text-secondary shrink-0" />
+                <span>{locale === "ar" ? "الجزائر العاصمة، الجمهورية الجزائرية" : "Algiers, Algeria"}</span>
+              </li>
+              <li className="pt-2 flex items-center gap-3">
+                <a
+                  href="https://github.com/an-dev"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="p-2 rounded-lg bg-surface-container border border-line text-text-muted hover:text-secondary hover:border-secondary/40 transition-colors"
+                  aria-label="GitHub"
+                >
+                  <Github className="w-4 h-4" />
+                </a>
+                <a
+                  href="https://linkedin.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="p-2 rounded-lg bg-surface-container border border-line text-text-muted hover:text-secondary hover:border-secondary/40 transition-colors"
+                  aria-label="LinkedIn"
+                >
+                  <Linkedin className="w-4 h-4" />
+                </a>
+                <Link
+                  to="/admin/login"
+                  className="p-2 rounded-lg bg-surface-container border border-line text-text-muted hover:text-secondary hover:border-secondary/40 transition-colors"
+                  title="Admin Access"
+                >
+                  <ShieldCheck className="w-4 h-4" />
+                </Link>
               </li>
             </ul>
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-mute/80 gap-3">
-          <p>{t("footer.rights")}</p>
-          <div className="flex items-center gap-4 font-mono">
-            <span>Vite + React</span>
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-text-muted">
+          <div>
+            &copy; {new Date().getFullYear()} AN DEV. All Rights Reserved. // Code · Create · Solve
+          </div>
+          <div className="flex items-center gap-4">
+            <span className="text-secondary font-semibold">Algeria Tech Hub</span>
             <span>•</span>
-            <span>Fastify + SQLite</span>
+            <span>Vite + React + SQLite</span>
           </div>
         </div>
       </div>
     </footer>
   );
 };
-

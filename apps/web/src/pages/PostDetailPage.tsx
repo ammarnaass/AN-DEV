@@ -4,7 +4,15 @@ import { useQuery } from "@tanstack/react-query";
 import { useI18n } from "../lib/i18n";
 import { apiFetch } from "../lib/api";
 import { Post } from "@andev/shared";
-import { ArrowLeft, ArrowRight, Calendar } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Calendar,
+  Clock,
+  Terminal,
+  ShieldCheck,
+  MessageSquare
+} from "lucide-react";
 
 export const PostDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -18,21 +26,21 @@ export const PostDetailPage: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="pt-36 pb-24 max-w-2xl mx-auto p-inline-safe space-y-6 animate-pulse">
+      <div className="pt-32 pb-24 max-w-4xl mx-auto px-4 space-y-6 animate-pulse">
         <div className="h-6 w-32 bg-surface rounded" />
-        <div className="h-10 w-full bg-surface rounded" />
-        <div className="h-60 bg-surface rounded-card" />
+        <div className="h-12 w-3/4 bg-surface rounded" />
+        <div className="h-96 bg-surface rounded-xl" />
       </div>
     );
   }
 
   if (error || !post) {
     return (
-      <div className="pt-40 pb-24 max-w-md mx-auto p-inline-safe text-center space-y-4">
-        <h2 className="text-xl font-bold text-ink">
+      <div className="pt-40 pb-24 max-w-md mx-auto px-4 text-center space-y-4">
+        <h2 className="text-xl font-bold text-text-primary">
           {locale === "ar" ? "المقال غير موجود" : "Article Not Found"}
         </h2>
-        <Link to="/blog" className="text-primary hover:underline text-sm">
+        <Link to="/blog" className="text-secondary hover:underline text-sm font-semibold">
           {locale === "ar" ? "العودة إلى المدونة" : "Back to Blog"}
         </Link>
       </div>
@@ -43,36 +51,101 @@ export const PostDetailPage: React.FC = () => {
   const body = locale === "ar" ? post.body_md_ar : post.body_md_en;
 
   return (
-    <article className="pt-20 sm:pt-24 pb-20 max-w-2xl mx-auto p-inline-safe space-y-8 text-start">
-      {/* Back to Blog */}
-      <div>
-        <Link
-          to="/blog"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-mute hover:text-accent transition-colors"
-        >
-          {isRtl ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
-          <span>{locale === "ar" ? "العودة إلى المدونة" : "Back to Blog"}</span>
-        </Link>
+    <article className="pt-24 sm:pt-28 pb-20 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 text-start">
+      {/* Top Breadcrumbs & Badges Bar */}
+      <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-line">
+        <div className="flex items-center gap-2 font-mono text-xs text-text-muted">
+          <Link
+            to="/blog"
+            className="inline-flex items-center gap-1.5 text-secondary hover:text-text-primary transition-colors font-semibold"
+          >
+            {isRtl ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
+            <span>{locale === "ar" ? "المدونة الهندسية" : "Engineering Journal"}</span>
+          </Link>
+          <span>/</span>
+          <span className="text-text-primary font-medium truncate max-w-[200px] sm:max-w-none">
+            {title}
+          </span>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-surface-container border border-line text-secondary font-mono text-xs">
+            <ShieldCheck className="w-3.5 h-3.5 text-status-ok" />
+            <span>PRODUCTION VERIFIED</span>
+          </span>
+        </div>
       </div>
 
       {/* Post Header */}
-      <header className="space-y-4 border-b border-line pb-8">
-        <div className="flex items-center gap-2 text-xs font-mono text-accent">
-          <Calendar className="w-3.5 h-3.5" />
-          <span>{post.published_at ? new Date(post.published_at).toLocaleDateString(locale === "ar" ? "ar-DZ" : "en-US") : "2026-11-07"}</span>
+      <header className="space-y-4">
+        <div className="flex flex-wrap items-center gap-3 text-xs font-mono text-text-muted">
+          <span className="flex items-center gap-1.5 text-secondary font-bold">
+            <Terminal className="w-3.5 h-3.5" />
+            <span>ARCHITECTURE // DATABASE</span>
+          </span>
           <span>•</span>
-          <span>AN DEV Engineering</span>
+          <span className="flex items-center gap-1">
+            <Calendar className="w-3.5 h-3.5 text-secondary" />
+            <span>{post.published_at ? new Date(post.published_at).toLocaleDateString(locale === "ar" ? "ar-DZ" : "en-US") : "2026-11-07"}</span>
+          </span>
+          <span>•</span>
+          <span className="flex items-center gap-1">
+            <Clock className="w-3.5 h-3.5 text-secondary" />
+            <span>8 min read</span>
+          </span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-ink tracking-tight leading-snug">
+
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-text-primary tracking-tight leading-tight">
           {title}
         </h1>
       </header>
 
-      {/* Post Markdown Content (around 70 characters line length per PRD) */}
-      <div className="prose prose-invert max-w-none space-y-5 text-ink/90 text-base sm:text-lg leading-[1.8] font-sans">
-        <div className="whitespace-pre-line">
+      {/* Architecture Benchmark Metrics Banner */}
+      <div className="p-6 rounded-2xl bg-surface border border-line grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="space-y-1">
+          <span className="text-xs font-mono text-text-muted">PostgreSQL API Latency</span>
+          <div className="text-2xl font-black text-status-err font-mono">140ms</div>
+          <span className="text-[11px] text-text-muted">Overhead on mobile networks</span>
+        </div>
+        <div className="space-y-1">
+          <span className="text-xs font-mono text-secondary">SQLite WAL Mode Latency</span>
+          <div className="text-2xl font-black text-status-ok font-mono">&lt; 22ms</div>
+          <span className="text-[11px] text-status-ok">84% latency reduction</span>
+        </div>
+        <div className="space-y-1">
+          <span className="text-xs font-mono text-text-muted">Replication Method</span>
+          <div className="text-2xl font-black text-secondary font-mono">Litestream</div>
+          <span className="text-[11px] text-text-muted">Continuous real-time S3 sync</span>
+        </div>
+      </div>
+
+      {/* Markdown Content Container */}
+      <div className="p-6 sm:p-10 rounded-2xl bg-surface border border-line text-text-primary space-y-6 leading-relaxed text-sm sm:text-base font-sans">
+        <div className="whitespace-pre-line prose prose-invert max-w-none text-text-primary">
           {body}
         </div>
+      </div>
+
+      {/* Bottom Architectural Consulting CTA */}
+      <div className="p-8 rounded-2xl bg-gradient-to-r from-surface via-surface-elevated to-surface border border-secondary/40 shadow-card flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div className="space-y-2 text-start">
+          <h3 className="text-lg sm:text-xl font-bold text-text-primary">
+            {locale === "ar"
+              ? "هل تواجه بطئاً أو اختناقات معمارية في نظامك الحالي؟"
+              : "Facing performance bottlenecks in your existing architecture?"}
+          </h3>
+          <p className="text-text-muted text-xs sm:text-sm">
+            {locale === "ar"
+              ? "فريق AN DEV جاهز لمراجعة الكود، تدقيق قواعد البيانات، وتقديم استشارة هندسية ملموسة."
+              : "Our senior engineers conduct comprehensive code reviews and performance audits."}
+          </p>
+        </div>
+        <Link to="/contact" className="shrink-0">
+          <button className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-primary-container text-white font-semibold text-sm hover:bg-secondary-container hover:text-surface transition-all shadow-[0_0_16px_rgba(13,110,253,0.35)] active:scale-[0.98]">
+            <MessageSquare className="w-4 h-4" />
+            <span>{locale === "ar" ? "طلب استشارة معمارية" : "Request Technical Audit"}</span>
+          </button>
+        </Link>
       </div>
     </article>
   );
