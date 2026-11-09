@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@100..900&family=Space+Grotesk:wght@100..900&display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"on-tertiary-fixed-variant":"#7f2b00","inverse-surface":"#dfe1f6","text-primary":"#E6E6E6","on-error-container":"#ffdad6","on-surface":"#dfe1f6","surface-dim":"#0f1321","error-container":"#93000a","inverse-on-surface":"#2c303f","status-err":"#FF486A","outline":"#8c90a1","secondary-fixed-dim":"#73d1ff","text-muted":"#8D99B3","surface-variant":"#303444","on-background":"#dfe1f6","on-tertiary":"#5a1c00","on-surface-variant":"#c2c6d8","tertiary-fixed":"#ffdbce","inverse-primary":"#0057ce","error":"#ffb4ab","surface-bright":"#353849","primary":"#b1c5ff","secondary-fixed":"#c1e8ff","tertiary":"#ffb599","tertiary-container":"#cf4b00","tertiary-fixed-dim":"#ffb599","surface-container-highest":"#303444","on-error":"#690005","surface-container-low":"#171b2a","primary-container":"#0d6efd","surface-tint":"#b1c5ff","on-primary-fixed":"#001946","surface-container":"#1b1f2e","on-tertiary-fixed":"#370e00","primary-fixed-dim":"#b1c5ff","outline-variant":"#424655","line":"#1A2850","on-secondary-fixed":"#001e2b","on-tertiary-container":"#ffffff","on-primary":"#002c70","on-secondary":"#003548","line-subtle":"#121E3E","surface-elevated":"#101D42","on-primary-fixed-variant":"#00419e","primary-fixed":"#dae2ff","surface-container-high":"#262939","surface-container-lowest":"#0a0d1c","status-ok":"#00E5A3","status-warn":"#FFB020","on-secondary-fixed-variant":"#004d67","on-primary-container":"#ffffff","surface":"#0B1430","secondary":"#95dbff","background":"#0f1321","on-secondary-container":"#004d67","secondary-container":"#14c4ff"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"space-xl":"2.5rem","margin-sm":"1rem","gutter":"1.5rem","margin":"2rem","space-md":"1rem","space-xs":"0.25rem","space-sm":"0.5rem","gutter-sm":"1rem","space-lg":"1.5rem"},"fontFamily":{"headline-lg":["Space Grotesk"],"title-lg":["Inter"],"code-block":["JetBrains Mono"],"body-md":["Inter"],"body-sm":["Inter"],"label-sm":["JetBrains Mono"],"title-md":["Inter"],"headline-md":["Space Grotesk"],"headline-xl-mobile":["Space Grotesk"],"headline-lg-mobile":["Space Grotesk"],"headline-xl":["Space Grotesk"],"body-lg":["Inter"],"label-md":["JetBrains Mono"]},"fontSize":{"headline-lg":["32px",{"lineHeight":"42px","fontWeight":"600"}],"title-lg":["20px",{"lineHeight":"28px","fontWeight":"600"}],"code-block":["13px",{"lineHeight":"20px","fontWeight":"400"}],"body-md":["14px",{"lineHeight":"22px","fontWeight":"400"}],"body-sm":["12px",{"lineHeight":"18px","fontWeight":"400"}],"label-sm":["11px",{"lineHeight":"16px","fontWeight":"500"}],"title-md":["16px",{"lineHeight":"24px","fontWeight":"600"}],"headline-md":["24px",{"lineHeight":"32px","fontWeight":"600"}],"headline-xl-mobile":["30px",{"lineHeight":"40px","fontWeight":"700"}],"headline-lg-mobile":["24px",{"lineHeight":"32px","fontWeight":"600"}],"headline-xl":["40px",{"lineHeight":"52px","fontWeight":"700"}],"body-lg":["16px",{"lineHeight":"26px","fontWeight":"400"}],"label-md":["13px",{"lineHeight":"18px","fontWeight":"500"}]}}}};</script></head><body class="bg-background font-body-md text-on-surface antialiased"><aside class="fixed right-0 top-0 h-full w-72 bg-surface z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col"><div class="h-16 px-space-lg flex items-center justify-between bg-surface-container-low"><div class="flex items-center gap-space-sm"><div class="w-9 h-9 rounded-lg bg-primary-container flex items-center justify-center text-on-primary-container font-headline-md text-headline-md">AN</div><div class="flex flex-col"><span class="font-title-md text-title-md text-text-primary tracking-tight">AN DEV Core</span><span class="font-label-sm text-label-sm text-text-muted">نظام إدارة الوكالة</span></div></div><div class="w-2.5 h-2.5 rounded-full bg-status-ok animate-pulse"></div></div><div class="px-space-md py-space-sm"><div class="px-space-md py-space-xs rounded-DEFAULT bg-surface-container-lowest flex items-center justify-between text-text-muted font-label-sm text-label-sm"><div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-[14px] text-secondary">sync_saved_locally</span><span>Litestream SQLite</span></div><span class="text-status-ok">نشط</span></div></div><nav class="flex flex-col gap-space-xs px-space-md py-space-sm" data-active-classes="bg-primary-container text-on-primary-container font-title-md"><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-elevated hover:text-on-surface transition-all group" data-path="overview" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px] text-text-muted group-hover:text-primary transition-colors">dashboard</span><span class="font-body-md text-body-md">لوحة التحكم الرئيسية</span></div></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-elevated hover:text-on-surface transition-all group" data-path="inquiries" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px] text-text-muted group-hover:text-primary transition-colors">contact_mail</span><span class="font-body-md text-body-md">إدارة الطلبات والاستفسارات</span></div><span class="px-space-sm py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-semibold">3 جديدة</span></a><a aria-current="page" class="flex items-center justify-between px-space-md py-space-sm rounded-lg transition-all group bg-primary-container text-on-primary-container font-title-md" data-path="projects" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px] text-text-muted group-hover:text-primary transition-colors">developer_mode_tv</span><span class="font-body-md text-body-md">إدارة المشاريع</span></div></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-elevated hover:text-on-surface transition-all group" data-path="posts" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px] text-text-muted group-hover:text-primary transition-colors">article</span><span class="font-body-md text-body-md">المقالات والمدونة</span></div></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-elevated hover:text-on-surface transition-all group" data-path="settings" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px] text-text-muted group-hover:text-primary transition-colors">settings</span><span class="font-body-md text-body-md">إعدادات الموقع</span></div></a></nav></div><div class="p-space-md bg-surface-container-lowest flex flex-col gap-space-xs"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-text-muted hover:bg-surface-elevated hover:text-on-surface transition-all font-body-sm text-body-sm" data-path="home" href="#"><span class="material-symbols-outlined text-[18px]">open_in_new</span><span>زيارة الموقع العام</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-status-err hover:bg-error-container hover:text-on-error transition-all font-body-sm text-body-sm" data-path="logout" href="#"><span class="material-symbols-outlined text-[18px]">logout</span><span>تسجيل الخروج</span></a></div></aside><div class="pr-72"><header class="fixed top-0 right-72 left-0 h-16 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-space-lg"><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs text-text-muted font-label-md text-label-md"><span>AN DEV</span><span class="material-symbols-outlined text-[14px]">chevron_left</span><span class="text-primary font-medium">لوحة الإدارة</span></div></div><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs px-space-sm py-1 rounded-full bg-surface-container-high text-status-ok font-label-sm text-label-sm"><span class="w-2 h-2 rounded-full bg-status-ok"></span><span>الخادم متصل</span></div><button class="relative p-space-xs text-on-surface-variant hover:bg-surface-elevated hover:text-on-surface rounded-lg transition-colors"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-1 left-1 w-2 h-2 rounded-full bg-status-err"></span></button><div class="flex items-center gap-space-sm pr-space-sm"><div class="flex flex-col text-left"><span class="font-title-md text-title-md text-text-primary">Ammar</span><span class="font-label-sm text-label-sm text-text-muted">مدير النظام</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="relative pt-16 w-full min-h-screen bg-background px-space-lg py-space-lg"><div class="flex flex-col w-full gap-space-lg">
+<!-- Top Headline & Action Center -->
+<section class="relative overflow-hidden rounded-xl bg-surface-container p-space-lg shadow-xl">
+<div class="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-secondary-container/10 blur-3xl pointer-events-none"></div>
+<div class="absolute -bottom-24 right-1/4 w-80 h-80 rounded-full bg-primary-container/15 blur-3xl pointer-events-none"></div>
+<div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-space-md">
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-sm text-secondary font-label-md text-label-md">
+<span class="inline-flex w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_rgba(20,196,255,0.8)]"></span>
+<span class="tracking-wider">AN DEV PORTFOLIO ENGINE // ARCHITECTURE CORE</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-text-primary tracking-tight">إدارة المشاريع ومعرض الأعمال</h1>
+<p class="font-body-md text-body-md text-text-muted max-w-2xl">
+          إضافة، تعديل، وترتيب المشاريع المعروضة على الواجهة العامة مع إدارة التقنيات، استهلاك الذاكرة، والصور عالية الكفاءة.
+        </p>
+</div>
+<div class="flex flex-wrap items-center gap-space-sm">
+<a class="inline-flex items-center gap-space-xs px-space-md py-2.5 rounded-lg bg-surface-container-high text-on-surface hover:bg-surface-elevated hover:text-secondary transition-all font-body-md text-body-md shadow-sm" href="#">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+<span>معاينة المعرض العام</span>
+</a>
+<button class="inline-flex items-center gap-space-xs px-space-md py-2.5 rounded-lg bg-primary-container text-on-primary-container font-title-md text-title-md hover:bg-secondary-container hover:text-on-secondary-container hover:shadow-[0_0_20px_rgba(13,110,253,0.4)] transition-all" id="open-new-project-btn">
+<span class="material-symbols-outlined text-[20px]">add_box</span>
+<span>إضافة مشروع جديد</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Metrics & Telemetry Strip -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-md">
+<div class="relative overflow-hidden rounded-xl bg-surface p-space-md shadow-md flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-text-muted">المشاريع المنشورة</span>
+<div class="flex items-baseline gap-space-xs mt-1">
+<span class="font-headline-md text-headline-md text-text-primary">6</span>
+<span class="font-label-sm text-label-sm text-status-ok font-semibold">/ 8 إجمالي</span>
+</div>
+</div>
+<div class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center text-status-ok">
+<span class="material-symbols-outlined text-[26px]">public</span>
+</div>
+</div>
+<div class="relative overflow-hidden rounded-xl bg-surface p-space-md shadow-md flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-text-muted">المسودات قيد التطوير</span>
+<div class="flex items-baseline gap-space-xs mt-1">
+<span class="font-headline-md text-headline-md text-status-warn">2</span>
+<span class="font-label-sm text-label-sm text-text-muted">غير معروضة</span>
+</div>
+</div>
+<div class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center text-status-warn">
+<span class="material-symbols-outlined text-[26px]">edit_document</span>
+</div>
+</div>
+<div class="relative overflow-hidden rounded-xl bg-surface p-space-md shadow-md flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-text-muted">توثيق المعمارية</span>
+<div class="flex items-baseline gap-space-xs mt-1">
+<span class="font-headline-md text-headline-md text-secondary">100%</span>
+<span class="font-label-sm text-label-sm text-status-ok">مكتمل</span>
+</div>
+</div>
+<div class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[26px]">verified</span>
+</div>
+</div>
+<div class="relative overflow-hidden rounded-xl bg-surface p-space-md shadow-md flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-text-muted">معالجة الوسائط (Sharp)</span>
+<div class="flex items-baseline gap-space-xs mt-1">
+<span class="font-headline-md text-headline-md text-primary">WebP</span>
+<span class="font-label-sm text-label-sm text-text-muted">84% ضغط مثالي</span>
+</div>
+</div>
+<div class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[26px]">speed</span>
+</div>
+</div>
+</section>
+<!-- Filter & Search Command Row -->
+<section class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-space-md rounded-xl bg-surface p-space-md shadow-md">
+<!-- Filter Chips -->
+<div class="flex flex-wrap items-center gap-space-xs">
+<button class="px-space-md py-1.5 rounded-lg bg-secondary-container text-on-secondary-container font-label-md text-label-md font-semibold transition-all">
+        الكل (8)
+      </button>
+<button class="px-space-md py-1.5 rounded-lg bg-surface-container-low text-text-muted hover:bg-surface-elevated hover:text-on-surface font-label-md text-label-md transition-all">
+        تطبيقات الويب (4)
+      </button>
+<button class="px-space-md py-1.5 rounded-lg bg-surface-container-low text-text-muted hover:bg-surface-elevated hover:text-on-surface font-label-md text-label-md transition-all">
+        تطبيقات الموبايل (2)
+      </button>
+<button class="px-space-md py-1.5 rounded-lg bg-surface-container-low text-text-muted hover:bg-surface-elevated hover:text-on-surface font-label-md text-label-md transition-all">
+        أنظمة السحاب و API (2)
+      </button>
+</div>
+<!-- Search Input & Sort Hint -->
+<div class="flex items-center gap-space-sm min-w-[280px] lg:w-96">
+<div class="relative w-full">
+<input class="w-full h-11 pr-10 pl-space-md rounded-lg bg-surface-container-low text-text-primary placeholder:text-text-muted font-body-sm text-body-sm focus:outline-none focus:ring-1 focus:ring-secondary transition-all" id="project-search" placeholder="بحث في عناوين المشاريع والتقنيات..." type="text"/>
+<span class="material-symbols-outlined absolute right-3 top-3 text-[18px] text-text-muted pointer-events-none">search</span>
+</div>
+<button class="h-11 w-11 shrink-0 rounded-lg bg-surface-container-low text-text-muted hover:text-secondary hover:bg-surface-elevated flex items-center justify-center transition-all" title="إعادة تعيين الترتيب">
+<span class="material-symbols-outlined text-[20px]">sort</span>
+</button>
+</div>
+</section>
+<!-- Main Management Layout: Projects List (70%) + Quick Sharp Upload Sandbox (30%) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- Projects Reorderable Area (Col 1-8) -->
+<div class="lg:col-span-8 flex flex-col gap-space-md">
+<div class="flex items-center justify-between px-space-xs">
+<div class="flex items-center gap-space-xs font-label-sm text-label-sm text-text-muted">
+<span class="material-symbols-outlined text-[16px] text-secondary">drag_indicator</span>
+<span>اسحب أي بطاقة لتعديل تسلسل العرض التلقائي (sort_order)</span>
+</div>
+<span class="font-label-sm text-label-sm text-status-ok bg-surface-container-low px-space-sm py-0.5 rounded-full">
+          المزامنة مع SQLite نشطة
+        </span>
+</div>
+<!-- Project List Container with Drag Micro-Interaction Simulation -->
+<div class="flex flex-col gap-space-sm" id="projects-sortable-list">
+<!-- 1. B2B Ecommerce -->
+<article class="group relative rounded-xl bg-surface p-space-md shadow-md hover:bg-surface-elevated transition-all duration-200">
+<div class="flex items-start gap-space-md">
+<button class="mt-2 text-text-muted hover:text-secondary cursor-grab active:cursor-grabbing p-1 rounded hover:bg-surface-container-highest transition-colors" title="إعادة الترتيب">
+<span class="material-symbols-outlined text-[20px]">drag_indicator</span>
+</button>
+<div class="relative w-24 h-24 rounded-lg overflow-hidden shrink-0 bg-surface-container-lowest">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Modern dark mode B2B eCommerce analytics dashboard UI on computer monitor with glowing neon blue cyan charts, clean minimalist data tables, high-tech engineering workstation aesthetics." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0bjQB9m91ihawR8KVapm1lU8BjrxOvP3yV-Bd52eHe_che5_71pWvIKzEZHR6htGBO1tBOiDz8m7rf_Y82z8ADEehYFlZuHRfvyWoUYfMpZ6BOqqcGWLi9nHusDWRr8KcFst-M_MdYpMYHlH1xogk_3O_m8SueYnaKjMGHzqCBDagzhClyrnv6PrdI3iHpQoHV4utC7U3UylL6gLXkcYP1pCTazxJhjLcSKpXymfL"/>
+<span class="absolute top-1 right-1 px-1.5 py-0.5 rounded bg-surface-container-lowest/80 text-[10px] font-label-sm text-secondary">
+                WebP
+              </span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between gap-space-xs mb-1">
+<div class="flex items-center gap-space-xs">
+<h3 class="font-title-md text-title-md text-text-primary truncate">منصة تجارة إلكترونية B2B للشركات</h3>
+<span class="inline-flex items-center gap-0.5 px-space-xs py-0.5 rounded bg-primary-container/20 text-secondary text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span>مميز</span>
+</span>
+</div>
+<div class="flex items-center gap-space-xs shrink-0">
+<span class="w-2 h-2 rounded-full bg-status-ok"></span>
+<span class="font-label-sm text-label-sm text-status-ok">منشور</span>
+</div>
+</div>
+<p class="font-label-sm text-label-sm text-text-muted truncate mb-2" dir="ltr">/projects/b2b-ecommerce</p>
+<!-- Tags -->
+<div class="flex flex-wrap items-center gap-1.5 mb-3">
+<span class="px-2 py-0.5 rounded bg-surface-container text-text-muted font-label-sm text-label-sm">React</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-text-muted font-label-sm text-label-sm">Fastify</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-text-muted font-label-sm text-label-sm">PostgreSQL</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-text-muted font-label-sm text-label-sm">Tailwind</span>
+</div>
+<!-- Actions & State Toggles -->
+<div class="flex items-center justify-between pt-2">
+<div class="flex items-center gap-space-xs">
+<button class="px-space-sm py-1 rounded bg-surface-container-low text-text-muted hover:text-secondary hover:bg-surface-container font-label-sm text-label-sm inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+<span>تعديل</span>
+</button>
+<button class="px-space-sm py-1 rounded bg-surface-container-low text-text-muted hover:text-primary hover:bg-surface-container font-label-sm text-label-sm inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">add_photo_alternate</span>
+<span>الوسائط</span>
+</button>
+<button class="px-space-sm py-1 rounded bg-surface-container-low text-text-muted hover:text-status-warn hover:bg-surface-container font-label-sm text-label-sm inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">visibility_off</span>
+<span>إخفاء</span>
+</button>
+</div>
+<span class="font-label-sm text-label-sm text-text-muted">ترتيب: #1</span>
+</div>
+</div>
+</div>
+</article>
+<!-- 2. Smart Logistics -->
+<article class="group relative rounded-xl bg-surface p-space-md shadow-md hover:bg-surface-elevated transition-all duration-200">
+<div class="flex items-start gap-space-md">
+<button class="mt-2 text-text-muted hover:text-secondary cursor-grab active:cursor-grabbing p-1 rounded hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-[20px]">drag_indicator</span>
+</button>
+<div class="relative w-24 h-24 rounded-lg overflow-hidden shrink-0 bg-surface-container-lowest">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Futuristic fleet GPS logistics tracking interface showing vector map route nodes in dark blue and glowing electric cyan overlays, real time telemetry markers." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQQRrKonIk-k5ISLMTfqze-F0_d6VHgPXeqvxPLpD2qZ2xBXH-wwf_DOgDlLpIMsSqQN6LcNlYuCAcgbsF1gUcEq2GAy7MKaobCtupmLtxNPlgEcg_LQVtAH5_BnR6GdsNw4IQb8ESIrkVPIH_096sTaPf5S7_wJVGoATuJvEIjjhhgK7_xMc5hnX95w5tYTlnEoEx7gn9ReLCQTega-dC6sZ90yVYwzJq8v8E3QtD"/>
+<span class="absolute top-1 right-1 px-1.5 py-0.5 rounded bg-surface-container-lowest/80 text-[10px] font-label-sm text-secondary">
+                WebP
+              </span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between gap-space-xs mb-1">
+<div class="flex items-center gap-space-xs">
+<h3 class="font-title-md text-title-md text-text-primary truncate">لوحة تحكم ذكية للخدمات اللوجستية</h3>
+<span class="inline-flex items-center gap-0.5 px-space-xs py-0.5 rounded bg-primary-container/20 text-secondary text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span>مميز</span>
+</span>
+</div>
+<div class="flex items-center gap-space-xs shrink-0">
+<span class="w-2 h-2 rounded-full bg-status-ok"></span>
+<span class="font-label-sm text-label-sm text-status-ok">منشور</span>
+</div>
+</div>
+<p class="font-label-sm text-label-sm text-text-muted truncate mb-2" dir="ltr">/projects/smart-logistics</p>
+<div class="flex flex-wrap items-center gap-1.5 mb-3">
+<span class="px-2 py-0.5 rounded bg-surface-container text-text-muted font-label-sm text-label-sm">Next.js 14</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-text-muted font-label-sm text-label-sm">MapLibre</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-text-muted font-label-sm text-label-sm">Redis</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-text-muted font-label-sm text-label-sm">WebSockets</span>
+</div>
+<div class="flex items-center justify-between pt-2">
+<div class="flex items-center gap-space-xs">
+<button class="px-space-sm py-1 rounded bg-surface-container-low text-text-muted hover:text-secondary hover:bg-surface-container font-label-sm text-label-sm inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+<span>تعديل</span>
+</button>
+<button class="px-space-sm py-1 rounded bg-surface-container-low text-text-muted hover:text-primary hover:bg-surface-container font-label-sm text-label-sm inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">add_photo_alternate</span>
+<span>الوسائط</span>
+</button>
+<button class="px-space-sm py-1 rounded bg-surface-container-low text-text-muted hover:text-status-warn hover:bg-surface-container font-label-sm text-label-sm inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">visibility_off</span>
+<span>إخفاء</span>
+</button>
+</div>
+<span class="font-label-sm text-label-sm text-text-muted">ترتيب: #2</span>
+</div>
+</div>
+</div>
+</article>
+<!-- 3. Clinic Telehealth -->
+<article class="group relative rounded-xl bg-surface p-space-md shadow-md hover:bg-surface-elevated transition-all duration-200">
+<div class="flex items-start gap-space-md">
+<button class="mt-2 text-text-muted hover:text-secondary cursor-grab active:cursor-grabbing p-1 rounded hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-[20px]">drag_indicator</span>
+</button>
+<div class="relative w-24 h-24 rounded-lg overflow-hidden shrink-0 bg-surface-container-lowest">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Modern telehealth and medical clinical mobile interface preview with doctor consultation cards, schedule calendars, dark navy background with smooth rounded buttons." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUUFjAX2Zlqho2SK8ZR1LD1zbj2ZH0F4yHQOm4fvh22rXvK8Hm0tSWQDJeXcWM8aUdtZELefutRuAg4SeiCbI9F10sxHpG_cLc9OHd5u_HLro8mgLhhjDwQVCGnHcGtGo4nyToNgigZotr7lCOzOd3bskK9KoVkbAEyW9AFZa5iheHtvODxiXqg9WnQt_vE-vtypQE6ZAB7H0jR4SoFzl5EvmKYHanqbqjFqyy-8_6"/>
+<span class="absolute top-1 right-1 px-1.5 py-0.5 rounded bg-surface-container-lowest/80 text-[10px] font-label-sm text-secondary">
+                WebP
+              </span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between gap-space-xs mb-1">
+<h3 class="font-title-md text-title-md text-text-primary truncate">تطبيق إدارة العيادات والمواعيد الطبية</h3>
+<div class="flex items-center gap-space-xs shrink-0">
+<span class="w-2 h-2 rounded-full bg-status-ok"></span>
+<span class="font-label-sm text-label-sm text-status-ok">منشور</span>
+</div>
+</div>
+<p class="font-label-sm text-label-sm text-text-muted truncate mb-2" dir="ltr">/projects/clinic-telehealth</p>
+<div class="flex flex-wrap items-center gap-1.5 mb-3">
+<span class="px-2 py-0.5 rounded bg-surface-container text-text-muted font-label-sm text-label-sm">Flutter</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-text-muted font-label-sm text-label-sm">Dart</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-text-muted font-label-sm text-label-sm">Firebase</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-text-muted font-label-sm text-label-sm">WebRTC</span>
+</div>
+<div class="flex items-center justify-between pt-2">
+<div class="flex items-center gap-space-xs">
+<button class="px-space-sm py-1 rounded bg-surface-container-low text-text-muted hover:text-secondary hover:bg-surface-container font-label-sm text-label-sm inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+<span>تعديل</span>
+</button>
+<button class="px-space-sm py-1 rounded bg-surface-container-low text-text-muted hover:text-primary hover:bg-surface-container font-label-sm text-label-sm inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">add_photo_alternate</span>
+<span>الوسائط</span>
+</button>
+<button class="px-space-sm py-1 rounded bg-surface-container-low text-text-muted hover:text-status-warn hover:bg-surface-container font-label-sm text-label-sm inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">visibility_off</span>
+<span>إخفاء</span>
+</button>
+</div>
+<span class="font-label-sm text-label-sm text-text-muted">ترتيب: #3</span>
+</div>
+</div>
+</div>
+</article>
+<!-- 4. Data Engine -->
+<article class="group relative rounded-xl bg-surface p-space-md shadow-md hover:bg-surface-elevated transition-all duration-200">
+<div class="flex items-start gap-space-md">
+<button class="mt-2 text-text-muted hover:text-secondary cursor-grab active:cursor-grabbing p-1 rounded hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-[20px]">drag_indicator</span>
+</button>
+<div class="relative w-24 h-24 rounded-lg overflow-hidden shrink-0 bg-surface-container-lowest flex items-center justify-center">
+<span class="material-symbols-outlined text-[40px] text-secondary">database</span>
+<span class="absolute top-1 right-1 px-1.5 py-0.5 rounded bg-surface-container-lowest/80 text-[10px] font-label-sm text-secondary">
+                WebP
+              </span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between gap-space-xs mb-1">
+<h3 class="font-title-md text-title-md text-text-primary truncate">محرك استعلامات وتحليلات بيانات ضخمة</h3>
+<div class="flex items-center gap-space-xs shrink-0">
+<span class="w-2 h-2 rounded-full bg-status-ok"></span>
+<span class="font-label-sm text-label-sm text-status-ok">منشور</span>
+</div>
+</div>
+<p class="font-label-sm text-label-sm text-text-muted truncate mb-2" dir="ltr">/projects/data-engine</p>
+<div class="flex flex-wrap items-center gap-1.5 mb-3">
+<span class="px-2 py-0.5 rounded bg-surface-container text-text-muted font-label-sm text-label-sm">ClickHouse</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-text-muted font-label-sm text-label-sm">gRPC</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-text-muted font-label-sm text-label-sm">Go</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-text-muted font-label-sm text-label-sm">Docker</span>
+</div>
+<div class="flex items-center justify-between pt-2">
+<div class="flex items-center gap-space-xs">
+<button class="px-space-sm py-1 rounded bg-surface-container-low text-text-muted hover:text-secondary hover:bg-surface-container font-label-sm text-label-sm inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+<span>تعديل</span>
+</button>
+<button class="px-space-sm py-1 rounded bg-surface-container-low text-text-muted hover:text-primary hover:bg-surface-container font-label-sm text-label-sm inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">add_photo_alternate</span>
+<span>الوسائط</span>
+</button>
+<button class="px-space-sm py-1 rounded bg-surface-container-low text-text-muted hover:text-status-warn hover:bg-surface-container font-label-sm text-label-sm inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">visibility_off</span>
+<span>إخفاء</span>
+</button>
+</div>
+<span class="font-label-sm text-label-sm text-text-muted">ترتيب: #4</span>
+</div>
+</div>
+</div>
+</article>
+<!-- 5. Tourism Booking -->
+<article class="group relative rounded-xl bg-surface p-space-md shadow-md hover:bg-surface-elevated transition-all duration-200">
+<div class="flex items-start gap-space-md">
+<button class="mt-2 text-text-muted hover:text-secondary cursor-grab active:cursor-grabbing p-1 rounded hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-[20px]">drag_indicator</span>
+</button>
+<div class="relative w-24 h-24 rounded-lg overflow-hidden shrink-0 bg-surface-container-lowest">
+<div class="w-full h-full bg-cover bg-center rounded" data-location="Algiers, Algeria" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCfHDY_5gidz5cHjYlBUByBAu5b90VwUqgBCUvrobFjHvnT7m_Fur4t_nAzzlKA5Cyd0RmfQeUrbeU_cFXz_CS63MhEG7_NxHRBXUd1ZUWVFCvFqFR6gvIeG2SPv4XMQ-DADpb9hO-rveoHXf17FmbF7MrxU8Ikce5XVpym72jmni6Gvezh9FF9OMtVXZcSCbbmh52f9MCZe3yGSr-xzk5U4wX-txrS9VOFJxhuTR-d')"></div>
+<span class="absolute top-1 right-1 px-1.5 py-0.5 rounded bg-surface-container-lowest/80 text-[10px] font-label-sm text-secondary">
+                WebP
+              </span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between gap-space-xs mb-1">
+<h3 class="font-title-md text-title-md text-text-primary truncate">منصة وتطبيق حجوزات سياحية متكاملة</h3>
+<div class="flex items-center gap-space-xs shrink-0">
+<span class="w-2 h-2 rounded-full bg-status-ok"></span>
+<span class="font-label-sm text-label-sm text-status-ok">منشور</span>
+</div>
+</div>
+<p class="font-label-sm text-label-sm text-text-muted truncate mb-2" dir="ltr">/projects/tourism-booking</p>
+<div class="flex flex-wrap items-center gap-1.5 mb-3">
+<span class="px-2 py-0.5 rounded bg-surface-container text-text-muted font-label-sm text-label-sm">React Native</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-text-muted font-label-sm text-label-sm">GraphQL</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-text-muted font-label-sm text-label-sm">Satim / Stripe</span>
+</div>
+<div class="flex items-center justify-between pt-2">
+<div class="flex items-center gap-space-xs">
+<button class="px-space-sm py-1 rounded bg-surface-container-low text-text-muted hover:text-secondary hover:bg-surface-container font-label-sm text-label-sm inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+<span>تعديل</span>
+</button>
+<button class="px-space-sm py-1 rounded bg-surface-container-low text-text-muted hover:text-primary hover:bg-surface-container font-label-sm text-label-sm inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">add_photo_alternate</span>
+<span>الوسائط</span>
+</button>
+<button class="px-space-sm py-1 rounded bg-surface-container-low text-text-muted hover:text-status-warn hover:bg-surface-container font-label-sm text-label-sm inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">visibility_off</span>
+<span>إخفاء</span>
+</button>
+</div>
+<span class="font-label-sm text-label-sm text-text-muted">ترتيب: #5</span>
+</div>
+</div>
+</div>
+</article>
+<!-- 6. Smart Warehouse -->
+<article class="group relative rounded-xl bg-surface p-space-md shadow-md hover:bg-surface-elevated transition-all duration-200">
+<div class="flex items-start gap-space-md">
+<button class="mt-2 text-text-muted hover:text-secondary cursor-grab active:cursor-grabbing p-1 rounded hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-[20px]">drag_indicator</span>
+</button>
+<div class="relative w-24 h-24 rounded-lg overflow-hidden shrink-0 bg-surface-container-lowest flex items-center justify-center">
+<span class="material-symbols-outlined text-[40px] text-primary">inventory_2</span>
+<span class="absolute top-1 right-1 px-1.5 py-0.5 rounded bg-surface-container-lowest/80 text-[10px] font-label-sm text-secondary">
+                WebP
+              </span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between gap-space-xs mb-1">
+<h3 class="font-title-md text-title-md text-text-primary truncate">نظام إدارة المخزون والمستودعات الذكي</h3>
+<div class="flex items-center gap-space-xs shrink-0">
+<span class="w-2 h-2 rounded-full bg-status-ok"></span>
+<span class="font-label-sm text-label-sm text-status-ok">منشور</span>
+</div>
+</div>
+<p class="font-label-sm text-label-sm text-text-muted truncate mb-2" dir="ltr">/projects/smart-warehouse</p>
+<div class="flex flex-wrap items-center gap-1.5 mb-3">
+<span class="px-2 py-0.5 rounded bg-surface-container text-text-muted font-label-sm text-label-sm">LibSQL</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-text-muted font-label-sm text-label-sm">Fastify</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-text-muted font-label-sm text-label-sm">Vue 3</span>
+</div>
+<div class="flex items-center justify-between pt-2">
+<div class="flex items-center gap-space-xs">
+<button class="px-space-sm py-1 rounded bg-surface-container-low text-text-muted hover:text-secondary hover:bg-surface-container font-label-sm text-label-sm inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+<span>تعديل</span>
+</button>
+<button class="px-space-sm py-1 rounded bg-surface-container-low text-text-muted hover:text-primary hover:bg-surface-container font-label-sm text-label-sm inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">add_photo_alternate</span>
+<span>الوسائط</span>
+</button>
+<button class="px-space-sm py-1 rounded bg-surface-container-low text-text-muted hover:text-status-warn hover:bg-surface-container font-label-sm text-label-sm inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">visibility_off</span>
+<span>إخفاء</span>
+</button>
+</div>
+<span class="font-label-sm text-label-sm text-text-muted">ترتيب: #6</span>
+</div>
+</div>
+</div>
+</article>
+<!-- 7. Draft Project -->
+<article class="group relative rounded-xl bg-surface-container-low p-space-md shadow-sm hover:bg-surface-elevated transition-all duration-200">
+<div class="flex items-start gap-space-md">
+<button class="mt-2 text-text-muted cursor-not-allowed p-1">
+<span class="material-symbols-outlined text-[20px]">lock</span>
+</button>
+<div class="relative w-24 h-24 rounded-lg overflow-hidden shrink-0 bg-surface-container-lowest flex items-center justify-center">
+<span class="material-symbols-outlined text-[36px] text-status-warn">credit_card</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between gap-space-xs mb-1">
+<div class="flex items-center gap-space-xs">
+<span class="px-1.5 py-0.5 rounded bg-status-warn/20 text-status-warn font-label-sm text-label-sm">مسودة</span>
+<h3 class="font-title-md text-title-md text-text-primary truncate">بوابة دفع إلكتروني محلية CIB/Edahabia</h3>
+</div>
+<div class="flex items-center gap-space-xs shrink-0">
+<span class="w-2 h-2 rounded-full bg-status-warn"></span>
+<span class="font-label-sm text-label-sm text-status-warn">غير معروض</span>
+</div>
+</div>
+<p class="font-label-sm text-label-sm text-text-muted truncate mb-2" dir="ltr">/projects/dz-payment-gateway</p>
+<div class="flex flex-wrap items-center gap-1.5 mb-3">
+<span class="px-2 py-0.5 rounded bg-surface text-text-muted font-label-sm text-label-sm">Node.js</span>
+<span class="px-2 py-0.5 rounded bg-surface text-text-muted font-label-sm text-label-sm">SATIM API</span>
+<span class="px-2 py-0.5 rounded bg-surface text-text-muted font-label-sm text-label-sm">AES Encryption</span>
+</div>
+<div class="flex items-center justify-between pt-2">
+<div class="flex items-center gap-space-xs">
+<button class="px-space-sm py-1 rounded bg-primary-container text-on-primary-container font-label-sm text-label-sm inline-flex items-center gap-1 hover:bg-secondary-container hover:text-on-secondary-container transition-colors">
+<span class="material-symbols-outlined text-[16px]">publish</span>
+<span>نشر المشروع الآن</span>
+</button>
+<button class="px-space-sm py-1 rounded bg-surface-container text-text-muted hover:text-text-primary font-label-sm text-label-sm inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">edit_note</span>
+<span>استكمال التوثيق</span>
+</button>
+</div>
+<span class="font-label-sm text-label-sm text-text-muted">مسودة غير مرقمة</span>
+</div>
+</div>
+</div>
+</article>
+</div>
+</div>
+<!-- Quick Media Upload & System Telemetry Drawer (Col 9-12) -->
+<div class="lg:col-span-4 flex flex-col gap-space-md sticky top-24">
+<!-- Sharp Image Converter Panel -->
+<div class="rounded-xl bg-surface p-space-lg shadow-xl relative overflow-hidden">
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-space-xs text-secondary font-title-md text-title-md">
+<span class="material-symbols-outlined text-[22px]">auto_fix_high</span>
+<span>معالج وسائط Sharp السريع</span>
+</div>
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-secondary font-label-sm text-label-sm">WebP Lossless</span>
+</div>
+<p class="font-body-sm text-body-sm text-text-muted mb-space-md">
+          رفع وسائط سريعة عبر Sharp لتحويل الصور تلقائياً إلى صيغة WebP بأعلى أداء، مع توليد 3 قياسات استجابة (Mobile / Tablet / Retina).
+        </p>
+<!-- Dropzone -->
+<div class="rounded-lg bg-surface-container-lowest p-space-lg text-center flex flex-col items-center justify-center gap-space-sm cursor-pointer hover:bg-surface-container-low transition-all" id="drop-zone">
+<div class="w-14 h-14 rounded-full bg-surface-container flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[28px]">cloud_upload</span>
+</div>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-text-primary">اسحب صور المشاريع هنا</span>
+<span class="font-label-sm text-label-sm text-text-muted">PNG, JPG, أو SVG حتى 25 ميجابايت</span>
+</div>
+<button class="mt-2 px-space-md py-1.5 rounded-lg bg-surface-container-high text-secondary hover:bg-surface-elevated font-label-sm text-label-sm">
+            أو تصفح الملفات من جهازك
+          </button>
+</div>
+<!-- Pipeline Stats Display -->
+<div class="mt-space-md flex flex-col gap-space-xs font-label-sm text-label-sm">
+<div class="flex items-center justify-between text-text-muted">
+<span>جودة الضغط الافتراضية:</span>
+<span class="text-text-primary font-mono">82% Quality (SSIM: 0.98)</span>
+</div>
+<div class="flex items-center justify-between text-text-muted">
+<span>أبعاد المعاينة المستهدفة:</span>
+<span class="text-text-primary font-mono">1920x1080 / 1200x800</span>
+</div>
+<div class="flex items-center justify-between text-text-muted">
+<span>التخزين المستهدف:</span>
+<span class="text-status-ok font-mono">/uploads/projects/webp</span>
+</div>
+</div>
+</div>
+<!-- Quick SQLite Archival Telemetry -->
+<div class="rounded-xl bg-surface-container-lowest p-space-md shadow-md">
+<div class="flex items-center justify-between mb-space-xs">
+<span class="font-label-sm text-label-sm text-text-muted">قاعدة بيانات الواجهة العامة</span>
+<span class="font-label-sm text-label-sm text-status-ok flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-status-ok"></span>
+            Litestream متزامن
+          </span>
+</div>
+<div class="flex items-center justify-between font-label-sm text-label-sm text-text-primary">
+<span>آخر تحديث لقائمة المعرض:</span>
+<span class="font-mono text-secondary" dir="ltr">منذ دقيقتين</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Interactive Slide-In / Modal: New Project Fast Setup (Hidden by default, triggered via JS) -->
+<div class="fixed inset-0 z-50 bg-background/80 backdrop-blur-md hidden items-center justify-center p-space-md" id="new-project-modal">
+<div class="relative w-full max-w-2xl rounded-2xl bg-surface p-space-xl shadow-2xl overflow-hidden">
+<div class="flex items-center justify-between pb-space-md mb-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined text-[24px]">post_add</span>
+</div>
+<div class="flex flex-col">
+<h2 class="font-headline-md text-headline-md text-text-primary">إنشاء مشروع جديد في المعرض</h2>
+<span class="font-label-sm text-label-sm text-text-muted">سيتم الحفظ الأولي كمسودة لحين استكمال المحتوى والصور</span>
+</div>
+</div>
+<button class="p-2 rounded-lg bg-surface-container-low text-text-muted hover:text-text-primary" id="close-modal-btn">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<form class="flex flex-col gap-space-md" id="create-project-form" onsubmit="event.preventDefault();">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-text-primary">عنوان المشروع (العربية)</label>
+<input class="h-11 px-space-md rounded-lg bg-surface-container-low text-text-primary font-body-sm text-body-sm focus:outline-none focus:ring-1 focus:ring-secondary" placeholder="مثال: نظام إدارة الأسطول الميداني" required="" type="text"/>
+</div>
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-text-primary">المعرّف التقني (Slug)</label>
+<input class="h-11 px-space-md rounded-lg bg-surface-container-low text-text-primary font-label-md text-label-md focus:outline-none focus:ring-1 focus:ring-secondary" dir="ltr" placeholder="fleet-management-dz" required="" type="text"/>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-text-primary">التصنيف الرئيسي</label>
+<select class="h-11 px-space-md rounded-lg bg-surface-container-low text-text-primary font-body-sm text-body-sm focus:outline-none focus:ring-1 focus:ring-secondary">
+<option>تطبيقات الويب</option>
+<option>تطبيقات الموبايل</option>
+<option>أنظمة السحاب و API</option>
+<option>بوابات الدفع والمعاملات</option>
+</select>
+</div>
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-text-primary">التقنيات المستخدمة (مفصولة بفواصل)</label>
+<input class="h-11 px-space-md rounded-lg bg-surface-container-low text-text-primary font-label-md text-label-md focus:outline-none focus:ring-1 focus:ring-secondary" dir="ltr" placeholder="Go, React, Tailwind, SQLite" type="text"/>
+</div>
+</div>
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-text-primary">نبذة هندسية عن المعمارية والتحدي</label>
+<textarea class="p-space-md rounded-lg bg-surface-container-low text-text-primary font-body-sm text-body-sm focus:outline-none focus:ring-1 focus:ring-secondary" placeholder="شرح مبسط لمعمارية النظام، حلول الأداء العالي، والمخرجات التقنية المنجزة..." rows="3"></textarea>
+</div>
+<div class="flex items-center justify-between pt-space-sm">
+<label class="flex items-center gap-space-xs cursor-pointer">
+<input checked="" class="w-4 h-4 rounded bg-surface-container text-primary-container" type="checkbox"/>
+<span class="font-label-md text-label-md text-text-primary">تضمين المشروع في المعرض المميز بالصفحة الرئيسية</span>
+</label>
+<div class="flex items-center gap-space-sm">
+<button class="px-space-md py-2.5 rounded-lg bg-surface-container-low text-text-muted hover:text-text-primary font-body-md text-body-md" id="cancel-modal-btn" type="button">
+              إلغاء
+            </button>
+<button class="px-space-lg py-2.5 rounded-lg bg-primary-container text-on-primary-container font-title-md text-title-md hover:bg-secondary-container hover:text-on-secondary-container transition-all" id="save-project-btn" type="submit">
+              حفظ وتوليد السجل
+            </button>
+</div>
+</div>
+</form>
+</div>
+</div>
+<script>
+    // Lightweight UI Controller for AN DEV Projects Workspace
+    const modal = document.getElementById('new-project-modal');
+    const openBtn = document.getElementById('open-new-project-btn');
+    const closeBtn = document.getElementById('close-modal-btn');
+    const cancelBtn = document.getElementById('cancel-modal-btn');
+    const saveBtn = document.getElementById('save-project-btn');
+    const searchInput = document.getElementById('project-search');
+
+    function toggleModal(show) {
+      if (show) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      } else {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    if (openBtn) openBtn.addEventListener('click', () => toggleModal(true));
+    if (closeBtn) closeBtn.addEventListener('click', () => toggleModal(false));
+    if (cancelBtn) cancelBtn.addEventListener('click', () => toggleModal(false));
+
+    if (saveBtn) {
+      saveBtn.addEventListener('click', () => {
+        toggleModal(false);
+        // Micro notification simulation
+        const toast = document.createElement('div');
+        toast.className = 'fixed bottom-6 left-6 z-50 px-4 py-3 rounded-lg bg-status-ok text-on-secondary-container font-label-md text-label-md shadow-2xl flex items-center gap-2 animate-bounce';
+        toast.innerHTML = '<span class="material-symbols-outlined text-[18px]">check_circle</span> تم حفظ المشروع بنجاح ومزامنة السجل في SQLite.';
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 4000);
+      });
+    }
+
+    // Interactive Search Filtering
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        const articles = document.querySelectorAll('#projects-sortable-list article');
+        articles.forEach((card) => {
+          const text = card.textContent.toLowerCase();
+          if (text.includes(query)) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    }
+  </script>
+</div></main></div></body></html>

@@ -4,21 +4,21 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { I18nProvider } from "./lib/i18n";
 import { Navbar } from "./components/layout/Navbar";
 import { Footer } from "./components/layout/Footer";
-import { HomePage } from "./pages/HomePage";
-import { ProjectsPage } from "./pages/ProjectsPage";
-import { ProjectDetailPage } from "./pages/ProjectDetailPage";
-import { ContactPage } from "./pages/ContactPage";
-import { BlogPage } from "./pages/BlogPage";
-import { PostDetailPage } from "./pages/PostDetailPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 
-// Admin imports
-import { AdminLoginPage } from "./pages/admin/AdminLoginPage";
-import { AdminLayout } from "./pages/admin/AdminLayout";
-import { AdminDashboardPage } from "./pages/admin/AdminDashboardPage";
-import { AdminInquiriesPage } from "./pages/admin/AdminInquiriesPage";
-import { AdminProjectsPage } from "./pages/admin/AdminProjectsPage";
-import { AdminSettingsPage } from "./pages/admin/AdminSettingsPage";
+// Feature modules public API imports
+import { HomePage } from "./features/home";
+import { ProjectsPage, ProjectDetailPage } from "./features/portfolio";
+import { BlogPage, PostDetailPage } from "./features/blog";
+import { ContactPage } from "./features/inquiries";
+import {
+  AdminLayout,
+  AdminLoginPage,
+  AdminDashboardPage,
+  AdminInquiriesPage,
+  AdminProjectsPage,
+  AdminSettingsPage,
+} from "./features/admin";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -90,4 +90,3 @@ export function App() {
 }
 
 export default App;
-
