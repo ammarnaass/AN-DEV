@@ -13,7 +13,7 @@
     "dev": "concurrently -n \"api,web\" -c \"blue,cyan\" \"npm run dev:api\" \"npm run dev:web\"",
     "dev:api": "npm run dev --workspace=@andev/api",
     "dev:web": "npm run dev --workspace=@andev/web",
-    "build": "npm run build --workspace=@andev/web && rm -rf ./dist && cp -r apps/web/dist ./dist",
+    "build": "node scripts/build.cjs",
     "build:all": "npm run build --workspaces --if-present",
     "test": "vitest run",
     "seed": "npm run seed --workspace=@andev/api"

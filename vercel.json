@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "vite",
   "installCommand": "npm install --workspace=@andev/web --workspace=@andev/shared --include-workspace-root",
-  "buildCommand": "npm run build --workspace=@andev/web && rm -rf ./dist && cp -r apps/web/dist ./dist",
+  "buildCommand": "node scripts/build.cjs",
   "outputDirectory": "dist",
   "rewrites": [
     {
