@@ -29,3 +29,4 @@ execSync(
 );
 
 console.log("[install.cjs] Dependencies installation complete!");
+

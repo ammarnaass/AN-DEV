@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate, Navigate } from "react-router-dom";
 import {
   LayoutDashboard,
   MessageSquare,
@@ -37,8 +37,7 @@ export const AdminLayout: React.FC = () => {
   }
 
   if (isError || !admin) {
-    navigate("/admin/login");
-    return null;
+    return <Navigate to="/admin/login" replace />;
   }
 
   const navItems = [
