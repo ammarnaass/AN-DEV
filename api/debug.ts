@@ -33,3 +33,4 @@ export default async function handler(req: any, res: any) {
   res.setHeader("content-type", "application/json");
   res.end(JSON.stringify(diagnostic, null, 2));
 }
+

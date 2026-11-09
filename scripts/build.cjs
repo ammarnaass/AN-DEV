@@ -80,7 +80,37 @@ for (const target of targetDirs) {
   }
 }
 
-// 6. Final validation
+// 6. Bundle serverless API handler for Vercel using esbuild
+console.log("[build.cjs] Bundling serverless API with esbuild...");
+const esbuild = require("esbuild");
+const serverlessSrc = path.resolve(rootDir, "apps/api/src/serverless.ts");
+const rootApiOut = path.resolve(rootDir, "api/index.js");
+const appApiOut = path.resolve(rootDir, "apps/api/api/index.js");
+
+fs.mkdirSync(path.dirname(rootApiOut), { recursive: true });
+fs.mkdirSync(path.dirname(appApiOut), { recursive: true });
+
+esbuild.buildSync({
+  entryPoints: [serverlessSrc],
+  bundle: true,
+  platform: "node",
+  target: "node20",
+  format: "cjs",
+  outfile: rootApiOut,
+  external: [
+    "fastify",
+    "@fastify/*",
+    "@neondatabase/*",
+    "drizzle-orm",
+    "drizzle-orm/*",
+    "sharp"
+  ]
+});
+
+fs.copyFileSync(rootApiOut, appApiOut);
+console.log("[build.cjs] Serverless API bundled successfully to api/index.js and apps/api/api/index.js");
+
+// 7. Final validation
 console.log("[build.cjs] Final Verification:");
 for (const target of targetDirs) {
   const hasIndex = fs.existsSync(path.join(target, "index.html"));

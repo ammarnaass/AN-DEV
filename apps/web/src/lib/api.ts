@@ -14,10 +14,17 @@ export async function apiFetch<T>(endpoint: string, options: RequestInit = {}): 
   });
 
   if (!res.ok) {
-    let errorMsg = "حدث خطأ في الاتصال بالخادم";
+    let errorMsg = `خطأ في الخادم (${res.status})`;
     try {
-      const data = await res.json();
-      errorMsg = data.error || errorMsg;
+      const text = await res.text();
+      try {
+        const data = JSON.parse(text);
+        errorMsg = data.error || data.message || errorMsg;
+      } catch {
+        if (text && text.length > 0) {
+          errorMsg = `${errorMsg}: ${text.slice(0, 150)}`;
+        }
+      }
     } catch {
       // fallback
     }
@@ -26,4 +33,3 @@ export async function apiFetch<T>(endpoint: string, options: RequestInit = {}): 
 
   return res.json();
 }
-
