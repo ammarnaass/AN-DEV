@@ -30,8 +30,21 @@ export default async function handler(req: any, res: any) {
       res.on("finish", resolve);
       res.on("error", reject);
 
+      // Extract original URL if rewritten by Vercel
+      let originalUrl = (req.headers["x-matched-path"] as string) || req.url || "/";
+      if (req.headers["x-matched-path"] && req.url && req.url.includes("?")) {
+        const query = req.url.slice(req.url.indexOf("?"));
+        if (!originalUrl.includes("?")) {
+          originalUrl += query;
+        }
+      }
+      if (!originalUrl.startsWith("/api") && !originalUrl.startsWith("/health")) {
+        originalUrl = "/api" + (originalUrl.startsWith("/") ? originalUrl : "/" + originalUrl);
+      }
+      req.url = originalUrl;
+
       // If Vercel pre-parsed the body or consumed the stream, construct a new readable stream
-      if (req.body !== undefined && req.readableEnded) {
+      if (req.body !== undefined && req.body !== null) {
         const bodyStr = typeof req.body === "object" ? JSON.stringify(req.body) : String(req.body);
         const bodyBuf = Buffer.from(bodyStr);
         const stream = Readable.from(bodyBuf) as any;
@@ -40,8 +53,9 @@ export default async function handler(req: any, res: any) {
           ...req.headers,
           "content-length": String(bodyBuf.length),
         };
+        stream.rawHeaders = req.rawHeaders;
         stream.method = req.method;
-        stream.url = req.url;
+        stream.url = originalUrl;
         stream.httpVersion = req.httpVersion || "1.1";
         stream.socket = req.socket;
         stream.connection = req.connection;

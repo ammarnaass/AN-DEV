@@ -107,13 +107,31 @@ esbuild.buildSync({
   ]
 });
 
-const rootAllOut = path.resolve(rootDir, "api/[...all].js");
-const appAllOut = path.resolve(rootDir, "apps/api/api/[...all].js");
+const targets = [
+  path.resolve(rootDir, "api/[...all].js"),
+  path.resolve(rootDir, "api/auth/login.js"),
+  path.resolve(rootDir, "api/auth/logout.js"),
+  path.resolve(rootDir, "api/auth/me.js"),
+  path.resolve(rootDir, "api/projects.js"),
+  path.resolve(rootDir, "api/posts.js"),
+  path.resolve(rootDir, "api/inquiries.js"),
+  path.resolve(rootDir, "api/views.js"),
+  path.resolve(rootDir, "apps/api/api/index.js"),
+  path.resolve(rootDir, "apps/api/api/[...all].js"),
+  path.resolve(rootDir, "apps/api/api/auth/login.js"),
+  path.resolve(rootDir, "apps/api/api/auth/logout.js"),
+  path.resolve(rootDir, "apps/api/api/auth/me.js"),
+  path.resolve(rootDir, "apps/api/api/projects.js"),
+  path.resolve(rootDir, "apps/api/api/posts.js"),
+  path.resolve(rootDir, "apps/api/api/inquiries.js"),
+  path.resolve(rootDir, "apps/api/api/views.js"),
+];
 
-fs.copyFileSync(rootApiOut, rootAllOut);
-fs.copyFileSync(rootApiOut, appApiOut);
-fs.copyFileSync(rootApiOut, appAllOut);
-console.log("[build.cjs] Serverless API bundled successfully to api/index.js, api/[...all].js, apps/api/api/index.js, apps/api/api/[...all].js");
+for (const t of targets) {
+  fs.mkdirSync(path.dirname(t), { recursive: true });
+  fs.copyFileSync(rootApiOut, t);
+}
+console.log("[build.cjs] Serverless API bundled successfully to all target entrypoints");
 
 // 7. Final validation
 console.log("[build.cjs] Final Verification:");

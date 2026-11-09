@@ -16535,7 +16535,18 @@ async function handler(req, res) {
     return new Promise((resolve, reject) => {
       res.on("finish", resolve);
       res.on("error", reject);
-      if (req.body !== void 0 && req.readableEnded) {
+      let originalUrl = req.headers["x-matched-path"] || req.url || "/";
+      if (req.headers["x-matched-path"] && req.url && req.url.includes("?")) {
+        const query = req.url.slice(req.url.indexOf("?"));
+        if (!originalUrl.includes("?")) {
+          originalUrl += query;
+        }
+      }
+      if (!originalUrl.startsWith("/api") && !originalUrl.startsWith("/health")) {
+        originalUrl = "/api" + (originalUrl.startsWith("/") ? originalUrl : "/" + originalUrl);
+      }
+      req.url = originalUrl;
+      if (req.body !== void 0 && req.body !== null) {
         const bodyStr = typeof req.body === "object" ? JSON.stringify(req.body) : String(req.body);
         const bodyBuf = Buffer.from(bodyStr);
         const stream = import_stream.Readable.from(bodyBuf);
@@ -16543,8 +16554,9 @@ async function handler(req, res) {
           ...req.headers,
           "content-length": String(bodyBuf.length)
         };
+        stream.rawHeaders = req.rawHeaders;
         stream.method = req.method;
-        stream.url = req.url;
+        stream.url = originalUrl;
         stream.httpVersion = req.httpVersion || "1.1";
         stream.socket = req.socket;
         stream.connection = req.connection;
