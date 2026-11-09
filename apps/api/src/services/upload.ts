@@ -1,4 +1,3 @@
-import sharp from "sharp";
 import path from "path";
 import fs from "fs";
 import crypto from "crypto";
@@ -15,6 +14,8 @@ export async function processAndSaveImage(
   const filename = `${Date.now()}-${crypto.randomBytes(6).toString("hex")}.webp`;
   const targetPath = path.join(uploadsDir, filename);
 
+  const sharpModule = await import("sharp");
+  const sharp = sharpModule.default || sharpModule;
   const image = sharp(fileBuffer);
   const metadata = await image.metadata();
 
@@ -33,4 +34,3 @@ export async function processAndSaveImage(
     height: metadata.height || 0
   };
 }
-
