@@ -1,9 +1,10 @@
-import { getDb } from "./index";
+import { getDb, initDb } from "./index";
 import { admins, projects, settings, posts } from "./schema";
 import { hashPassword } from "../services/auth";
 import { eq } from "drizzle-orm";
 
 export async function seedDatabase() {
+  await initDb(undefined, true);
   const db = getDb();
   const now = new Date().toISOString();
 

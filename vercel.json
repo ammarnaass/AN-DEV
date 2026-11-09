@@ -6,19 +6,11 @@
   "outputDirectory": "dist",
   "rewrites": [
     {
-      "source": "/api/(.*)",
-      "destination": "/api"
-    },
-    {
-      "source": "/api",
-      "destination": "/api"
-    },
-    {
       "source": "/health",
-      "destination": "/api"
+      "destination": "/api/health"
     },
     {
-      "source": "/(.*)",
+      "source": "/((?!api(?:$|/)).*)",
       "destination": "/index.html"
     }
   ]
