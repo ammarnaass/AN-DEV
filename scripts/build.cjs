@@ -17,8 +17,10 @@ while (rootDir !== path.dirname(rootDir)) {
 
 const currentCwd = process.cwd();
 const webDir = path.resolve(rootDir, "apps/web");
+const apiDir = path.resolve(rootDir, "apps/api");
 const rootDist = path.resolve(rootDir, "dist");
 const webDist = path.resolve(webDir, "dist");
+const apiDist = path.resolve(apiDir, "dist");
 const cwdDist = path.resolve(currentCwd, "dist");
 
 console.log("[build.cjs] Execution CWD:", currentCwd);
@@ -54,7 +56,7 @@ if (!sourceDist) {
 console.log("[build.cjs] Found build artifacts in:", sourceDist);
 
 // 4. Mirror build artifacts to all possible target dist directories
-const targetDirs = new Set([rootDist, webDist, cwdDist]);
+const targetDirs = new Set([rootDist, webDist, cwdDist, apiDist]);
 
 for (const target of targetDirs) {
   if (target !== sourceDist) {
