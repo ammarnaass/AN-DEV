@@ -27,7 +27,19 @@ console.log("[build.cjs] Execution CWD:", currentCwd);
 console.log("[build.cjs] Monorepo Root:", rootDir);
 console.log("[build.cjs] Web Directory:", webDir);
 
-// 2. Build the web app
+// 2. Ensure dependencies are installed (Self-healing in case Vercel executed from a subfolder)
+const reactInWeb = path.resolve(webDir, "node_modules/react");
+const reactInRoot = path.resolve(rootDir, "node_modules/react");
+if (!fs.existsSync(reactInWeb) && !fs.existsSync(reactInRoot)) {
+  console.log("[build.cjs] Web dependencies missing in node_modules! Running install.cjs...");
+  execSync("node scripts/install.cjs", {
+    cwd: rootDir,
+    stdio: "inherit",
+    env: { ...process.env, CI: "false" }
+  });
+}
+
+// 3. Build the web app
 console.log("[build.cjs] Running web build (tsc && vite build)...");
 execSync("npm run build --workspace=@andev/web", {
   cwd: rootDir,
@@ -35,7 +47,7 @@ execSync("npm run build --workspace=@andev/web", {
   env: { ...process.env, CI: "false" }
 });
 
-// 3. Locate the generated dist directory
+// 4. Locate the generated dist directory
 let sourceDist = null;
 if (fs.existsSync(webDist) && fs.existsSync(path.join(webDist, "index.html"))) {
   sourceDist = webDist;
@@ -55,7 +67,7 @@ if (!sourceDist) {
 
 console.log("[build.cjs] Found build artifacts in:", sourceDist);
 
-// 4. Mirror build artifacts to all possible target dist directories
+// 5. Mirror build artifacts to all possible target dist directories
 const targetDirs = new Set([rootDist, webDist, cwdDist, apiDist]);
 
 for (const target of targetDirs) {
@@ -68,7 +80,7 @@ for (const target of targetDirs) {
   }
 }
 
-// 5. Final validation
+// 6. Final validation
 console.log("[build.cjs] Final Verification:");
 for (const target of targetDirs) {
   const hasIndex = fs.existsSync(path.join(target, "index.html"));
