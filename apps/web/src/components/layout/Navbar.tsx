@@ -69,9 +69,6 @@ export const Navbar: React.FC = () => {
           <Link to="/" className="flex items-center" onClick={() => setMobileMenuOpen(false)}>
             <Logo size={36} />
           </Link>
-          <span className="hidden lg:inline-flex items-center px-2 py-0.5 rounded text-[11px] font-mono font-medium text-secondary bg-surface-container border border-line">
-            v2.5
-          </span>
         </div>
 
         {/* Desktop Navigation Links with active pill styling */}

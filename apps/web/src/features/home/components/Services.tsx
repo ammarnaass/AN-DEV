@@ -45,16 +45,14 @@ export const Services: React.FC = () => {
   return (
     <section className="w-full px-4 sm:px-6 lg:px-8 py-20 max-w-7xl mx-auto" id="services">
       {/* Section Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
-        <div className="flex flex-col gap-2">
-          <div className="inline-flex items-center gap-2 text-secondary font-mono text-xs sm:text-sm">
-            <span>01 // SERVICES &amp; CAPABILITIES</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-text-primary tracking-tight">
-            {locale === "ar" ? "ماذا نبني" : "What We Build"}
-          </h2>
-        </div>
-        <p className="text-text-muted text-sm sm:text-base max-w-md">
+      <div className="flex flex-col items-start gap-3 mb-12 max-w-3xl text-start">
+        <span className="text-secondary font-mono text-xs uppercase tracking-wider font-semibold">
+          {locale === "ar" ? "القدرات الهندسية" : "Core Capabilities"}
+        </span>
+        <h2 className="text-3xl sm:text-4xl font-extrabold text-text-primary tracking-tight">
+          {locale === "ar" ? "ماذا نبني" : "What We Build"}
+        </h2>
+        <p className="text-text-muted text-sm sm:text-base leading-relaxed">
           {locale === "ar"
             ? "حلول هندسية مصممة للعمل دون انقطاع مع تركيز جذري على الأمان، السرعة والاستدامة البرمجية."
             : "Engineering solutions designed for uninterrupted uptime with relentless focus on security, speed, and software longevity."}

@@ -42,11 +42,11 @@ export const Process: React.FC = () => {
     <section className="w-full px-4 sm:px-6 lg:px-8 py-20 max-w-7xl mx-auto">
       {/* Header */}
       <div className="flex flex-col items-center text-center gap-2 mb-12">
-        <span className="font-mono text-xs sm:text-sm text-secondary">
-          03 // ENGINEERING METHODOLOGY
+        <span className="font-mono text-xs uppercase tracking-wider text-secondary font-semibold">
+          {locale === "ar" ? "منهجية العمل الهندسية" : "Engineering Methodology"}
         </span>
         <h2 className="text-3xl sm:text-4xl font-extrabold text-text-primary tracking-tight">
-          {locale === "ar" ? "مراحل العمل الهندسية" : "Engineering Methodology"}
+          {locale === "ar" ? "مراحل العمل" : "How We Deliver"}
         </h2>
         <p className="text-text-muted text-sm sm:text-base max-w-xl">
           {locale === "ar"
