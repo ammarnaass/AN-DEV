@@ -18,7 +18,7 @@ export async function authRoutes(app: FastifyInstance) {
 
     const { email, password } = parseResult.data;
     const db = getDb();
-    const admin = db.select().from(admins).where(eq(admins.email, email)).get();
+    const [admin] = await db.select().from(admins).where(eq(admins.email, email));
 
     if (!admin) {
       return reply.status(401).send({ error: "البريد الإلكتروني أو كلمة المرور غير صحيحة" });

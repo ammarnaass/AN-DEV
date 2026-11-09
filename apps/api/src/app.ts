@@ -17,11 +17,8 @@ export interface BuildAppOptions extends FastifyServerOptions {
 export async function buildApp(opts: BuildAppOptions = {}): Promise<FastifyInstance> {
   const app = fastify(opts);
 
-  // Initialize SQLite database
-  const dbPath = opts.test
-    ? path.resolve(process.cwd(), `data/test_${Date.now()}_${Math.random().toString(36).substring(7)}.db`)
-    : opts.dbPath;
-  initDb(dbPath);
+  // Initialize Neon PostgreSQL database
+  await initDb();
 
   // Register cookie parser
   await app.register(fastifyCookie, {

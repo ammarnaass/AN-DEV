@@ -37,7 +37,7 @@ describe("Inquiries API", () => {
     expect(body.success).toBe(true);
 
     const db = getDb();
-    const saved = db.select().from(inquiries).all();
+    const saved = await db.select().from(inquiries);
     expect(saved.some(i => i.email === "karim@business.dz")).toBe(true);
   });
 
@@ -49,12 +49,13 @@ describe("Inquiries API", () => {
         name: "Spam Bot",
         email: "bot@spam.com",
         project_type: "web",
-        message: "Spam advertising content here",
-        honeypot: "not-empty"
+        message: "Spam content message here",
+        honeypot: "gotcha"
       }
     });
 
     expect(res.statusCode).toBe(400);
+    const body = JSON.parse(res.body);
+    expect(body.error).toContain("تم حظر الطلب");
   });
 });
-

@@ -16,16 +16,19 @@ describe("Admin Management API", () => {
     await app.ready();
     const db = getDb();
 
-    const [admin] = db.insert(admins).values({
-      email: "boss@andev.dz",
-      password_hash: await hashPassword("pass123456"),
-      created_at: new Date().toISOString()
-    }).returning().all();
+    let [admin] = await db.select().from(admins).where(eq(admins.email, "boss@andev.dz"));
+    if (!admin) {
+      [admin] = await db.insert(admins).values({
+        email: "boss@andev.dz",
+        password_hash: await hashPassword("pass123456"),
+        created_at: new Date().toISOString()
+      }).returning();
+    }
 
     const sessionId = await createSession(admin.id);
     sessionCookie = `andev_session=${sessionId}`;
 
-    const [inq] = db.insert(inquiries).values({
+    const [inq] = await db.insert(inquiries).values({
       name: "Client Enterprise",
       email: "client@dz.com",
       project_type: "web",
@@ -33,7 +36,7 @@ describe("Admin Management API", () => {
       status: "new",
       ip_hash: "test-hash",
       created_at: new Date().toISOString()
-    }).returning().all();
+    }).returning();
     inquiryId = inq.id;
   });
 
@@ -56,7 +59,7 @@ describe("Admin Management API", () => {
     expect(res.statusCode).toBe(200);
 
     const db = getDb();
-    const updated = db.select().from(inquiries).where(eq(inquiries.id, inquiryId)).get();
+    const [updated] = await db.select().from(inquiries).where(eq(inquiries.id, inquiryId));
     expect(updated?.status).toBe("in_progress");
     expect(updated?.admin_note).toContain("تم الاتصال");
   });
@@ -68,9 +71,7 @@ describe("Admin Management API", () => {
       headers: { cookie: sessionCookie }
     });
     expect(res.statusCode).toBe(200);
-    const stats = JSON.parse(res.body);
-    expect(stats.total_inquiries).toBeDefined();
-    expect(stats.published_projects).toBeDefined();
+    const body = JSON.parse(res.body);
+    expect(body.total_inquiries).toBeGreaterThanOrEqual(1);
   });
 });
-

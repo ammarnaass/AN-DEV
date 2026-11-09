@@ -78,15 +78,16 @@ describe("E2E Integration Journey", () => {
     expect(patchRes.statusCode).toBe(200);
 
     // 5. Admin creates a new showcase project
+    const projectSlug = `barid-pay-pos-${Date.now()}`;
     const newProjectPayload = {
-      slug: "barid-pay-pos",
+      slug: projectSlug,
       title_ar: "نظام بريد باي لنقاط البيع",
       title_en: "BaridPay - Retail POS Terminal Integration",
       summary_ar: "نظام نقاط بيع متصل سحابياً يدعم الدفع ببطاقات الذهبية وحسابات البريد.",
       summary_en: "Cloud POS integration with national postal and Edahabia cards.",
       body_ar: "تفاصيل الحل والتحدي والنتائج...",
       body_en: "Detailed solution, challenges, and results...",
-      tech_json: ["React", "Fastify", "SQLite", "WebSockets"],
+      tech_json: ["React", "Fastify", "PostgreSQL", "WebSockets"],
       cover_image: "/uploads/projects/barid-pos.webp",
       live_url: "https://baridpay-demo.andev.dz",
       repo_url: "",
@@ -107,12 +108,12 @@ describe("E2E Integration Journey", () => {
     // 6. Public visitor views portfolio and retrieves the new project
     const publicProjectRes = await app.inject({
       method: "GET",
-      url: "/api/projects/barid-pay-pos"
+      url: `/api/projects/${projectSlug}`
     });
 
     expect(publicProjectRes.statusCode).toBe(200);
     const publishedProject = JSON.parse(publicProjectRes.body);
-    expect(publishedProject.slug).toBe("barid-pay-pos");
+    expect(publishedProject.slug).toBe(projectSlug);
     expect(publishedProject.title_ar).toBe("نظام بريد باي لنقاط البيع");
   });
 });

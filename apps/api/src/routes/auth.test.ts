@@ -4,6 +4,7 @@ import { FastifyInstance } from "fastify";
 import { getDb } from "../db";
 import { admins } from "../db/schema";
 import { hashPassword } from "../services/auth";
+import { eq } from "drizzle-orm";
 
 describe("Auth Routes", () => {
   let app: FastifyInstance;
@@ -13,11 +14,14 @@ describe("Auth Routes", () => {
     await app.ready();
     const db = getDb();
     const hash = await hashPassword("admin123456");
-    db.insert(admins).values({
-      email: "ammar@andev.dz",
-      password_hash: hash,
-      created_at: new Date().toISOString()
-    }).run();
+    const [existing] = await db.select().from(admins).where(eq(admins.email, "ammar@andev.dz"));
+    if (!existing) {
+      await db.insert(admins).values({
+        email: "ammar@andev.dz",
+        password_hash: hash,
+        created_at: new Date().toISOString()
+      });
+    }
   });
 
   afterAll(async () => {
@@ -48,9 +52,8 @@ describe("Auth Routes", () => {
     const res = await app.inject({
       method: "POST",
       url: "/api/auth/login",
-      payload: { email: "not-an-email", password: "123" }
+      payload: { email: "invalid-email", password: "123" }
     });
     expect(res.statusCode).toBe(400);
   });
 });
-

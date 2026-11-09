@@ -28,8 +28,9 @@ export async function inquiryRoutes(app: FastifyInstance) {
     // 3. Validate payload with Zod
     const parseResult = InquirySchema.safeParse(request.body);
     if (!parseResult.success) {
+      const isHoneypot = parseResult.error.issues.some(i => i.path.includes("honeypot"));
       return reply.status(400).send({
-        error: "بيانات غير صالحة",
+        error: isHoneypot ? "تم حظر الطلب لاشتباه نشاط آلي (Bot detected)" : "بيانات غير صالحة",
         details: parseResult.error.format()
       });
     }
@@ -40,7 +41,7 @@ export async function inquiryRoutes(app: FastifyInstance) {
     const db = getDb();
     const createdAt = new Date().toISOString();
 
-    const [created] = db.insert(inquiries).values({
+    const [created] = await db.insert(inquiries).values({
       name,
       email,
       project_type,
@@ -49,7 +50,7 @@ export async function inquiryRoutes(app: FastifyInstance) {
       status: "new",
       ip_hash: ipHash,
       created_at: createdAt
-    }).returning().all();
+    }).returning();
 
     // 5. Update rate limit record
     timestamps.push(now);

@@ -1,5 +1,5 @@
 import { getDb } from "./index";
-import { admins, projects, project_images, settings, posts } from "./schema";
+import { admins, projects, settings, posts } from "./schema";
 import { hashPassword } from "../services/auth";
 import { eq } from "drizzle-orm";
 
@@ -8,14 +8,14 @@ export async function seedDatabase() {
   const now = new Date().toISOString();
 
   // 1. Seed Admin
-  const existingAdmin = db.select().from(admins).where(eq(admins.email, "ammar@andev.dz")).get();
+  const [existingAdmin] = await db.select().from(admins).where(eq(admins.email, "ammar@andev.dz"));
   if (!existingAdmin) {
     const hash = await hashPassword("admin123456");
-    db.insert(admins).values({
+    await db.insert(admins).values({
       email: "ammar@andev.dz",
       password_hash: hash,
       created_at: now
-    }).run();
+    });
   }
 
   // 2. Seed Settings
@@ -33,10 +33,9 @@ export async function seedDatabase() {
   };
 
   for (const [key, value] of Object.entries(defaultSettings)) {
-    db.insert(settings)
+    await db.insert(settings)
       .values({ key, value })
-      .onConflictDoUpdate({ target: settings.key, set: { value } })
-      .run();
+      .onConflictDoUpdate({ target: settings.key, set: { value } });
   }
 
   // 3. Seed 6 Showcase Projects
@@ -249,7 +248,7 @@ A centralized ticketing desk with automatic escalation rules and SLA compliance 
 - Average ticket resolution time reduced from 24h to < 3h.
 - 35% increase in customer satisfaction scores.
 `,
-      tech_json: JSON.stringify(["React", "Fastify", "TailwindCSS", "SQLite"]),
+      tech_json: JSON.stringify(["React", "Fastify", "TailwindCSS", "PostgreSQL"]),
       cover_image: "/uploads/projects/safir-crm-cover.webp",
       live_url: "https://safir.andev.dz",
       repo_url: "",
@@ -260,13 +259,13 @@ A centralized ticketing desk with automatic escalation rules and SLA compliance 
   ];
 
   for (const p of showcaseProjects) {
-    const existing = db.select().from(projects).where(eq(projects.slug, p.slug)).get();
+    const [existing] = await db.select().from(projects).where(eq(projects.slug, p.slug));
     if (!existing) {
-      db.insert(projects).values({
+      await db.insert(projects).values({
         ...p,
         created_at: now,
         updated_at: now
-      }).run();
+      });
     }
   }
 
@@ -295,19 +294,18 @@ At AN DEV, web performance is a core competitive requirement rather than an afte
     published_at: now
   };
 
-  const existingPost = db.select().from(posts).where(eq(posts.slug, samplePost.slug)).get();
+  const [existingPost] = await db.select().from(posts).where(eq(posts.slug, samplePost.slug));
   if (!existingPost) {
-    db.insert(posts).values(samplePost).run();
+    await db.insert(posts).values(samplePost);
   }
 }
 
 if (process.argv[1]?.endsWith("seed.ts")) {
   seedDatabase().then(() => {
-    console.log("Database seeded successfully with AN DEV showcase projects!");
+    console.log("Database seeded successfully on Neon PostgreSQL with AN DEV showcase projects!");
     process.exit(0);
   }).catch(err => {
     console.error("Seeding failed:", err);
     process.exit(1);
   });
 }
-

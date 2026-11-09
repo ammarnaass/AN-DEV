@@ -1,20 +1,20 @@
-import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
+import { pgTable, serial, text, integer, boolean } from "drizzle-orm/pg-core";
 
-export const admins = sqliteTable("admins", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const admins = pgTable("admins", {
+  id: serial("id").primaryKey(),
   email: text("email").notNull().unique(),
   password_hash: text("password_hash").notNull(),
   created_at: text("created_at").notNull()
 });
 
-export const sessions = sqliteTable("sessions", {
+export const sessions = pgTable("sessions", {
   id: text("id").primaryKey(), // UUID token
   admin_id: integer("admin_id").notNull().references(() => admins.id, { onDelete: "cascade" }),
   expires_at: text("expires_at").notNull()
 });
 
-export const projects = sqliteTable("projects", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const projects = pgTable("projects", {
+  id: serial("id").primaryKey(),
   slug: text("slug").notNull().unique(),
   title_ar: text("title_ar").notNull(),
   title_en: text("title_en").notNull(),
@@ -26,15 +26,15 @@ export const projects = sqliteTable("projects", {
   cover_image: text("cover_image").notNull(),
   live_url: text("live_url"),
   repo_url: text("repo_url"),
-  featured: integer("featured", { mode: "boolean" }).notNull().default(false),
-  published: integer("published", { mode: "boolean" }).notNull().default(true),
+  featured: boolean("featured").notNull().default(false),
+  published: boolean("published").notNull().default(true),
   sort_order: integer("sort_order").notNull().default(0),
   created_at: text("created_at").notNull(),
   updated_at: text("updated_at").notNull()
 });
 
-export const project_images = sqliteTable("project_images", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const project_images = pgTable("project_images", {
+  id: serial("id").primaryKey(),
   project_id: integer("project_id").notNull().references(() => projects.id, { onDelete: "cascade" }),
   path: text("path").notNull(),
   alt_ar: text("alt_ar").notNull().default(""),
@@ -42,8 +42,8 @@ export const project_images = sqliteTable("project_images", {
   sort_order: integer("sort_order").notNull().default(0)
 });
 
-export const inquiries = sqliteTable("inquiries", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const inquiries = pgTable("inquiries", {
+  id: serial("id").primaryKey(),
   name: text("name").notNull(),
   email: text("email").notNull(),
   project_type: text("project_type").notNull(),
@@ -55,26 +55,25 @@ export const inquiries = sqliteTable("inquiries", {
   created_at: text("created_at").notNull()
 });
 
-export const posts = sqliteTable("posts", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const posts = pgTable("posts", {
+  id: serial("id").primaryKey(),
   slug: text("slug").notNull().unique(),
   title_ar: text("title_ar").notNull(),
   title_en: text("title_en").notNull(),
   body_md_ar: text("body_md_ar").notNull(),
   body_md_en: text("body_md_en").notNull(),
-  published: integer("published", { mode: "boolean" }).notNull().default(true),
+  published: boolean("published").notNull().default(true),
   published_at: text("published_at").notNull()
 });
 
-export const settings = sqliteTable("settings", {
+export const settings = pgTable("settings", {
   key: text("key").primaryKey(),
   value: text("value").notNull()
 });
 
-export const page_views = sqliteTable("page_views", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const page_views = pgTable("page_views", {
+  id: serial("id").primaryKey(),
   path: text("path").notNull(),
   day: text("day").notNull(), // YYYY-MM-DD
   count: integer("count").notNull().default(1)
 });
-

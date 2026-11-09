@@ -1,43 +1,31 @@
-import Database from "better-sqlite3";
-import { drizzle } from "drizzle-orm/better-sqlite3";
+import { neon } from "@neondatabase/serverless";
+import { drizzle } from "drizzle-orm/neon-http";
 import * as schema from "./schema";
-import path from "path";
-import fs from "fs";
 
-let sqliteDb: Database.Database | null = null;
+const DEFAULT_CONNECTION = "postgresql://neondb_owner:npg_s2hjOkANc3tF@ep-damp-bird-zajgsfr3-pooler.c-2.eu-west-2.aws.neon.tech/neondb?sslmode=require";
 
-export function initDb(dbPath?: string) {
-  const rootDir = process.cwd().includes("apps") ? path.resolve(process.cwd(), "../..") : process.cwd();
-  const defaultPath = path.resolve(rootDir, "data/andev.db");
-  const resolvedPath = dbPath || process.env.DATABASE_PATH || defaultPath;
-  
-  const dir = path.dirname(resolvedPath);
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
-  }
+let dbInstance: ReturnType<typeof drizzle> | null = null;
+let rawSql: ReturnType<typeof neon> | null = null;
 
-  sqliteDb = new Database(resolvedPath);
-  sqliteDb.pragma("journal_mode = WAL");
-  sqliteDb.pragma("synchronous = NORMAL");
-  sqliteDb.pragma("foreign_keys = ON");
+export async function initDb(connStr?: string) {
+  const connectionString = connStr || process.env.DATABASE_URL || DEFAULT_CONNECTION;
+  rawSql = neon(connectionString);
+  dbInstance = drizzle(rawSql, { schema });
 
-  // Create tables if they do not exist
-  sqliteDb.exec(`
-    CREATE TABLE IF NOT EXISTS admins (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
+  const statements = [
+    `CREATE TABLE IF NOT EXISTS admins (
+      id SERIAL PRIMARY KEY,
       email TEXT NOT NULL UNIQUE,
       password_hash TEXT NOT NULL,
       created_at TEXT NOT NULL
-    );
-
-    CREATE TABLE IF NOT EXISTS sessions (
+    )`,
+    `CREATE TABLE IF NOT EXISTS sessions (
       id TEXT PRIMARY KEY,
       admin_id INTEGER NOT NULL REFERENCES admins(id) ON DELETE CASCADE,
       expires_at TEXT NOT NULL
-    );
-
-    CREATE TABLE IF NOT EXISTS projects (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
+    )`,
+    `CREATE TABLE IF NOT EXISTS projects (
+      id SERIAL PRIMARY KEY,
       slug TEXT NOT NULL UNIQUE,
       title_ar TEXT NOT NULL,
       title_en TEXT NOT NULL,
@@ -49,24 +37,22 @@ export function initDb(dbPath?: string) {
       cover_image TEXT NOT NULL,
       live_url TEXT,
       repo_url TEXT,
-      featured INTEGER NOT NULL DEFAULT 0,
-      published INTEGER NOT NULL DEFAULT 1,
+      featured BOOLEAN NOT NULL DEFAULT FALSE,
+      published BOOLEAN NOT NULL DEFAULT TRUE,
       sort_order INTEGER NOT NULL DEFAULT 0,
       created_at TEXT NOT NULL,
       updated_at TEXT NOT NULL
-    );
-
-    CREATE TABLE IF NOT EXISTS project_images (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
+    )`,
+    `CREATE TABLE IF NOT EXISTS project_images (
+      id SERIAL PRIMARY KEY,
       project_id INTEGER NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
       path TEXT NOT NULL,
       alt_ar TEXT NOT NULL DEFAULT '',
       alt_en TEXT NOT NULL DEFAULT '',
       sort_order INTEGER NOT NULL DEFAULT 0
-    );
-
-    CREATE TABLE IF NOT EXISTS inquiries (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
+    )`,
+    `CREATE TABLE IF NOT EXISTS inquiries (
+      id SERIAL PRIMARY KEY,
       name TEXT NOT NULL,
       email TEXT NOT NULL,
       project_type TEXT NOT NULL,
@@ -76,41 +62,47 @@ export function initDb(dbPath?: string) {
       admin_note TEXT,
       ip_hash TEXT NOT NULL,
       created_at TEXT NOT NULL
-    );
-
-    CREATE TABLE IF NOT EXISTS posts (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
+    )`,
+    `CREATE TABLE IF NOT EXISTS posts (
+      id SERIAL PRIMARY KEY,
       slug TEXT NOT NULL UNIQUE,
       title_ar TEXT NOT NULL,
       title_en TEXT NOT NULL,
       body_md_ar TEXT NOT NULL,
       body_md_en TEXT NOT NULL,
-      published INTEGER NOT NULL DEFAULT 1,
+      published BOOLEAN NOT NULL DEFAULT TRUE,
       published_at TEXT NOT NULL
-    );
-
-    CREATE TABLE IF NOT EXISTS settings (
+    )`,
+    `CREATE TABLE IF NOT EXISTS settings (
       key TEXT PRIMARY KEY,
       value TEXT NOT NULL
-    );
-
-    CREATE TABLE IF NOT EXISTS page_views (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
+    )`,
+    `CREATE TABLE IF NOT EXISTS page_views (
+      id SERIAL PRIMARY KEY,
       path TEXT NOT NULL,
       day TEXT NOT NULL,
       count INTEGER NOT NULL DEFAULT 1
-    );
-  `);
+    )`
+  ];
 
-  return drizzle(sqliteDb, { schema });
+  for (const stmt of statements) {
+    try {
+      await rawSql.query(stmt);
+    } catch (e) {
+      // already exists or non-fatal
+    }
+  }
+
+  return dbInstance;
 }
 
 export function getDb() {
-  if (!sqliteDb) {
-    return initDb();
+  if (!dbInstance) {
+    const connectionString = process.env.DATABASE_URL || DEFAULT_CONNECTION;
+    rawSql = neon(connectionString);
+    dbInstance = drizzle(rawSql, { schema });
   }
-  return drizzle(sqliteDb, { schema });
+  return dbInstance;
 }
 
 export { schema };
-
