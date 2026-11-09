@@ -107,8 +107,13 @@ esbuild.buildSync({
   ]
 });
 
+const rootAllOut = path.resolve(rootDir, "api/[...all].js");
+const appAllOut = path.resolve(rootDir, "apps/api/api/[...all].js");
+
+fs.copyFileSync(rootApiOut, rootAllOut);
 fs.copyFileSync(rootApiOut, appApiOut);
-console.log("[build.cjs] Serverless API bundled successfully to api/index.js and apps/api/api/index.js");
+fs.copyFileSync(rootApiOut, appAllOut);
+console.log("[build.cjs] Serverless API bundled successfully to api/index.js, api/[...all].js, apps/api/api/index.js, apps/api/api/[...all].js");
 
 // 7. Final validation
 console.log("[build.cjs] Final Verification:");
