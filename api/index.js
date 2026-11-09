@@ -16511,6 +16511,7 @@ async function buildApp(opts = {}) {
 }
 
 // apps/api/src/serverless.ts
+var import_stream = require("stream");
 var appPromise = null;
 async function getApp() {
   if (!appPromise) {
@@ -16531,26 +16532,26 @@ var config = {
 async function handler(req, res) {
   try {
     const app = await getApp();
-    if (req.body !== void 0 || req.readableEnded) {
-      const payload = typeof req.body === "object" ? JSON.stringify(req.body) : req.body;
-      const response = await app.inject({
-        method: req.method,
-        url: req.url,
-        headers: req.headers,
-        payload
-      });
-      res.statusCode = response.statusCode;
-      for (const [key, value] of Object.entries(response.headers)) {
-        if (value !== void 0) {
-          res.setHeader(key, value);
-        }
-      }
-      return res.end(response.rawPayload);
-    }
     return new Promise((resolve, reject) => {
       res.on("finish", resolve);
       res.on("error", reject);
-      app.server.emit("request", req, res);
+      if (req.body !== void 0 && req.readableEnded) {
+        const bodyStr = typeof req.body === "object" ? JSON.stringify(req.body) : String(req.body);
+        const bodyBuf = Buffer.from(bodyStr);
+        const stream = import_stream.Readable.from(bodyBuf);
+        stream.headers = {
+          ...req.headers,
+          "content-length": String(bodyBuf.length)
+        };
+        stream.method = req.method;
+        stream.url = req.url;
+        stream.httpVersion = req.httpVersion || "1.1";
+        stream.socket = req.socket;
+        stream.connection = req.connection;
+        app.server.emit("request", stream, res);
+      } else {
+        app.server.emit("request", req, res);
+      }
     });
   } catch (err) {
     console.error("Vercel Serverless Handler Error:", err);

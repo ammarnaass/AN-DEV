@@ -1,5 +1,6 @@
 import { buildApp } from "./app";
 import type { FastifyInstance } from "fastify";
+import { Readable } from "stream";
 
 let appPromise: Promise<FastifyInstance> | null = null;
 
@@ -25,30 +26,30 @@ export default async function handler(req: any, res: any) {
   try {
     const app = await getApp();
 
-    // If Vercel pre-parsed the body or consumed the stream, use Fastify inject
-    if (req.body !== undefined || req.readableEnded) {
-      const payload = typeof req.body === "object" ? JSON.stringify(req.body) : req.body;
-      const response = await app.inject({
-        method: req.method,
-        url: req.url,
-        headers: req.headers,
-        payload,
-      });
-
-      res.statusCode = response.statusCode;
-      for (const [key, value] of Object.entries(response.headers)) {
-        if (value !== undefined) {
-          res.setHeader(key, value as any);
-        }
-      }
-      return res.end(response.rawPayload);
-    }
-
-    // Otherwise delegate natively to Fastify HTTP server
     return new Promise<void>((resolve, reject) => {
       res.on("finish", resolve);
       res.on("error", reject);
-      app.server.emit("request", req, res);
+
+      // If Vercel pre-parsed the body or consumed the stream, construct a new readable stream
+      if (req.body !== undefined && req.readableEnded) {
+        const bodyStr = typeof req.body === "object" ? JSON.stringify(req.body) : String(req.body);
+        const bodyBuf = Buffer.from(bodyStr);
+        const stream = Readable.from(bodyBuf) as any;
+
+        stream.headers = {
+          ...req.headers,
+          "content-length": String(bodyBuf.length),
+        };
+        stream.method = req.method;
+        stream.url = req.url;
+        stream.httpVersion = req.httpVersion || "1.1";
+        stream.socket = req.socket;
+        stream.connection = req.connection;
+
+        app.server.emit("request", stream, res);
+      } else {
+        app.server.emit("request", req, res);
+      }
     });
   } catch (err: any) {
     console.error("Vercel Serverless Handler Error:", err);
