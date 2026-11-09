@@ -6,6 +6,9 @@
     "packages/*",
     "apps/*"
   ],
+  "engines": {
+    "node": ">=20.0.0 <23.0.0"
+  },
   "scripts": {
     "dev": "concurrently -n \"api,web\" -c \"blue,cyan\" \"npm run dev:api\" \"npm run dev:web\"",
     "dev:api": "npm run dev --workspace=@andev/api",
