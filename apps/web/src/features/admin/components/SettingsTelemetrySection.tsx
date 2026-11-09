@@ -54,3 +54,4 @@ export const SettingsTelemetrySection: React.FC = () => {
     </div>
   );
 };
+

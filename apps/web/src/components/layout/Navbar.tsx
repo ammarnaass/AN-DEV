@@ -9,8 +9,31 @@ export const Navbar: React.FC = () => {
   const { locale, toggleLocale, t } = useI18n();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isDark, setIsDark] = useState(true);
   const location = useLocation();
+
+  const [isDark, setIsDark] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("andev-theme");
+      if (saved) return saved === "dark";
+      return document.documentElement.getAttribute("data-theme") !== "light";
+    }
+    return true;
+  });
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (isDark) {
+      root.setAttribute("data-theme", "dark");
+      root.classList.add("dark");
+      root.classList.remove("light");
+      localStorage.setItem("andev-theme", "dark");
+    } else {
+      root.setAttribute("data-theme", "light");
+      root.classList.add("light");
+      root.classList.remove("dark");
+      localStorage.setItem("andev-theme", "light");
+    }
+  }, [isDark]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,13 +44,7 @@ export const Navbar: React.FC = () => {
   }, []);
 
   const toggleTheme = () => {
-    const next = !isDark;
-    setIsDark(next);
-    if (next) {
-      document.documentElement.setAttribute("data-theme", "dark");
-    } else {
-      document.documentElement.setAttribute("data-theme", "light");
-    }
+    setIsDark(prev => !prev);
   };
 
   const navLinks = [
@@ -42,7 +59,7 @@ export const Navbar: React.FC = () => {
     <header
       className={`fixed top-0 start-0 end-0 z-50 transition-all duration-200 ${
         isScrolled
-          ? "bg-surface/90 backdrop-blur-xl border-b border-line shadow-[0_1px_16px_rgba(0,0,0,0.3)] py-3"
+          ? "bg-surface/90 backdrop-blur-xl border-b border-line shadow-[0_1px_16px_rgba(0,0,0,0.12)] py-3"
           : "bg-surface/75 backdrop-blur-lg border-b border-line-subtle py-4"
       }`}
     >
@@ -99,14 +116,15 @@ export const Navbar: React.FC = () => {
           <button
             onClick={toggleTheme}
             className="w-9 h-9 rounded-lg bg-surface-container border border-line flex items-center justify-center text-text-muted hover:text-secondary hover:border-secondary/40 transition-colors"
+            title={locale === "ar" ? "تبديل المظهر (فاتح / داكن)" : "Toggle theme (Dark / Light)"}
             aria-label="Toggle Theme"
           >
-            {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4 text-secondary" />}
+            {isDark ? <Sun className="w-4 h-4 text-warn" /> : <Moon className="w-4 h-4 text-secondary" />}
           </button>
 
           {/* Start Project CTA Button */}
           <Link to="/contact">
-            <button className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-primary-container text-white text-sm font-semibold hover:bg-secondary-container hover:text-surface transition-all shadow-[0_0_16px_rgba(13,110,253,0.35)] active:scale-[0.98]">
+            <button className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-primary-container text-white text-sm font-semibold hover:bg-primary/90 transition-all shadow-[0_0_16px_rgba(13,110,253,0.35)] active:scale-[0.98]">
               <span>{t("nav.start_project")}</span>
               {locale === "ar" ? (
                 <ArrowLeft className="w-4 h-4" />
@@ -153,8 +171,8 @@ export const Navbar: React.FC = () => {
               onClick={toggleTheme}
               className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container border border-line text-xs text-text-muted"
             >
-              {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-              <span>{isDark ? "Light Mode" : "Dark Mode"}</span>
+              {isDark ? <Sun className="w-4 h-4 text-warn" /> : <Moon className="w-4 h-4 text-secondary" />}
+              <span>{isDark ? (locale === "ar" ? "الوضع الفاتح" : "Light Mode") : (locale === "ar" ? "الوضع الداكن" : "Dark Mode")}</span>
             </button>
             <Link to="/contact" onClick={() => setMobileMenuOpen(false)}>
               <Button size="sm" variant="primary">

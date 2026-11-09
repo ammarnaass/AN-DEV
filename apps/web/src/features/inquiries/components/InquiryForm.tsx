@@ -110,12 +110,12 @@ export const InquiryForm: React.FC = () => {
           name="project_type"
           value={formData.project_type}
           onChange={handleChange}
-          className="w-full h-12 px-4 rounded border border-line bg-bg/50 text-ink text-sm transition-colors focus:outline-none focus:ring-1 focus:ring-accent"
+          className="w-full h-12 px-4 rounded border border-line bg-surface text-ink text-sm transition-colors focus:outline-none focus:ring-1 focus:ring-accent"
         >
-          <option value="web">{locale === "ar" ? "تطبيق ويب / منصة سحابية" : "Web App / Cloud Platform"}</option>
-          <option value="mobile">{locale === "ar" ? "تطبيق موبايل (iOS / Android)" : "Mobile Application"}</option>
-          <option value="system">{locale === "ar" ? "نظام مخصص / قواعد بيانات وAPI" : "Custom Backend / Database & API"}</option>
-          <option value="other">{locale === "ar" ? "مشروع مخصص آخر" : "Other Custom Project"}</option>
+          <option value="web" className="bg-surface text-ink">{locale === "ar" ? "تطبيق ويب / منصة سحابية" : "Web App / Cloud Platform"}</option>
+          <option value="mobile" className="bg-surface text-ink">{locale === "ar" ? "تطبيق موبايل (iOS / Android)" : "Mobile Application"}</option>
+          <option value="system" className="bg-surface text-ink">{locale === "ar" ? "نظام مخصص / قواعد بيانات وAPI" : "Custom Backend / Database & API"}</option>
+          <option value="other" className="bg-surface text-ink">{locale === "ar" ? "مشروع مخصص آخر" : "Other Custom Project"}</option>
         </select>
       </div>
 
@@ -180,3 +180,4 @@ export const InquiryForm: React.FC = () => {
     </form>
   );
 };
+

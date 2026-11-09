@@ -1,4 +1,14 @@
 /** @type {import('tailwindcss').Config} */
+
+function withOpacity(variableName) {
+  return ({ opacityValue }) => {
+    if (opacityValue !== undefined) {
+      return `rgb(var(${variableName}) / ${opacityValue})`;
+    }
+    return `rgb(var(${variableName}))`;
+  };
+}
+
 export default {
   content: [
     "./index.html",
@@ -8,43 +18,42 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Base tokens
-        bg: "var(--bg)",
-        surface: "#0B1430",
-        "surface-elevated": "#101D42",
-        "surface-dim": "#0f1321",
-        "surface-bright": "#353849",
-        "surface-container": "#1b1f2e",
-        "surface-container-high": "#262939",
-        "surface-container-highest": "#303444",
-        "surface-container-low": "#171b2a",
-        "surface-container-lowest": "#0a0d1c",
-        "on-surface": "#dfe1f6",
-        "on-surface-variant": "#c2c6d8",
-        "inverse-surface": "#dfe1f6",
-        "inverse-on-surface": "#2c303f",
-        background: "#0f1321",
-        "on-background": "#dfe1f6",
-        line: "#1A2850",
-        "line-subtle": "#121E3E",
-        ink: "var(--ink)",
-        mute: "var(--mute)",
-        primary: "#0D6EFD",
-        "primary-container": "#0D6EFD",
-        "on-primary-container": "#ffffff",
+        bg: withOpacity("--bg"),
+        background: withOpacity("--background"),
+        surface: withOpacity("--surface"),
+        "surface-elevated": withOpacity("--surface-elevated"),
+        "surface-dim": withOpacity("--surface-dim"),
+        "surface-bright": withOpacity("--surface-bright"),
+        "surface-container": withOpacity("--surface-container"),
+        "surface-container-high": withOpacity("--surface-container-high"),
+        "surface-container-highest": withOpacity("--surface-container-highest"),
+        "surface-container-low": withOpacity("--surface-container-low"),
+        "surface-container-lowest": withOpacity("--surface-container-lowest"),
+        "on-surface": withOpacity("--on-surface"),
+        "on-surface-variant": withOpacity("--on-surface-variant"),
+        "inverse-surface": withOpacity("--inverse-surface"),
+        "inverse-on-surface": withOpacity("--inverse-on-surface"),
+        "on-background": withOpacity("--on-background"),
+        line: withOpacity("--line"),
+        "line-subtle": withOpacity("--line-subtle"),
+        ink: withOpacity("--ink"),
+        mute: withOpacity("--mute"),
+        "text-primary": withOpacity("--text-primary"),
+        "text-muted": withOpacity("--text-muted"),
+        primary: withOpacity("--primary"),
+        "primary-container": withOpacity("--primary-container"),
+        "on-primary-container": withOpacity("--on-primary-container"),
         "inverse-primary": "#0057ce",
-        secondary: "#00C3FF",
-        "secondary-container": "#14c4ff",
-        "on-secondary-container": "#004d67",
-        "text-primary": "#E6E6E6",
-        "text-muted": "#8D99B3",
-        "status-ok": "#00E5A3",
-        "status-warn": "#FFB020",
-        "status-err": "#FF486A",
-        accent: "var(--accent)",
-        ok: "#00E5A3",
-        warn: "#FFB020",
-        err: "#FF486A",
+        secondary: withOpacity("--secondary"),
+        "secondary-container": withOpacity("--secondary-container"),
+        "on-secondary-container": withOpacity("--on-secondary-container"),
+        "status-ok": withOpacity("--status-ok"),
+        "status-warn": withOpacity("--status-warn"),
+        "status-err": withOpacity("--status-err"),
+        accent: withOpacity("--accent"),
+        ok: withOpacity("--ok"),
+        warn: withOpacity("--warn"),
+        err: withOpacity("--err"),
       },
       spacing: {
         gutter: "1.5rem",
@@ -76,8 +85,8 @@ export default {
       boxShadow: {
         glow: "0 0 25px -5px rgba(13, 110, 253, 0.45)",
         "glow-accent": "0 0 25px -5px rgba(0, 195, 255, 0.45)",
-        card: "0 0 20px -4px rgba(0, 195, 255, 0.15)",
-        modal: "0 0 40px -8px rgba(13, 110, 253, 0.35)",
+        card: "var(--card-shadow, 0 0 20px -4px rgba(0, 195, 255, 0.15))",
+        modal: "var(--modal-shadow, 0 0 40px -8px rgba(13, 110, 253, 0.35))",
       },
       borderRadius: {
         DEFAULT: "10px",

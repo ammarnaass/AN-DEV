@@ -100,7 +100,7 @@ export const ProjectDetailPage: React.FC = () => {
         <div className="pt-2 flex flex-wrap items-center gap-3">
           {project.live_url && (
             <a href={project.live_url} target="_blank" rel="noreferrer">
-              <button className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary-container text-white text-sm font-semibold hover:bg-secondary-container hover:text-surface transition-all shadow-[0_0_16px_rgba(13,110,253,0.35)] active:scale-[0.98]">
+              <button className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary-container text-white text-sm font-semibold hover:bg-primary/90 transition-all shadow-[0_0_16px_rgba(13,110,253,0.35)] active:scale-[0.98]">
                 <span>{locale === "ar" ? "معاينة النظام الحي" : "Launch Live Platform"}</span>
                 <ExternalLink className="w-4 h-4" />
               </button>
@@ -155,7 +155,7 @@ export const ProjectDetailPage: React.FC = () => {
 
       {/* Detailed Architectural Breakdown (Body) */}
       <div className="space-y-8 pt-4 border-t border-line">
-        <div className="prose prose-invert max-w-none text-text-muted leading-relaxed space-y-6">
+        <div className="prose dark:prose-invert max-w-none text-text-muted leading-relaxed space-y-6">
           <div className="p-6 rounded-xl bg-surface border border-line space-y-3">
             <div className="flex items-center gap-2 text-secondary font-mono text-xs font-bold uppercase">
               <CheckCircle2 className="w-4 h-4" />
@@ -197,3 +197,4 @@ export const ProjectDetailPage: React.FC = () => {
     </article>
   );
 };
+

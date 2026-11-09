@@ -25,3 +25,4 @@ describe("AdminInquiriesPage (Feature)", () => {
     expect(screen.getByRole("button", { name: /قيد المتابعة/i })).toBeDefined();
   });
 });
+

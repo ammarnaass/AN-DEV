@@ -8,3 +8,4 @@ export function useAdminStats(enabled = true) {
     enabled,
   });
 }
+

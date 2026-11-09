@@ -66,3 +66,4 @@ export const ContactFaq: React.FC = () => {
     </div>
   );
 };
+

@@ -95,7 +95,7 @@ Host: Algiers Cluster`;
         {/* Action Buttons */}
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
           <Link to="/">
-            <button className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-primary-container text-white font-semibold text-sm hover:bg-secondary-container hover:text-surface transition-all shadow-[0_0_20px_rgba(13,110,253,0.35)] active:scale-[0.98]">
+            <button className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-primary-container text-white font-semibold text-sm hover:bg-primary/90 transition-all shadow-[0_0_20px_rgba(13,110,253,0.35)] active:scale-[0.98]">
               <Home className="w-4 h-4" />
               <span>{locale === "ar" ? "العودة إلى الصفحة الرئيسية" : "Return to Home"}</span>
             </button>

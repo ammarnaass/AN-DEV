@@ -89,3 +89,4 @@ export const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
     </div>
   );
 };
+

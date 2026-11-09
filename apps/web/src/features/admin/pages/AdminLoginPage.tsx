@@ -131,7 +131,7 @@ export const AdminLoginPage: React.FC = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full h-11 rounded-lg bg-primary-container text-white font-semibold text-sm hover:bg-secondary-container hover:text-surface transition-all shadow-[0_0_20px_rgba(13,110,253,0.35)] flex items-center justify-center gap-2 active:scale-[0.98] disabled:opacity-50"
+              className="w-full h-11 rounded-lg bg-primary-container text-white font-semibold text-sm hover:bg-primary/90 transition-all shadow-[0_0_20px_rgba(13,110,253,0.35)] flex items-center justify-center gap-2 active:scale-[0.98] disabled:opacity-50"
             >
               <Lock className="w-4 h-4" />
               <span>{loading ? "جاري المصادقة..." : "تسجيل الدخول للنظام (SECURE_AUTH)"}</span>
@@ -148,3 +148,4 @@ export const AdminLoginPage: React.FC = () => {
     </div>
   );
 };
+

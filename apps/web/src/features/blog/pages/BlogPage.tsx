@@ -99,3 +99,4 @@ export const BlogPage: React.FC = () => {
     </div>
   );
 };
+

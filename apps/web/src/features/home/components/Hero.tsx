@@ -54,7 +54,7 @@ export const Hero: React.FC = () => {
             {/* CTAs */}
             <div className="pt-2 flex flex-wrap gap-4 items-center w-full sm:w-auto">
               <Link to="/contact">
-                <button className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-primary-container text-white font-semibold text-base hover:bg-secondary-container hover:text-surface transition-all shadow-[0_0_24px_rgba(13,110,253,0.4)] group active:scale-[0.98]">
+                <button className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-primary-container text-white font-semibold text-base hover:bg-primary/90 transition-all shadow-[0_0_24px_rgba(13,110,253,0.4)] group active:scale-[0.98]">
                   <span>{locale === "ar" ? "ابدأ مشروعك" : "Start Project"}</span>
                   {isRtl ? (
                     <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
@@ -81,3 +81,4 @@ export const Hero: React.FC = () => {
     </section>
   );
 };
+

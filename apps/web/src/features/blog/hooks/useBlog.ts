@@ -16,3 +16,4 @@ export function useBlogPostDetail(slug: string | undefined) {
     enabled: !!slug,
   });
 }
+

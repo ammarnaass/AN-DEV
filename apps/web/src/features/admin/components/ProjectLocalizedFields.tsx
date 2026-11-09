@@ -88,3 +88,4 @@ export const ProjectLocalizedFields: React.FC<ProjectLocalizedFieldsProps> = ({
     </div>
   );
 };
+

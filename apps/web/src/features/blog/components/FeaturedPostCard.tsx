@@ -58,3 +58,4 @@ export const FeaturedPostCard: React.FC<FeaturedPostCardProps> = ({ post }) => {
     </div>
   );
 };
+

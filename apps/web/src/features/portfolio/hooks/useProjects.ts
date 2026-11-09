@@ -16,3 +16,4 @@ export function useProjectDetail(slug?: string) {
     enabled: Boolean(slug)
   });
 }
+

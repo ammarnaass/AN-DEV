@@ -33,7 +33,7 @@ export const HomeConversionCta: React.FC = () => {
 
           <div className="flex flex-wrap items-center justify-center gap-4 shrink-0">
             <Link to="/contact">
-              <button className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-primary-container text-white font-semibold text-sm sm:text-base hover:bg-secondary-container hover:text-surface transition-all shadow-[0_0_24px_rgba(13,110,253,0.4)] active:scale-[0.98]">
+              <button className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-primary-container text-white font-semibold text-sm sm:text-base hover:bg-primary/90 transition-all shadow-[0_0_24px_rgba(13,110,253,0.4)] active:scale-[0.98]">
                 <span>{locale === "ar" ? "طلب استشارة أو مشروع" : "Start Project Inquiry"}</span>
                 {isRtl ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
               </button>
@@ -53,3 +53,4 @@ export const HomeConversionCta: React.FC = () => {
     </section>
   );
 };
+

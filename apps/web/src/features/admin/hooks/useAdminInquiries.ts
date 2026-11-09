@@ -26,3 +26,4 @@ export function useAdminInquiries(statusFilter = "all") {
     isUpdating: updateStatusMutation.isPending,
   };
 }
+

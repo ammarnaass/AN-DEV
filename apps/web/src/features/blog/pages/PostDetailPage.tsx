@@ -103,7 +103,7 @@ export const PostDetailPage: React.FC = () => {
 
       {/* Markdown Content Container */}
       <div className="p-6 sm:p-10 rounded-2xl bg-surface border border-line text-text-primary space-y-6 leading-relaxed text-sm sm:text-base font-sans">
-        <div className="whitespace-pre-line prose prose-invert max-w-none text-text-primary">
+        <div className="whitespace-pre-line prose dark:prose-invert max-w-none text-text-primary">
           {body}
         </div>
       </div>
@@ -123,7 +123,7 @@ export const PostDetailPage: React.FC = () => {
           </p>
         </div>
         <Link to="/contact" className="shrink-0">
-          <button className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-primary-container text-white font-semibold text-sm hover:bg-secondary-container hover:text-surface transition-all shadow-[0_0_16px_rgba(13,110,253,0.35)] active:scale-[0.98]">
+          <button className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-primary-container text-white font-semibold text-sm hover:bg-primary/90 transition-all shadow-[0_0_16px_rgba(13,110,253,0.35)] active:scale-[0.98]">
             <MessageSquare className="w-4 h-4" />
             <span>{locale === "ar" ? "طلب استشارة معمارية" : "Request Technical Audit"}</span>
           </button>
@@ -132,3 +132,4 @@ export const PostDetailPage: React.FC = () => {
     </article>
   );
 };
+

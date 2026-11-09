@@ -60,3 +60,4 @@ export const adminService = {
       body: JSON.stringify(payload),
     }),
 };
+

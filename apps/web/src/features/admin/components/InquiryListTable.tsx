@@ -133,3 +133,4 @@ export const InquiryListTable: React.FC<InquiryListTableProps> = ({
     </div>
   );
 };
+

@@ -47,3 +47,4 @@ export const SettingsSocialSection: React.FC<SettingsSocialSectionProps> = ({
     </div>
   );
 };
+

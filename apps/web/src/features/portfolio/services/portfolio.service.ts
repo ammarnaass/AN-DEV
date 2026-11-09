@@ -9,3 +9,4 @@ export const portfolioService = {
     return apiFetch<Project>(`/api/projects/${slug}`);
   }
 };
+

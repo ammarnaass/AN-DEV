@@ -42,3 +42,4 @@ export const ProjectKpis: React.FC = () => {
     </div>
   );
 };
+

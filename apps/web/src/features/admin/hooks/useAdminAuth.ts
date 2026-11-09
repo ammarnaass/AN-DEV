@@ -32,3 +32,4 @@ export function useAdminAuth() {
     logout: logoutMutation.mutateAsync,
   };
 }
+

@@ -92,3 +92,4 @@ export const Process: React.FC = () => {
     </section>
   );
 };
+

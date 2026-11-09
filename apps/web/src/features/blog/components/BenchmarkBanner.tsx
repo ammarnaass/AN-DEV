@@ -21,3 +21,4 @@ export const BenchmarkBanner: React.FC = () => {
     </div>
   );
 };
+

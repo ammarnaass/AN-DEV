@@ -77,7 +77,7 @@ export const AdminInquiriesPage: React.FC = () => {
           </button>
           <button
             onClick={handleExportCsv}
-            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-primary-container text-white text-xs font-semibold hover:bg-secondary-container hover:text-surface transition-all shadow-[0_0_12px_rgba(13,110,253,0.35)]"
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-primary-container text-white text-xs font-semibold hover:bg-primary/90 transition-all shadow-[0_0_12px_rgba(13,110,253,0.35)]"
           >
             <Download className="w-3.5 h-3.5" />
             <span>تصدير CSV</span>
@@ -128,3 +128,4 @@ export const AdminInquiriesPage: React.FC = () => {
     </div>
   );
 };
+

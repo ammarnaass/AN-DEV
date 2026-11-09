@@ -6,7 +6,7 @@
 
 @layer base {
   * {
-    border-color: var(--line);
+    border-color: rgb(var(--line));
   }
 
   html {
@@ -44,8 +44,9 @@
   }
 
   body {
-    background-color: var(--bg);
-    color: var(--ink);
+    background-color: rgb(var(--bg));
+    color: rgb(var(--ink));
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
 
   code, pre, .font-mono {

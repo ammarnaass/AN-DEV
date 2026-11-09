@@ -61,7 +61,7 @@ export const AdminProjectsPage: React.FC = () => {
 
         <button
           onClick={handleCreate}
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-primary-container text-white text-xs sm:text-sm font-semibold hover:bg-secondary-container hover:text-surface transition-all shadow-[0_0_16px_rgba(13,110,253,0.35)] active:scale-[0.98]"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-primary-container text-white text-xs sm:text-sm font-semibold hover:bg-primary/90 transition-all shadow-[0_0_16px_rgba(13,110,253,0.35)] active:scale-[0.98]"
         >
           <Plus className="w-4 h-4" />
           <span>إضافة مشروع جديد</span>
@@ -129,3 +129,4 @@ export const AdminProjectsPage: React.FC = () => {
     </div>
   );
 };
+

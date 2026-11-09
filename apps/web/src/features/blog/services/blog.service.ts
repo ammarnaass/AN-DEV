@@ -10,3 +10,4 @@ export const blogService = {
     return apiFetch<Post>(`/api/posts/${slug}`);
   },
 };
+

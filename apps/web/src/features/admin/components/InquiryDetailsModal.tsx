@@ -124,7 +124,7 @@ export const InquiryDetailsModal: React.FC<InquiryDetailsModalProps> = ({
               type="button"
               onClick={handleSave}
               disabled={isSaving}
-              className="px-5 py-2 rounded-lg bg-primary-container text-white text-xs font-semibold hover:bg-secondary-container hover:text-surface transition-all shadow-[0_0_12px_rgba(13,110,253,0.35)] disabled:opacity-50"
+              className="px-5 py-2 rounded-lg bg-primary-container text-white text-xs font-semibold hover:bg-primary/90 transition-all shadow-[0_0_12px_rgba(13,110,253,0.35)] disabled:opacity-50"
             >
               {isSaving ? "جاري الحفظ..." : "حفظ التغييرات"}
             </button>
@@ -134,3 +134,4 @@ export const InquiryDetailsModal: React.FC<InquiryDetailsModalProps> = ({
     </div>
   );
 };
+
