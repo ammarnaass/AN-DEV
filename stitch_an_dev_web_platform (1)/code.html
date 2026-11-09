@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+
+<html class="light" dir="rtl" lang="ar"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "on-secondary-fixed": "#001d31",
+          "secondary-fixed-dim": "#93ccff",
+          "surface-container-high": "#dce9ff",
+          "tertiary": "#565e74",
+          "secondary-fixed": "#cce5ff",
+          "on-primary-container": "#ffffff",
+          "primary": "#0057cd",
+          "on-surface-variant": "#475569",
+          "on-tertiary-container": "#ffffff",
+          "on-background": "#0b1c30",
+          "on-tertiary-fixed-variant": "#3f465c",
+          "on-error-container": "#93000a",
+          "surface-tint": "#0057ce",
+          "tertiary-fixed": "#dae2fd",
+          "on-secondary-container": "#00476e",
+          "on-secondary-fixed-variant": "#004b73",
+          "primary-fixed-dim": "#b1c5ff",
+          "on-tertiary-fixed": "#131b2e",
+          "surface": "#f8f9ff",
+          "inverse-on-surface": "#eaf1ff",
+          "on-error": "#ffffff",
+          "background": "#f8f9ff",
+          "outline-variant": "#e2e8f0",
+          "inverse-surface": "#213145",
+          "on-primary-fixed": "#001946",
+          "on-primary-fixed-variant": "#00419e",
+          "primary-container": "#0d6efd",
+          "surface-bright": "#f8f9ff",
+          "surface-container-highest": "#d3e4fe",
+          "surface-container": "#f1f5f9",
+          "on-surface": "#0f172a",
+          "outline": "#cbd5e1",
+          "surface-container-lowest": "#ffffff",
+          "tertiary-fixed-dim": "#bec6e0",
+          "primary-fixed": "#dae2ff",
+          "error-container": "#ffdad6",
+          "on-tertiary": "#ffffff",
+          "secondary-container": "#0284c7",
+          "error": "#ba1a1a",
+          "surface-variant": "#f1f5f9",
+          "surface-container-low": "#eff4ff",
+          "on-secondary": "#ffffff",
+          "secondary": "#006398",
+          "on-primary": "#ffffff",
+          "surface-dim": "#cbdbf5",
+          "inverse-primary": "#b1c5ff",
+          "tertiary-container": "#6f768d",
+          "status-ok": "#059669",
+          "status-warn": "#d97706",
+          "status-err": "#dc2626"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "full": "9999px"
+        },
+        "spacing": {
+          "gutter": "1.5rem",
+          "margin": "2rem",
+          "space-xl": "2.5rem",
+          "gutter-lg": "2rem",
+          "space-xs": "0.25rem",
+          "gutter-sm": "1rem",
+          "space-md": "1rem",
+          "space-sm": "0.5rem",
+          "margin-mobile": "1rem",
+          "space-lg": "1.5rem"
+        },
+        "fontFamily": {
+          "display": ["Space Grotesk", "Cairo"],
+          "headline-lg": ["Space Grotesk", "Cairo"],
+          "headline-md": ["Space Grotesk", "Cairo"],
+          "headline-sm": ["Space Grotesk", "Cairo"],
+          "title-lg": ["Cairo", "Inter"],
+          "title-md": ["Cairo", "Inter"],
+          "body-lg": ["Cairo", "Inter"],
+          "body-md": ["Cairo", "Inter"],
+          "body-sm": ["Cairo", "Inter"],
+          "label-code": ["JetBrains Mono"],
+          "code-block": ["JetBrains Mono"]
+        }
+      }
+    }
+  }
+</script></head><body class="bg-background font-body-md text-on-surface antialiased selection:bg-primary selection:text-white"><header class="fixed top-0 w-full z-50 bg-white/85 backdrop-blur-xl border-b border-outline-variant shadow-[0_1px_10px_rgba(0,0,0,0.03)]"><div class="h-20 w-full px-gutter flex items-center justify-between"><div class="flex items-center gap-space-md"><img alt="AN DEV Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/ALJJyrDELZRIuyuCeLePadBzlwzG1nDafz58W_53ITs-1uABfe3cOPNJDMfKe5GLCgs9SWAdPpsHHQTstx0gSQY0c5fY76sIsS7rklpdWmb-240VznKy85-v_bUnTD46q7Zh76umszYPt4aFSQ8Gjh_6qk0ciJWuqLnNMf-ZHpK7nSdkxJu-18Nl47xbDbQvTfL3Cek6Szo98xHuT2z8cTmNCeYKzw3pcfAzPe-YU7h3C5wOhQ"/><div class="flex flex-col"><div class="flex items-center gap-space-xs"><span class="font-headline-md text-title-md text-on-surface font-bold tracking-wide">AN DEV</span><span class="hidden lg:inline-flex items-center px-space-xs py-0.5 rounded text-primary font-code-block text-[11px] font-semibold bg-surface-container-high">v2.5</span></div><span class="text-[11px] text-on-surface-variant font-code-block tracking-tight">Code · Create · Solve</span></div></div><nav class="hidden xl:flex items-center gap-space-lg" data-active-classes="bg-primary-container text-on-primary-container font-title-md rounded-lg"><a aria-current="page" class="px-space-sm py-1.5 transition-colors bg-primary-container text-on-primary-container font-title-md rounded-lg shadow-sm" data-path="home" href="#">الرئيسية</a><a class="font-title-md text-body-md text-on-surface-variant hover:text-primary px-space-sm py-1.5 transition-colors" data-path="services" href="#services">خدماتنا</a><a class="font-title-md text-body-md text-on-surface-variant hover:text-primary px-space-sm py-1.5 transition-colors" data-path="projects" href="#projects">أعمالنا</a><a class="font-title-md text-body-md text-on-surface-variant hover:text-primary px-space-sm py-1.5 transition-colors" data-path="blog" href="#">المدونة</a><a class="font-title-md text-body-md text-on-surface-variant hover:text-primary px-space-sm py-1.5 transition-colors" data-path="contact" href="#">تواصل معنا</a></nav><div class="flex items-center gap-space-md"><button class="flex items-center gap-space-xs px-space-sm py-1.5 rounded-lg border border-outline-variant bg-surface-container text-on-surface-variant hover:text-primary transition-colors font-code-block text-xs font-medium" type="button"><span class="material-symbols-outlined text-[18px]">translate</span><span>AR</span></button><button aria-label="Toggle Dark Mode" class="w-9 h-9 rounded-lg border border-outline-variant bg-surface-container flex items-center justify-center text-primary hover:bg-surface-container-high transition-colors" title="الوضع الفاتح مفعل" type="button"><span class="material-symbols-outlined text-[20px]">light_mode</span></button><a class="hidden md:inline-flex items-center justify-center px-space-md py-2 rounded-lg bg-primary-container text-on-primary-container font-title-md text-body-md hover:bg-primary transition-all shadow-[0_4px_14px_rgba(13,110,253,0.3)] hover:shadow-[0_6px_20px_rgba(13,110,253,0.4)]" data-path="start-project" href="#">ابدأ مشروعك</a><div class="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center"><span class="material-symbols-outlined text-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-20 bg-background"><div class="flex flex-col w-full overflow-hidden">
+<!-- HERO SECTION -->
+<section class="relative w-full px-gutter py-space-xl lg:py-28 overflow-hidden">
+<!-- Light Cybernetic Blueprint Grid & Atmospheric Glows -->
+<div class="absolute inset-0 bg-[linear-gradient(to_right,#cbd5e120_1px,transparent_1px),linear-gradient(to_bottom,#cbd5e120_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_40%,#000_70%,transparent_100%)] pointer-events-none"></div>
+<div class="absolute top-1/4 start-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[120px] pointer-events-none -z-10"></div>
+<div class="absolute bottom-10 end-10 w-[500px] h-[500px] bg-secondary-container/10 rounded-full blur-[140px] pointer-events-none -z-10"></div>
+<div class="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-space-xl items-center relative z-10">
+<!-- Right Column: Editorial Typographic Anchor -->
+<div class="lg:col-span-6 flex flex-col gap-space-lg items-start text-start">
+<!-- Live System Metric Pill -->
+<div class="inline-flex items-center gap-space-xs px-space-md py-1.5 rounded-full bg-surface-container border border-outline-variant text-secondary font-code-block text-xs shadow-sm">
+<span class="w-2 h-2 rounded-full bg-status-ok animate-pulse"></span>
+<span class="text-on-surface-variant tracking-wider font-semibold">ENGINEERING_HUB // ALGIERS · GLOBAL</span>
+</div>
+<!-- Hero Headline -->
+<h1 class="font-headline-lg text-4xl lg:text-[54px] lg:leading-[64px] text-on-surface tracking-tight font-bold">
+          أفكار نُحوّلها إلى <br class="hidden sm:inline"/>
+<span class="text-transparent bg-clip-text bg-gradient-to-l from-primary via-secondary-container to-secondary">
+            تطبيقات تُحدث فرقاً
+          </span>
+</h1>
+<!-- Subtitle -->
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl leading-relaxed">
+          نطور تطبيقات ويب ومنصات سحابية وأنظمة مخصصة تجمع بين كفاءة الأداء والأناقة الهندسية للشركات ورواد الأعمال برؤية معمارية حديثة.
+        </p>
+<!-- CTAs -->
+<div class="flex flex-wrap items-center gap-space-md pt-space-xs w-full sm:w-auto">
+<a class="inline-flex items-center justify-center gap-space-xs px-space-xl py-3.5 rounded-lg bg-primary-container text-on-primary-container font-title-md text-title-md hover:bg-primary transition-all shadow-[0_4px_16px_rgba(13,110,253,0.35)] group" href="#">
+<span>ابدأ مشروعك</span>
+<span class="material-symbols-outlined text-[20px] transition-transform group-hover:-translate-x-1">arrow_back</span>
+</a>
+<a class="inline-flex items-center justify-center gap-space-xs px-space-xl py-3.5 rounded-lg bg-white border border-outline-variant text-on-surface font-title-md text-title-md hover:bg-surface-container hover:text-primary transition-all shadow-sm" href="#projects">
+<span>استعرض أعمالنا</span>
+<span class="material-symbols-outlined text-[20px] text-secondary">layers</span>
+</a>
+</div>
+<!-- Micro stats strip -->
+<div class="grid grid-cols-3 gap-space-lg pt-space-md w-full max-w-md border-t border-outline-variant/80">
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md text-on-surface font-bold">99.98%</span>
+<span class="font-body-sm text-xs text-on-surface-variant font-medium">موثوقية التشغيل</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md text-primary font-bold font-code-block">&lt;50ms</span>
+<span class="font-body-sm text-xs text-on-surface-variant font-medium">زمن استجابة API</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md text-status-ok font-bold">100%</span>
+<span class="font-body-sm text-xs text-on-surface-variant font-medium">كود نقي ومرن</span>
+</div>
+</div>
+</div>
+<!-- Left Column: Interactive High-Precision IDE Terminal (Crisp Dark Developer Blueprint Box) -->
+<div class="lg:col-span-6 w-full flex justify-center">
+<div class="w-full max-w-xl bg-[#0b1329] border border-slate-700/60 rounded-xl shadow-[0_20px_50px_-15px_rgba(15,23,42,0.25)] overflow-hidden">
+<!-- Terminal Titlebar -->
+<div class="h-10 px-space-md bg-[#080d1e] border-b border-slate-800 flex items-center justify-between select-none">
+<!-- Traffic Light Controls (LTR orientation for terminal window) -->
+<div class="flex items-center gap-1.5" dir="ltr">
+<span class="w-3 h-3 rounded-full bg-[#ef4444] inline-block opacity-90"></span>
+<span class="w-3 h-3 rounded-full bg-[#f59e0b] inline-block opacity-90"></span>
+<span class="w-3 h-3 rounded-full bg-[#10b981] inline-block opacity-90"></span>
+</div>
+<div class="flex items-center gap-space-xs font-code-block text-[12px] text-slate-400" dir="ltr">
+<span class="material-symbols-outlined text-[16px] text-cyan-400">terminal</span>
+<span>apps/core/src/architecture.ts</span>
+</div>
+<div class="flex items-center gap-1 text-slate-400" dir="ltr">
+<span class="font-code-block text-[11px] px-1.5 py-0.5 rounded bg-slate-800 text-cyan-300 font-semibold">TS</span>
+</div>
+</div>
+<!-- Code Canvas -->
+<div class="p-space-lg font-code-block text-code-block leading-relaxed overflow-x-auto text-left" dir="ltr">
+<pre class="font-code-block text-[13px] leading-[22px]"><code class="text-slate-300"><span class="text-slate-500">// AN DEV: Code · Create · Solve</span>
+<span class="text-sky-400 font-semibold">import</span> { <span class="text-indigo-300">Microservices</span>, <span class="text-indigo-300">CloudEdge</span> } <span class="text-sky-400 font-semibold">from</span> <span class="text-emerald-400">'@andev/core'</span>;
+<span class="text-sky-400 font-semibold">import</span> { <span class="text-indigo-300">FastifyEngine</span> } <span class="text-sky-400 font-semibold">from</span> <span class="text-emerald-400">'@andev/backend'</span>;
+
+<span class="text-sky-400 font-semibold">export async function</span> <span class="text-cyan-300 font-semibold">deployEnterpriseStack</span>() {
+  <span class="text-sky-400 font-semibold">const</span> engine = <span class="text-sky-400 font-semibold">new</span> <span class="text-indigo-300">FastifyEngine</span>({
+    locale: <span class="text-emerald-400">'dz-global'</span>,
+    latency: <span class="text-amber-300">'ultra-low'</span>,
+    db: <span class="text-emerald-400">'PostgreSQL + DrizzleORM'</span>,
+    scaling: <span class="text-blue-400 font-semibold">true</span>
+  });
+
+  <span class="text-sky-400 font-semibold">const</span> runtime = <span class="text-sky-400 font-semibold">await</span> engine.<span class="text-cyan-300">bootstrap</span>({
+    ui: <span class="text-emerald-400">'React 19 + TailwindCSS'</span>,
+    runtimeTarget: <span class="text-emerald-400">'Edge Node Cluster'</span>
+  });
+
+  <span class="text-slate-500">// System Ready: Zero-friction experience</span>
+  <span class="text-sky-400 font-semibold">return</span> runtime.<span class="text-cyan-300">launch</span>();
+}</code></pre>
+</div>
+<!-- Terminal Status Footer -->
+<div class="px-space-md py-2 bg-[#080d1e] border-t border-slate-800 flex items-center justify-between font-code-block text-[11px] text-slate-400">
+<div class="flex items-center gap-space-sm" dir="ltr">
+<span class="inline-flex items-center text-emerald-400 gap-1.5 font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+<span>Ready</span>
+</span>
+<span class="text-slate-500">UTF-8</span>
+</div>
+<div class="flex items-center gap-space-xs text-sky-400" dir="ltr">
+<span>Branch:</span>
+<span class="text-slate-200 font-semibold">main*</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- TECH STACK HORIZONTAL BANNER -->
+<section class="w-full bg-surface-container-lowest border-y border-outline-variant py-space-lg overflow-hidden">
+<div class="max-w-7xl mx-auto px-gutter flex flex-col md:flex-row items-center justify-between gap-space-lg">
+<div class="flex items-center gap-space-xs text-on-surface-variant font-title-md text-sm whitespace-nowrap">
+<span class="material-symbols-outlined text-primary text-[20px]">memory</span>
+<span class="tracking-wide font-semibold text-on-surface">الترسانة التقنية المعتمدة :</span>
+</div>
+<div class="flex flex-wrap items-center justify-center gap-space-sm md:gap-space-md text-on-surface-variant font-code-block text-xs">
+<span class="px-3 py-1.5 rounded-md bg-surface-container border border-outline-variant hover:text-primary hover:border-primary/40 hover:bg-white transition-all font-medium">TypeScript</span>
+<span class="px-3 py-1.5 rounded-md bg-surface-container border border-outline-variant hover:text-primary hover:border-primary/40 hover:bg-white transition-all font-medium">React / Vite</span>
+<span class="px-3 py-1.5 rounded-md bg-surface-container border border-outline-variant hover:text-primary hover:border-primary/40 hover:bg-white transition-all font-medium">Next.js</span>
+<span class="px-3 py-1.5 rounded-md bg-surface-container border border-outline-variant hover:text-primary hover:border-primary/40 hover:bg-white transition-all font-medium">Fastify</span>
+<span class="px-3 py-1.5 rounded-md bg-surface-container border border-outline-variant hover:text-primary hover:border-primary/40 hover:bg-white transition-all font-medium">SQLite / Postgres</span>
+<span class="px-3 py-1.5 rounded-md bg-surface-container border border-outline-variant hover:text-primary hover:border-primary/40 hover:bg-white transition-all font-medium">Drizzle ORM</span>
+<span class="px-3 py-1.5 rounded-md bg-surface-container border border-outline-variant hover:text-primary hover:border-primary/40 hover:bg-white transition-all font-medium">Tailwind CSS</span>
+<span class="px-3 py-1.5 rounded-md bg-surface-container border border-outline-variant hover:text-primary hover:border-primary/40 hover:bg-white transition-all font-medium">Docker</span>
+</div>
+</div>
+</section>
+<!-- SERVICES ROW SECTION: PRD Specified Architectural Rows -->
+<section class="w-full px-gutter py-24 max-w-7xl mx-auto" id="services">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-md mb-space-xl">
+<div class="flex flex-col gap-space-xs">
+<div class="inline-flex items-center gap-space-xs text-primary font-code-block text-xs font-semibold tracking-wider">
+<span>01 // SERVICES &amp; CAPABILITIES</span>
+</div>
+<h2 class="font-headline-lg text-3xl lg:text-4xl text-on-surface font-bold">
+          ماذا نبني
+        </h2>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-md">
+        حلول هندسية مصممة للعمل دون انقطاع مع تركيز جذري على الأمان، السرعة والاستدامة البرمجية.
+      </p>
+</div>
+<!-- Architectural Rows Container -->
+<div class="flex flex-col gap-space-md">
+<!-- Row 1: Web Applications -->
+<div class="group p-space-xl rounded-xl bg-white border border-outline-variant hover:border-primary/50 hover:shadow-md transition-all duration-300 flex flex-col lg:flex-row lg:items-center justify-between gap-space-lg">
+<div class="flex items-start gap-space-lg max-w-2xl">
+<div class="w-14 h-14 rounded-lg bg-surface-container border border-outline-variant flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all shrink-0">
+<span class="material-symbols-outlined text-[30px]">web</span>
+</div>
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-sm">
+<span class="font-code-block text-xs font-semibold text-primary">CORE.01</span>
+<h3 class="font-title-lg text-title-lg text-on-surface font-bold group-hover:text-primary transition-colors">
+                تطبيقات الويب المتقدمة والمنصات التفاعلية
+              </h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+              بناء منصات رقمية متجاوبة وسريعة جداً باستخدام أحدث ممارسات الواجهات، مع إدارة بيانات متزامنة وتجربة مستخدم مخصصة وفق أعلى معايير الـ UX.
+            </p>
+</div>
+</div>
+<div class="flex flex-wrap lg:flex-nowrap items-center gap-space-xs lg:gap-space-sm font-code-block text-xs self-start lg:self-center">
+<span class="px-space-sm py-1 rounded bg-surface-container border border-outline-variant text-on-surface-variant font-medium">React</span>
+<span class="px-space-sm py-1 rounded bg-surface-container border border-outline-variant text-on-surface-variant font-medium">Vite</span>
+<span class="px-space-sm py-1 rounded bg-surface-container border border-outline-variant text-on-surface-variant font-medium">Next.js</span>
+<span class="px-space-sm py-1 rounded bg-surface-container border border-outline-variant text-on-surface-variant font-medium">Node.js</span>
+<div class="hidden lg:flex w-10 h-10 rounded-full bg-surface-container border border-outline-variant items-center justify-center text-on-surface-variant group-hover:text-primary group-hover:border-primary/40 transition-all ms-space-md">
+<span class="material-symbols-outlined text-[20px]">arrow_outward</span>
+</div>
+</div>
+</div>
+<!-- Row 2: Mobile & Hybrid Systems -->
+<div class="group p-space-xl rounded-xl bg-white border border-outline-variant hover:border-primary/50 hover:shadow-md transition-all duration-300 flex flex-col lg:flex-row lg:items-center justify-between gap-space-lg">
+<div class="flex items-start gap-space-lg max-w-2xl">
+<div class="w-14 h-14 rounded-lg bg-surface-container border border-outline-variant flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all shrink-0">
+<span class="material-symbols-outlined text-[30px]">phone_iphone</span>
+</div>
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-sm">
+<span class="font-code-block text-xs font-semibold text-primary">CORE.02</span>
+<h3 class="font-title-lg text-title-lg text-on-surface font-bold group-hover:text-primary transition-colors">
+                تطبيقات الموبايل والأنظمة الهجينة متعددة المنصات
+              </h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+              تطوير تطبيقات هواتف ذكية أصلية وهجينة عالية الاستجابة تدعم أنظمة iOS و Android بنسخة كود موحدة تضمن سرعة الإطلاق واستقرار الأداء دون مساومة.
+            </p>
+</div>
+</div>
+<div class="flex flex-wrap lg:flex-nowrap items-center gap-space-xs lg:gap-space-sm font-code-block text-xs self-start lg:self-center">
+<span class="px-space-sm py-1 rounded bg-surface-container border border-outline-variant text-on-surface-variant font-medium">Flutter</span>
+<span class="px-space-sm py-1 rounded bg-surface-container border border-outline-variant text-on-surface-variant font-medium">React Native</span>
+<span class="px-space-sm py-1 rounded bg-surface-container border border-outline-variant text-on-surface-variant font-medium">Cross-platform</span>
+<div class="hidden lg:flex w-10 h-10 rounded-full bg-surface-container border border-outline-variant items-center justify-center text-on-surface-variant group-hover:text-primary group-hover:border-primary/40 transition-all ms-space-md">
+<span class="material-symbols-outlined text-[20px]">arrow_outward</span>
+</div>
+</div>
+</div>
+<!-- Row 3: Backend & High Performance DB -->
+<div class="group p-space-xl rounded-xl bg-white border border-outline-variant hover:border-primary/50 hover:shadow-md transition-all duration-300 flex flex-col lg:flex-row lg:items-center justify-between gap-space-lg">
+<div class="flex items-start gap-space-lg max-w-2xl">
+<div class="w-14 h-14 rounded-lg bg-surface-container border border-outline-variant flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all shrink-0">
+<span class="material-symbols-outlined text-[30px]">database</span>
+</div>
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-sm">
+<span class="font-code-block text-xs font-semibold text-primary">CORE.03</span>
+<h3 class="font-title-lg text-title-lg text-on-surface font-bold group-hover:text-primary transition-colors">
+                هندسة الأنظمة الخلفية والـ API وقواعد البيانات فائقة السرعة
+              </h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+              تصميم معمارية سحابية قوية ومحركات API منخفضة الكمون، مع حلول تخزين واستعلام سريعة تضمن استيعاب ملايين العمليات المتزامنة بكفاءة متناهية.
+            </p>
+</div>
+</div>
+<div class="flex flex-wrap lg:flex-nowrap items-center gap-space-xs lg:gap-space-sm font-code-block text-xs self-start lg:self-center">
+<span class="px-space-sm py-1 rounded bg-surface-container border border-outline-variant text-on-surface-variant font-medium">Fastify</span>
+<span class="px-space-sm py-1 rounded bg-surface-container border border-outline-variant text-on-surface-variant font-medium">SQLite</span>
+<span class="px-space-sm py-1 rounded bg-surface-container border border-outline-variant text-on-surface-variant font-medium">PostgreSQL</span>
+<span class="px-space-sm py-1 rounded bg-surface-container border border-outline-variant text-on-surface-variant font-medium">Drizzle ORM</span>
+<div class="hidden lg:flex w-10 h-10 rounded-full bg-surface-container border border-outline-variant items-center justify-center text-on-surface-variant group-hover:text-primary group-hover:border-primary/40 transition-all ms-space-md">
+<span class="material-symbols-outlined text-[20px]">arrow_outward</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- FEATURED PROJECTS: High-Impact Project Mosaic -->
+<section class="w-full px-gutter py-24 bg-surface-container-low/60 border-y border-outline-variant" id="projects">
+<div class="max-w-7xl mx-auto flex flex-col gap-space-xl">
+<!-- Section Header -->
+<div class="flex flex-col sm:flex-row sm:items-end justify-between gap-space-md">
+<div class="flex flex-col gap-space-xs">
+<div class="inline-flex items-center gap-space-xs text-primary font-code-block text-xs font-semibold tracking-wider">
+<span>02 // SHOWCASE</span>
+</div>
+<h2 class="font-headline-lg text-3xl lg:text-4xl text-on-surface font-bold">
+            أعمال مختارة
+          </h2>
+</div>
+<a class="inline-flex items-center gap-space-xs font-title-md text-body-md text-primary hover:text-secondary-container transition-colors group font-semibold" href="#">
+<span>عرض كل الأعمال والمشاريع</span>
+<span class="material-symbols-outlined text-[18px] transition-transform group-hover:-translate-x-1">arrow_back</span>
+</a>
+</div>
+<!-- 3 Featured Projects Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-space-lg">
+<!-- Project 1 -->
+<div class="group flex flex-col rounded-xl bg-white border border-outline-variant overflow-hidden hover:border-primary/40 hover:shadow-lg transition-all duration-300">
+<!-- 16:10 Aspect Ratio Image Container -->
+<div class="relative w-full aspect-[16/10] overflow-hidden bg-slate-100">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Futuristic logistics analytics dashboard interface on dark slate glass display with glowing cyan charts, route maps for Algiers freight management, crisp real-time telemetric counters and blue gradient accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1g8vXke6WVsQZH1j3yNJTcTyO5h-HrP6BvCFI4HSZIya08TOrEFue0WL47cGCoLXUiLy-SQI5sy0ENP-sSvRSKmMYM_fD73chsUE8I9oj7FDkAI_6frF6ks7bWkjj6qN-qL9MuBDULlxADsDFKhdXCH5PsUFV5Tvxc7Vcoidarjnx6UOMEU7RZEFfKBQZy8yoDRrsaysZMGRhoJpEEbwrl4x0RmQW_tIUjQjcK55u"/>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
+<div class="absolute top-space-md start-space-md">
+<span class="px-space-sm py-1 rounded bg-white/95 backdrop-blur-md text-primary font-code-block text-[11px] font-bold shadow-sm">
+                SaaS PLATFORM
+              </span>
+</div>
+</div>
+<div class="p-space-lg flex flex-col flex-1 justify-between gap-space-md bg-white">
+<div class="flex flex-col gap-space-xs">
+<h3 class="font-title-lg text-title-lg text-on-surface font-bold group-hover:text-primary transition-colors">
+                منصة لوجستيات وتتبع الأساطيل الميدانية
+              </h3>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed line-clamp-2">
+                نظام ذكي لإدارة ومراقبة مسارات الشحن اللوجستي محلياً ودولياً في الوقت الحقيقي مع تحليلات كفاءة الاستهلاك والتحميل.
+              </p>
+</div>
+<div class="flex flex-wrap items-center gap-space-xs font-code-block text-xs pt-space-xs">
+<span class="px-2 py-0.5 rounded bg-surface-container border border-outline-variant text-primary font-medium">React</span>
+<span class="px-2 py-0.5 rounded bg-surface-container border border-outline-variant text-primary font-medium">Fastify</span>
+<span class="px-2 py-0.5 rounded bg-surface-container border border-outline-variant text-primary font-medium">PostgreSQL</span>
+<span class="px-2 py-0.5 rounded bg-surface-container border border-outline-variant text-primary font-medium">WebSockets</span>
+</div>
+</div>
+</div>
+<!-- Project 2 -->
+<div class="group flex flex-col rounded-xl bg-white border border-outline-variant overflow-hidden hover:border-primary/40 hover:shadow-lg transition-all duration-300">
+<!-- 16:10 Aspect Ratio Image Container -->
+<div class="relative w-full aspect-[16/10] overflow-hidden bg-slate-100">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Digital fintech mobile payment app interface with dark mode cybernetic neon blue tones, Arabic typography, transaction cards, biometric authentication shield symbol and sleek analytics visuals." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfB8IFBGvSuMm-r-od-zp7nJEL3J_SE0ES8ocJMbmHxGhCfNGpkCH0k75zHhsSP7PbnJuKQ7UL0T6-RX-jVygLMO4R10-e8WosxeLJUrC5XExrYjNUZ5yl4D8HSjLRZj4Yab0zrDAueKDdh59TI4di7KlBNIu7bkfMhtECNJHG7nxXl8gsrvc5wtIgd_LB9vcezOdJ_f3cTg_877vgNY_FBTPFdLzeTUSpUWcdqzbT"/>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
+<div class="absolute top-space-md start-space-md">
+<span class="px-space-sm py-1 rounded bg-white/95 backdrop-blur-md text-primary font-code-block text-[11px] font-bold shadow-sm">
+                FINTECH // MOBILE
+              </span>
+</div>
+</div>
+<div class="p-space-lg flex flex-col flex-1 justify-between gap-space-md bg-white">
+<div class="flex flex-col gap-space-xs">
+<h3 class="font-title-lg text-title-lg text-on-surface font-bold group-hover:text-primary transition-colors">
+                تطبيق المحفظة والمدفوعات الإلكترونية
+              </h3>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed line-clamp-2">
+                تطبيق دفع فوري مشفر للأجهزة الذكية يتيح التحويل السلس والفوترة الرقمية مع مطابقة معايير أمان البيانات المصرفية.
+              </p>
+</div>
+<div class="flex flex-wrap items-center gap-space-xs font-code-block text-xs pt-space-xs">
+<span class="px-2 py-0.5 rounded bg-surface-container border border-outline-variant text-primary font-medium">Flutter</span>
+<span class="px-2 py-0.5 rounded bg-surface-container border border-outline-variant text-primary font-medium">Drizzle ORM</span>
+<span class="px-2 py-0.5 rounded bg-surface-container border border-outline-variant text-primary font-medium">Redis</span>
+<span class="px-2 py-0.5 rounded bg-surface-container border border-outline-variant text-primary font-medium">Docker</span>
+</div>
+</div>
+</div>
+<!-- Project 3 -->
+<div class="group flex flex-col rounded-xl bg-white border border-outline-variant overflow-hidden hover:border-primary/40 hover:shadow-lg transition-all duration-300">
+<!-- 16:10 Aspect Ratio Image Container -->
+<div class="relative w-full aspect-[16/10] overflow-hidden bg-slate-100">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Enterprise hospital and medical management software on high resolution screens showing patient records timeline, encrypted biometric badges, deep cobalt blue and slate UI with luminous cyan highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAV6itNoqYI4LbpcPEFCLMnxNH2GP0PZmQ_fkz1JpD6hawe4PAm6f382itG8JBqMkEEP_G7TeEPYksFjU56E-cUxVyvALG0p5QFFby-BTp-aNZzQHTry6jgehyc4Rk2PV7px_poCBKNr1Cr5zIpZDDM3bo3C6TBmD1-DB12qgomu0j0-jhDV5lgRZQUZV6iAjMSCpwo8DCOViZ-iHCw2vJg-kL89I7GopfwSET8WqPj"/>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
+<div class="absolute top-space-md start-space-md">
+<span class="px-space-sm py-1 rounded bg-white/95 backdrop-blur-md text-primary font-code-block text-[11px] font-bold shadow-sm">
+                HEALTHCARE ERP
+              </span>
+</div>
+</div>
+<div class="p-space-lg flex flex-col flex-1 justify-between gap-space-md bg-white">
+<div class="flex flex-col gap-space-xs">
+<h3 class="font-title-lg text-title-lg text-on-surface font-bold group-hover:text-primary transition-colors">
+                نظام إدارة المنشآت الطبية المتقدم
+              </h3>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed line-clamp-2">
+                بيئة تشغيلية مركزية للعيادات والمستشفيات تدعم السجلات الطبية الإلكترونية، الجدولة الذكية للعمليات، وإدارة الصيدليات.
+              </p>
+</div>
+<div class="flex flex-wrap items-center gap-space-xs font-code-block text-xs pt-space-xs">
+<span class="px-2 py-0.5 rounded bg-surface-container border border-outline-variant text-primary font-medium">Next.js</span>
+<span class="px-2 py-0.5 rounded bg-surface-container border border-outline-variant text-primary font-medium">TypeScript</span>
+<span class="px-2 py-0.5 rounded bg-surface-container border border-outline-variant text-primary font-medium">SQLite Edge</span>
+<span class="px-2 py-0.5 rounded bg-surface-container border border-outline-variant text-primary font-medium">Tailwind</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- HOW WE WORK: Sequential Architectural Process -->
+<section class="w-full px-gutter py-24 max-w-7xl mx-auto">
+<div class="flex flex-col items-center text-center gap-space-sm mb-space-xl">
+<span class="font-code-block text-xs font-semibold text-primary tracking-wider">03 // ENGINEERING METHODOLOGY</span>
+<h2 class="font-headline-lg text-3xl lg:text-4xl text-on-surface font-bold">
+        مراحل العمل الهندسية
+      </h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-xl">
+        مسار عمل منهجي يضمن تحويل الرؤية المجردة إلى منتج ملموس بأعلى درجات الانضباط والجاهزية.
+      </p>
+</div>
+<!-- 3 Sequential Steps -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-lg relative">
+<!-- Step 1 -->
+<div class="p-space-xl rounded-xl bg-white border border-outline-variant hover:border-primary/40 relative flex flex-col gap-space-md shadow-sm transition-all">
+<div class="flex items-center justify-between">
+<span class="font-code-block font-headline-lg text-4xl text-primary/20 font-bold">01</span>
+<div class="w-12 h-12 rounded-lg bg-surface-container border border-outline-variant flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]">architecture</span>
+</div>
+</div>
+<div class="flex flex-col gap-space-xs">
+<h3 class="font-title-lg text-title-lg text-on-surface font-bold">
+            أفكار وتخطيط
+          </h3>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+            تحليل المتطلبات وصياغة المعمارية التقنية، اختيار حزم التكنولوجيا المناسبة، وهيكلة واجهات المستخدم والمخططات البيانية بدقة شاملة.
+          </p>
+</div>
+<div class="mt-auto pt-space-sm font-code-block text-xs text-primary font-semibold">
+<span>// ANALYZE &amp; SPECIFY</span>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="p-space-xl rounded-xl bg-white border border-outline-variant hover:border-primary/40 relative flex flex-col gap-space-md shadow-sm transition-all">
+<div class="flex items-center justify-between">
+<span class="font-code-block font-headline-lg text-4xl text-secondary-container/20 font-bold">02</span>
+<div class="w-12 h-12 rounded-lg bg-surface-container border border-outline-variant flex items-center justify-center text-secondary-container">
+<span class="material-symbols-outlined text-[24px]">code</span>
+</div>
+</div>
+<div class="flex flex-col gap-space-xs">
+<h3 class="font-title-lg text-title-lg text-on-surface font-bold">
+            تطوير واختبار
+          </h3>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+            كتابة كود نظيف وقابل للصيانة، اختبارات آلية للوظائف والأمان، مراجعات معمارية مستمرة، وضمان استجابة وتوافق فائق مع جميع الشاشات.
+          </p>
+</div>
+<div class="mt-auto pt-space-sm font-code-block text-xs text-secondary-container font-semibold">
+<span>// CODE &amp; AUDIT</span>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="p-space-xl rounded-xl bg-white border border-outline-variant hover:border-primary/40 relative flex flex-col gap-space-md shadow-sm transition-all">
+<div class="flex items-center justify-between">
+<span class="font-code-block font-headline-lg text-4xl text-status-ok/20 font-bold">03</span>
+<div class="w-12 h-12 rounded-lg bg-surface-container border border-outline-variant flex items-center justify-center text-status-ok">
+<span class="material-symbols-outlined text-[24px]">rocket_launch</span>
+</div>
+</div>
+<div class="flex flex-col gap-space-xs">
+<h3 class="font-title-lg text-title-lg text-on-surface font-bold">
+            إطلاق ونمو
+          </h3>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+            نشر مؤتمت عبر خطوط CI/CD على سحابات حديثة، مراقبة حية للأداء والأخطاء، وتطوير مستمر يدعم التوسع المستقبلي لعملائك دون تباطؤ.
+          </p>
+</div>
+<div class="mt-auto pt-space-sm font-code-block text-xs text-status-ok font-semibold">
+<span>// DEPLOY &amp; SCALE</span>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA BANNER: Immersive Light Cybernetic Blueprint -->
+<section class="w-full px-gutter py-16">
+<div class="max-w-7xl mx-auto rounded-2xl p-space-xl lg:p-20 relative overflow-hidden bg-gradient-to-br from-[#0d6efd] via-[#0284c7] to-[#0057cd] shadow-[0_15px_40px_-10px_rgba(13,110,253,0.4)] text-white">
+<!-- Internal Subtle Ambient Blueprint Lines -->
+<div class="absolute inset-0 bg-[linear-gradient(to_right,#ffffff15_1px,transparent_1px),linear-gradient(to_bottom,#ffffff15_1px,transparent_1px)] bg-[size:3rem_3rem] pointer-events-none"></div>
+<div class="absolute -top-24 -end-24 w-96 h-96 bg-white/20 rounded-full blur-[90px] pointer-events-none"></div>
+<div class="absolute -bottom-24 -start-24 w-96 h-96 bg-cyan-300/20 rounded-full blur-[90px] pointer-events-none"></div>
+<div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-space-xl text-center lg:text-start">
+<div class="flex flex-col gap-space-md max-w-2xl">
+<div class="inline-flex items-center gap-space-xs px-3 py-1 rounded-full bg-white/15 backdrop-blur-md text-white font-code-block text-xs font-semibold self-center lg:self-start">
+<span class="w-2 h-2 rounded-full bg-emerald-300 animate-pulse"></span>
+<span>متاحون الآن للمشاريع الجديدة</span>
+</div>
+<h2 class="font-headline-lg text-3xl lg:text-[42px] lg:leading-[52px] text-white font-bold">
+            جاهز لتحويل فكرتك إلى منتج رقمي متكامل؟
+          </h2>
+<p class="font-body-lg text-body-lg text-blue-50 leading-relaxed">
+            سواء كنت تطلق شركة ناشئة أو تطور نظاماً قائماً لشركتك، فريق AN DEV مستعد لتقديم الاستشارة والمعمارية البرمجية التي تضمن نجاحك.
+          </p>
+</div>
+<div class="flex flex-col sm:flex-row items-center gap-space-md shrink-0">
+<a class="inline-flex items-center justify-center gap-space-sm px-space-xl py-4 rounded-lg bg-white text-primary font-title-md text-title-md hover:bg-slate-50 transition-all shadow-[0_4px_16px_rgba(0,0,0,0.15)] group font-bold" href="#">
+<span>طلب مشروع جديد</span>
+<span class="material-symbols-outlined text-[20px] transition-transform group-hover:-translate-x-1">send</span>
+</a>
+<a class="inline-flex items-center justify-center gap-space-sm px-space-xl py-4 rounded-lg bg-white/15 border border-white/30 text-white font-title-md text-title-md hover:bg-white/25 transition-all backdrop-blur-sm" href="#">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+<span>استشارة تقنية</span>
+</a>
+</div>
+</div>
+</div>
+</section>
+</div></main><footer class="w-full bg-white border-t border-outline-variant mt-space-xl"><div class="w-full px-gutter py-space-xl"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-space-xl"><div class="lg:col-span-5 flex flex-col gap-space-md"><div class="flex items-center gap-space-md"><img alt="AN DEV Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/ALJJyrDELZRIuyuCeLePadBzlwzG1nDafz58W_53ITs-1uABfe3cOPNJDMfKe5GLCgs9SWAdPpsHHQTstx0gSQY0c5fY76sIsS7rklpdWmb-240VznKy85-v_bUnTD46q7Zh76umszYPt4aFSQ8Gjh_6qk0ciJWuqLnNMf-ZHpK7nSdkxJu-18Nl47xbDbQvTfL3Cek6Szo98xHuT2z8cTmNCeYKzw3pcfAzPe-YU7h3C5wOhQ"/><span class="font-headline-md text-title-lg text-on-surface font-bold">AN DEV</span></div><p class="font-body-md text-body-md text-on-surface-variant max-w-md leading-relaxed">نبني حلولاً رقمية وتطبيقات قابلة للتوسع بدقة هندسية عالية - الجزائر. تجربة برمجية متقدمة تواكب التطور السحابي والخوارزمي بأعلى معايير الجودة.</p><div class="flex items-center gap-space-sm"><span class="inline-flex items-center gap-space-xs px-space-sm py-1 rounded-md bg-surface-container border border-outline-variant text-primary font-code-block text-xs font-semibold"><span class="w-2 h-2 rounded-full bg-status-ok animate-pulse"></span>الجزائر العاصمة | أنظمة نشطة</span></div></div><div class="lg:col-span-3 flex flex-col gap-space-sm"><h3 class="font-title-md text-title-md text-on-surface mb-space-xs font-bold">روابط سريعة</h3><a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" data-path="services" href="#services">الخدمات الهندسية</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" data-path="projects" href="#projects">معرض المشاريع</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" data-path="blog" href="#">المدونة التقنية</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" data-path="start-project" href="#">طلب مشروع جديد</a></div><div class="lg:col-span-4 flex flex-col gap-space-md"><h3 class="font-title-md text-title-md text-on-surface font-bold">بيانات التواصل</h3><div class="flex flex-col gap-space-xs font-body-md text-body-md text-on-surface-variant"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px] text-primary">location_on</span><span>الجزائر، الجزائر العاصمة</span></div><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px] text-primary">mail</span><span class="font-code-block text-xs text-on-surface font-semibold" dir="ltr">contact@andev.dz</span></div><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px] text-primary">terminal</span><span class="text-xs">استجابة فورية واستشارات تقنية</span></div></div><div class="flex items-center gap-space-sm pt-space-xs"><a aria-label="Terminal Profile" class="w-10 h-10 rounded-lg bg-surface-container border border-outline-variant flex items-center justify-center text-on-surface-variant hover:text-primary hover:border-primary/40 transition-all" href="#"><span class="material-symbols-outlined text-[20px]">code</span></a><a aria-label="Network Hub" class="w-10 h-10 rounded-lg bg-surface-container border border-outline-variant flex items-center justify-center text-on-surface-variant hover:text-primary hover:border-primary/40 transition-all" href="#"><span class="material-symbols-outlined text-[20px]">hub</span></a><a aria-label="Showcase" class="w-10 h-10 rounded-lg bg-surface-container border border-outline-variant flex items-center justify-center text-on-surface-variant hover:text-primary hover:border-primary/40 transition-all" href="#"><span class="material-symbols-outlined text-[20px]">deployed_code</span></a></div></div></div><div class="mt-space-xl pt-space-md border-t border-outline-variant flex flex-col md:flex-row items-center justify-between gap-space-md font-body-sm text-xs text-on-surface-variant"><p>© 2025 AN DEV. جميع الحقوق محفوظة. <span class="font-code-block text-xs text-primary font-semibold">Code · Create · Solve</span></p><div class="flex items-center gap-space-md font-body-sm text-xs"><a class="hover:text-primary transition-colors" href="#">سياسة الخصوصية</a><a class="hover:text-primary transition-colors" href="#">الشروط والأحكام</a></div></div></div></footer></body></html>

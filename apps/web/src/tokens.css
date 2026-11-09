@@ -41,35 +41,35 @@
 }
 
 [data-theme="light"], html.light {
-  --bg: 244 247 253;
-  --background: 244 247 253;
+  --bg: 248 249 255;
+  --background: 248 249 255;
   --surface: 255 255 255;
   --surface-elevated: 255 255 255;
-  --surface-dim: 227 234 244;
-  --surface-bright: 255 255 255;
-  --surface-container: 235 240 248;
-  --surface-container-high: 225 232 244;
-  --surface-container-highest: 213 223 238;
-  --surface-container-low: 241 245 251;
+  --surface-dim: 203 219 245;
+  --surface-bright: 248 249 255;
+  --surface-container: 241 245 249;
+  --surface-container-high: 220 233 255;
+  --surface-container-highest: 211 228 254;
+  --surface-container-low: 239 244 255;
   --surface-container-lowest: 255 255 255;
-  --on-surface: 11 19 43;
+  --on-surface: 15 23 42;
   --on-surface-variant: 71 85 105;
-  --inverse-surface: 11 19 43;
-  --inverse-on-surface: 248 250 252;
-  --on-background: 11 19 43;
+  --inverse-surface: 33 49 69;
+  --inverse-on-surface: 234 241 255;
+  --on-background: 11 28 48;
   --line: 203 213 225;
   --line-subtle: 226 232 240;
-  --ink: 11 19 43;
+  --ink: 15 23 42;
   --mute: 71 85 105;
-  --text-primary: 11 19 43;
+  --text-primary: 15 23 42;
   --text-muted: 71 85 105;
   --primary: 13 110 253;
   --primary-container: 13 110 253;
   --on-primary-container: 255 255 255;
-  --inverse-primary: 0 87 206;
-  --secondary: 2 132 199;
-  --secondary-container: 224 242 254;
-  --on-secondary-container: 3 105 161;
+  --inverse-primary: 177 197 255;
+  --secondary: 0 99 152;
+  --secondary-container: 2 132 199;
+  --on-secondary-container: 0 71 110;
   --accent: 2 132 199;
   --status-ok: 5 150 105;
   --status-warn: 217 119 6;
@@ -77,7 +77,7 @@
   --ok: 5 150 105;
   --warn: 217 119 6;
   --err: 220 38 38;
-  --card-shadow: 0 4px 20px -4px rgba(13, 110, 253, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
-  --modal-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.12), 0 1px 3px rgba(0, 0, 0, 0.04);
+  --card-shadow: 0 4px 20px -4px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
+  --modal-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.15), 0 1px 3px rgba(0, 0, 0, 0.05);
   color-scheme: light;
 }

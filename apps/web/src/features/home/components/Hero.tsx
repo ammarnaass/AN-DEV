@@ -8,10 +8,13 @@ export const Hero: React.FC = () => {
   const { locale, isRtl } = useI18n();
 
   return (
-    <section className="relative w-full pt-24 sm:pt-28 pb-16 overflow-hidden">
+    <section className="relative w-full pt-20 sm:pt-24 pb-16 overflow-hidden">
+      {/* Light/Dark Cybernetic Blueprint Grid */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgb(var(--line)/0.25)_1px,transparent_1px),linear-gradient(to_bottom,rgb(var(--line)/0.25)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_40%,#000_70%,transparent_100%)] pointer-events-none" />
+
       {/* Atmospheric Ambient Glows */}
-      <div className="absolute top-1/4 start-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[140px] pointer-events-none -z-10" />
-      <div className="absolute bottom-10 end-10 w-[450px] h-[450px] bg-secondary/15 rounded-full blur-[160px] pointer-events-none -z-10" />
+      <div className="absolute top-1/4 start-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[140px] pointer-events-none -z-10" />
+      <div className="absolute bottom-10 end-10 w-[450px] h-[450px] bg-secondary/10 rounded-full blur-[160px] pointer-events-none -z-10" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -64,11 +67,27 @@ export const Hero: React.FC = () => {
                 </button>
               </Link>
               <Link to="/projects">
-                <button className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-surface-container border border-line text-text-primary font-semibold text-base hover:bg-surface-elevated hover:text-secondary hover:border-secondary/40 transition-all active:scale-[0.98]">
+                <button className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-surface border border-line text-text-primary font-semibold text-base hover:bg-surface-elevated hover:text-secondary hover:border-secondary/40 transition-all active:scale-[0.98] shadow-sm">
                   <Terminal className="w-4 h-4 text-secondary" />
                   <span>{locale === "ar" ? "تصفح أعمالنا" : "Browse Portfolio"}</span>
                 </button>
               </Link>
+            </div>
+
+            {/* Micro stats strip from Stitch Specification */}
+            <div className="grid grid-cols-3 gap-6 pt-4 w-full max-w-md border-t border-line/80">
+              <div className="flex flex-col text-start">
+                <span className="text-xl sm:text-2xl font-bold text-text-primary">99.98%</span>
+                <span className="text-xs text-text-muted font-medium">{locale === "ar" ? "موثوقية التشغيل" : "System Uptime"}</span>
+              </div>
+              <div className="flex flex-col text-start">
+                <span className="text-xl sm:text-2xl font-bold text-primary font-mono">&lt;25ms</span>
+                <span className="text-xs text-text-muted font-medium">{locale === "ar" ? "زمن استجابة API" : "API Latency"}</span>
+              </div>
+              <div className="flex flex-col text-start">
+                <span className="text-xl sm:text-2xl font-bold text-status-ok font-mono">100%</span>
+                <span className="text-xs text-text-muted font-medium">{locale === "ar" ? "كود نقي ومرن" : "Clean Code"}</span>
+              </div>
             </div>
           </div>
 
