@@ -6,10 +6,7 @@ import {
   Trash2,
   ArrowUp,
   ArrowDown,
-  Images,
-  Smartphone,
-  Globe,
-  Monitor
+  Images
 } from "lucide-react";
 
 export interface ProjectGalleryManagerProps {
@@ -265,3 +262,4 @@ export const ProjectGalleryManager: React.FC<ProjectGalleryManagerProps> = ({
     </div>
   );
 };
+

@@ -191,33 +191,55 @@ export const ProjectLiveGateway: React.FC<ProjectLiveGatewayProps> = ({
             </div>
           )}
 
-          {/* Iframe Viewport */}
+          {/* Iframe Viewport or Fallback */}
           <div className="flex-1 w-full h-full relative bg-background">
-            {isLoading && (
-              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-surface/80 backdrop-blur-sm animate-fadeIn">
-                <div className="w-8 h-8 rounded-full border-2 border-secondary border-t-transparent animate-spin" />
-                <span className="text-xs font-mono text-text-muted">
-                  {locale === "ar" ? "جاري تحميل المنصة الحية..." : "Loading live platform..."}
-                </span>
-              </div>
-            )}
+            {hasFramingNotice && coverImage ? (
+              <img
+                src={coverImage}
+                alt={title}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <>
+                {isLoading && (
+                  <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-surface/80 backdrop-blur-sm animate-fadeIn">
+                    <div className="w-8 h-8 rounded-full border-2 border-secondary border-t-transparent animate-spin" />
+                    <span className="text-xs font-mono text-text-muted">
+                      {locale === "ar" ? "جاري تحميل المنصة الحية..." : "Loading live platform..."}
+                    </span>
+                  </div>
+                )}
 
-            <iframe
-              key={reloadKey}
-              data-testid="gateway-iframe"
-              src={liveUrl}
-              title={`${title} Live Platform Sandbox`}
-              onLoad={() => setIsLoading(false)}
-              onError={() => {
-                setIsLoading(false);
-                setHasFramingNotice(true);
-              }}
-              sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-              className="w-full h-full border-0"
-            />
+                <iframe
+                  key={reloadKey}
+                  data-testid="gateway-iframe"
+                  src={liveUrl}
+                  title={`${title} Live Platform Sandbox`}
+                  onLoad={() => setIsLoading(false)}
+                  onError={() => {
+                    setIsLoading(false);
+                    setHasFramingNotice(true);
+                  }}
+                  sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                  className="w-full h-full border-0"
+                />
+              </>
+            )}
           </div>
         </div>
       </div>
+
+      {/* Framing Notice Alert */}
+      {hasFramingNotice && (
+        <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-xs flex items-center gap-2 text-amber-400">
+          <AlertCircle className="w-4 h-4 shrink-0" />
+          <span>
+            {locale === "ar"
+              ? "تعذر تحميل المعاينة التفاعلية داخل الإطار بسبب سياسة أمان المصدر. يرجى الفتح في نافذة جديدة."
+              : "Unable to load interactive preview inside frame due to security policies. Please open in a new tab."}
+          </span>
+        </div>
+      )}
 
       {/* Helpful CSP / Framing Notice Banner */}
       <div className="p-3 rounded-xl bg-surface-container/60 border border-line text-xs flex items-center justify-between gap-3 text-text-muted">
@@ -241,3 +263,4 @@ export const ProjectLiveGateway: React.FC<ProjectLiveGatewayProps> = ({
     </section>
   );
 };
+

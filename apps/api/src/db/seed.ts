@@ -299,7 +299,7 @@ A centralized ticketing desk with automatic escalation rules and SLA compliance 
         ...p,
         created_at: now,
         updated_at: now
-      });
+      }).onConflictDoNothing({ target: projects.slug });
     }
   }
 

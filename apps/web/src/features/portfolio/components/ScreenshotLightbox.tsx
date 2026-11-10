@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { ProjectGalleryItem } from "@andev/shared";
 import { useI18n } from "../../../lib/i18n";
-import { X, ChevronLeft, ChevronRight, ZoomIn } from "lucide-react";
+import { X, ChevronLeft, ChevronRight } from "lucide-react";
 
 export interface ScreenshotLightboxProps {
   items: ProjectGalleryItem[];
@@ -151,3 +151,4 @@ export const ScreenshotLightbox: React.FC<ScreenshotLightboxProps> = ({
     </div>
   );
 };
+

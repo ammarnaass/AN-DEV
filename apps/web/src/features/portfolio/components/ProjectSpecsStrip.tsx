@@ -2,7 +2,7 @@ import React from "react";
 import { Project } from "@andev/shared";
 import { useI18n } from "../../../lib/i18n";
 import { PlatformIcon } from "./PlatformIcon";
-import { Download, Tag, HardDrive, Layers, Sparkles } from "lucide-react";
+import { Download, Tag, HardDrive, Layers } from "lucide-react";
 
 interface ProjectSpecsStripProps {
   project: Project;
@@ -13,7 +13,7 @@ export const ProjectSpecsStrip: React.FC<ProjectSpecsStripProps> = ({
   project,
   className = ""
 }) => {
-  const { locale, isRtl } = useI18n();
+  const { locale } = useI18n();
 
   const getTypeName = (type: string) => {
     switch (type) {
@@ -138,3 +138,4 @@ export const ProjectSpecsStrip: React.FC<ProjectSpecsStripProps> = ({
     </div>
   );
 };
+

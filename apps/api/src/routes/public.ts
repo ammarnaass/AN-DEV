@@ -3,6 +3,15 @@ import { getDb } from "../db";
 import { projects, project_images, posts, settings, page_views } from "../db/schema";
 import { eq, and } from "drizzle-orm";
 
+function safeJsonParse<T>(value: string | null | undefined, fallback: T): T {
+  if (!value) return fallback;
+  try {
+    return JSON.parse(value);
+  } catch {
+    return fallback;
+  }
+}
+
 export async function publicRoutes(app: FastifyInstance) {
   // 1. Projects listing
   app.get("/projects", async (request, reply) => {
@@ -34,9 +43,9 @@ export async function publicRoutes(app: FastifyInstance) {
 
     const formatted = rows.map(r => ({
       ...r,
-      tech: JSON.parse(r.tech_json || "[]"),
-      platforms: JSON.parse(r.platforms_json || '["web"]'),
-      gallery: JSON.parse(r.gallery_json || "[]")
+      tech: safeJsonParse(r.tech_json, []),
+      platforms: safeJsonParse(r.platforms_json, ["web"]),
+      gallery: safeJsonParse(r.gallery_json, [])
     }));
 
     return reply.send(formatted);
@@ -62,9 +71,9 @@ export async function publicRoutes(app: FastifyInstance) {
 
     return reply.send({
       ...project,
-      tech: JSON.parse(project.tech_json || "[]"),
-      platforms: JSON.parse(project.platforms_json || '["web"]'),
-      gallery: JSON.parse(project.gallery_json || "[]"),
+      tech: safeJsonParse(project.tech_json, []),
+      platforms: safeJsonParse(project.platforms_json, ["web"]),
+      gallery: safeJsonParse(project.gallery_json, []),
       images
     });
   });

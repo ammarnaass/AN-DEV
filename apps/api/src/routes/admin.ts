@@ -6,6 +6,15 @@ import { eq, desc, sql } from "drizzle-orm";
 import { ProjectSchema, UpdateInquirySchema, SettingsSchema } from "@andev/shared";
 import { processAndSaveImage } from "../services/upload";
 
+function safeJsonParse<T>(value: string | null | undefined, fallback: T): T {
+  if (!value) return fallback;
+  try {
+    return JSON.parse(value);
+  } catch {
+    return fallback;
+  }
+}
+
 export async function adminRoutes(app: FastifyInstance) {
   // Enforce session check on all admin routes
   app.addHook("preHandler", requireAdmin);
@@ -84,9 +93,9 @@ export async function adminRoutes(app: FastifyInstance) {
     const rows = await db.select().from(projects).orderBy(projects.sort_order);
     return reply.send(rows.map(r => ({
       ...r,
-      tech: JSON.parse(r.tech_json || "[]"),
-      platforms: JSON.parse(r.platforms_json || '["web"]'),
-      gallery: JSON.parse(r.gallery_json || "[]")
+      tech: safeJsonParse(r.tech_json, []),
+      platforms: safeJsonParse(r.platforms_json, ["web"]),
+      gallery: safeJsonParse(r.gallery_json, [])
     })));
   });
 

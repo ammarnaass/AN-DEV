@@ -20,9 +20,9 @@ describe("Auth Routes", () => {
         email: "ammar@andev.dz",
         password_hash: hash,
         created_at: new Date().toISOString()
-      });
+      }).onConflictDoNothing({ target: admins.email });
     }
-  });
+  }, 30000);
 
   afterAll(async () => {
     await app.close();

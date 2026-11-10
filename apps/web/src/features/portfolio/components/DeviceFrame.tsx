@@ -119,3 +119,4 @@ export const DeviceFrame: React.FC<DeviceFrameProps> = ({
     </div>
   );
 };
+

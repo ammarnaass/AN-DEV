@@ -2,7 +2,6 @@ import React from "react";
 import {
   Globe,
   Smartphone,
-  Monitor,
   Terminal,
   Store,
   Laptop
@@ -111,3 +110,4 @@ export const PlatformIcon: React.FC<PlatformIconProps> = ({
     </span>
   );
 };
+

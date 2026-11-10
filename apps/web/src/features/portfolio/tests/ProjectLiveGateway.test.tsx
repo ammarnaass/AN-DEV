@@ -47,3 +47,4 @@ describe("ProjectLiveGateway component", () => {
     expect(openLink.getAttribute("href")).toBe("https://anposwebsite.vercel.app");
   });
 });
+

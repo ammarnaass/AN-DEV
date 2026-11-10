@@ -11739,6 +11739,13 @@ var projects = (0, import_pg_core.pgTable)("projects", {
   summary_en: (0, import_pg_core.text)("summary_en").notNull(),
   body_ar: (0, import_pg_core.text)("body_ar").notNull(),
   body_en: (0, import_pg_core.text)("body_en").notNull(),
+  project_type: (0, import_pg_core.text)("project_type").notNull().default("web"),
+  version: (0, import_pg_core.text)("version").notNull().default("v1.0.0"),
+  package_size: (0, import_pg_core.text)("package_size").notNull().default(""),
+  platforms_json: (0, import_pg_core.text)("platforms_json").notNull().default('["web"]'),
+  download_url: (0, import_pg_core.text)("download_url"),
+  enable_live_preview: (0, import_pg_core.boolean)("enable_live_preview").notNull().default(true),
+  gallery_json: (0, import_pg_core.text)("gallery_json").notNull().default("[]"),
   tech_json: (0, import_pg_core.text)("tech_json").notNull().default("[]"),
   cover_image: (0, import_pg_core.text)("cover_image").notNull(),
   live_url: (0, import_pg_core.text)("live_url"),
@@ -11924,7 +11931,14 @@ async function initDb(connStr, runMigrations = true) {
       )`,
       `ALTER TABLE bio_links ADD COLUMN IF NOT EXISTS image_size TEXT NOT NULL DEFAULT 'md'`,
       `ALTER TABLE bio_links ADD COLUMN IF NOT EXISTS image_radius TEXT NOT NULL DEFAULT 'md'`,
-      `ALTER TABLE bio_links ADD COLUMN IF NOT EXISTS image_fit TEXT NOT NULL DEFAULT 'cover'`
+      `ALTER TABLE bio_links ADD COLUMN IF NOT EXISTS image_fit TEXT NOT NULL DEFAULT 'cover'`,
+      `ALTER TABLE projects ADD COLUMN IF NOT EXISTS project_type TEXT NOT NULL DEFAULT 'web'`,
+      `ALTER TABLE projects ADD COLUMN IF NOT EXISTS version TEXT NOT NULL DEFAULT 'v1.0.0'`,
+      `ALTER TABLE projects ADD COLUMN IF NOT EXISTS package_size TEXT NOT NULL DEFAULT ''`,
+      `ALTER TABLE projects ADD COLUMN IF NOT EXISTS platforms_json TEXT NOT NULL DEFAULT '["web"]'`,
+      `ALTER TABLE projects ADD COLUMN IF NOT EXISTS download_url TEXT`,
+      `ALTER TABLE projects ADD COLUMN IF NOT EXISTS enable_live_preview BOOLEAN NOT NULL DEFAULT TRUE`,
+      `ALTER TABLE projects ADD COLUMN IF NOT EXISTS gallery_json TEXT NOT NULL DEFAULT '[]'`
     ];
     for (const stmt of statements) {
       try {
@@ -16003,6 +16017,12 @@ var UpdateInquirySchema = external_exports.object({
 });
 
 // packages/shared/src/schemas/project.ts
+var ProjectGalleryItemSchema = external_exports.object({
+  url: external_exports.string(),
+  caption_ar: external_exports.string().optional().default(""),
+  caption_en: external_exports.string().optional().default(""),
+  device_frame: external_exports.enum(["mobile", "browser", "desktop"]).default("browser")
+});
 var ProjectSchema = external_exports.object({
   slug: external_exports.string().min(2, "\u0645\u0639\u0631\u0641 \u0627\u0644\u0631\u0627\u0628\u0637 \u064A\u062C\u0628 \u0623\u0646 \u064A\u0643\u0648\u0646 \u062D\u0631\u0641\u064A\u0646 \u0639\u0644\u0649 \u0627\u0644\u0623\u0642\u0644").regex(/^[a-z0-9-]+$/, "\u0645\u0639\u0631\u0641 \u0627\u0644\u0631\u0627\u0628\u0637 (Slug) \u064A\u062C\u0628 \u0623\u0646 \u064A\u062D\u062A\u0648\u064A \u0639\u0644\u0649 \u0623\u062D\u0631\u0641 \u0625\u0646\u062C\u0644\u064A\u0632\u064A\u0629 \u0635\u063A\u064A\u0631\u0629 \u0648\u0623\u0631\u0642\u0627\u0645 \u0648\u0634\u0631\u0637\u0627\u062A \u0641\u0642\u0637"),
   title_ar: external_exports.string().min(2, "\u0639\u0646\u0648\u0627\u0646 \u0627\u0644\u0645\u0634\u0631\u0648\u0639 \u0628\u0627\u0644\u0639\u0631\u0628\u064A\u0629 \u0645\u0637\u0644\u0648\u0628"),
@@ -16011,6 +16031,13 @@ var ProjectSchema = external_exports.object({
   summary_en: external_exports.string().optional().default(""),
   body_ar: external_exports.string().min(10, "\u062A\u0641\u0627\u0635\u064A\u0644 \u0627\u0644\u0645\u0634\u0631\u0648\u0639 \u0628\u0627\u0644\u0639\u0631\u0628\u064A\u0629 \u0645\u0637\u0644\u0648\u0628\u0629"),
   body_en: external_exports.string().optional().default(""),
+  project_type: external_exports.enum(["web", "mobile", "desktop", "pos", "system"]).default("web"),
+  version: external_exports.string().default("v1.0.0"),
+  package_size: external_exports.string().default(""),
+  platforms_json: external_exports.array(external_exports.string()).default(["web"]),
+  download_url: external_exports.string().optional().nullable().default(""),
+  enable_live_preview: external_exports.boolean().default(true),
+  gallery_json: external_exports.array(ProjectGalleryItemSchema).default([]),
   tech_json: external_exports.array(external_exports.string()).default([]),
   cover_image: external_exports.string().min(1, "\u0635\u0648\u0631\u0629 \u0627\u0644\u063A\u0644\u0627\u0641 \u0645\u0637\u0644\u0648\u0628\u0629"),
   live_url: external_exports.string().optional().nullable().default(""),
@@ -16295,6 +16322,14 @@ async function inquiryRoutes(app) {
 
 // apps/api/src/routes/public.ts
 var import_drizzle_orm3 = require("drizzle-orm");
+function safeJsonParse(value, fallback) {
+  if (!value) return fallback;
+  try {
+    return JSON.parse(value);
+  } catch {
+    return fallback;
+  }
+}
 async function publicRoutes(app) {
   app.get("/projects", async (request, reply) => {
     const db = getDb();
@@ -16305,6 +16340,13 @@ async function publicRoutes(app) {
       title_en: projects.title_en,
       summary_ar: projects.summary_ar,
       summary_en: projects.summary_en,
+      project_type: projects.project_type,
+      version: projects.version,
+      package_size: projects.package_size,
+      platforms_json: projects.platforms_json,
+      download_url: projects.download_url,
+      enable_live_preview: projects.enable_live_preview,
+      gallery_json: projects.gallery_json,
       tech_json: projects.tech_json,
       cover_image: projects.cover_image,
       live_url: projects.live_url,
@@ -16314,7 +16356,9 @@ async function publicRoutes(app) {
     }).from(projects).where((0, import_drizzle_orm3.eq)(projects.published, true)).orderBy(projects.sort_order);
     const formatted = rows.map((r) => ({
       ...r,
-      tech: JSON.parse(r.tech_json || "[]")
+      tech: safeJsonParse(r.tech_json, []),
+      platforms: safeJsonParse(r.platforms_json, ["web"]),
+      gallery: safeJsonParse(r.gallery_json, [])
     }));
     return reply.send(formatted);
   });
@@ -16328,7 +16372,9 @@ async function publicRoutes(app) {
     const images = await db.select().from(project_images).where((0, import_drizzle_orm3.eq)(project_images.project_id, project.id)).orderBy(project_images.sort_order);
     return reply.send({
       ...project,
-      tech: JSON.parse(project.tech_json || "[]"),
+      tech: safeJsonParse(project.tech_json, []),
+      platforms: safeJsonParse(project.platforms_json, ["web"]),
+      gallery: safeJsonParse(project.gallery_json, []),
       images
     });
   });
@@ -16477,6 +16523,14 @@ async function processAndSaveImage(fileBuffer, subDir = "projects") {
 }
 
 // apps/api/src/routes/admin.ts
+function safeJsonParse2(value, fallback) {
+  if (!value) return fallback;
+  try {
+    return JSON.parse(value);
+  } catch {
+    return fallback;
+  }
+}
 async function adminRoutes(app) {
   app.addHook("preHandler", requireAdmin);
   app.get("/stats", async (request, reply) => {
@@ -16530,7 +16584,9 @@ async function adminRoutes(app) {
     const rows = await db.select().from(projects).orderBy(projects.sort_order);
     return reply.send(rows.map((r) => ({
       ...r,
-      tech: JSON.parse(r.tech_json || "[]")
+      tech: safeJsonParse2(r.tech_json, []),
+      platforms: safeJsonParse2(r.platforms_json, ["web"]),
+      gallery: safeJsonParse2(r.gallery_json, [])
     })));
   });
   app.post("/projects", async (request, reply) => {
@@ -16553,6 +16609,13 @@ async function adminRoutes(app) {
       summary_en: data.summary_en,
       body_ar: data.body_ar,
       body_en: data.body_en,
+      project_type: data.project_type,
+      version: data.version,
+      package_size: data.package_size,
+      platforms_json: JSON.stringify(data.platforms_json),
+      download_url: data.download_url || null,
+      enable_live_preview: data.enable_live_preview,
+      gallery_json: JSON.stringify(data.gallery_json),
       tech_json: JSON.stringify(data.tech_json),
       cover_image: data.cover_image,
       live_url: data.live_url || null,
@@ -16586,6 +16649,13 @@ async function adminRoutes(app) {
       summary_en: data.summary_en,
       body_ar: data.body_ar,
       body_en: data.body_en,
+      project_type: data.project_type,
+      version: data.version,
+      package_size: data.package_size,
+      platforms_json: JSON.stringify(data.platforms_json),
+      download_url: data.download_url || null,
+      enable_live_preview: data.enable_live_preview,
+      gallery_json: JSON.stringify(data.gallery_json),
       tech_json: JSON.stringify(data.tech_json),
       cover_image: data.cover_image,
       live_url: data.live_url || null,

@@ -45,3 +45,4 @@ describe("ProjectSpecsFields component", () => {
     expect(onPlatformsChange).toHaveBeenCalledWith(["windows", "pos_terminals", "android"]);
   });
 });
+

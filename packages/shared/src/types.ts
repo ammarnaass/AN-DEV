@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { InquirySchema } from "./schemas/inquiry";
-import { ProjectSchema, ProjectGalleryItemSchema } from "./schemas/project";
+import { ProjectSchema } from "./schemas/project";
 import { PostSchema } from "./schemas/post";
 
 export type Inquiry = z.infer<typeof InquirySchema> & {
@@ -10,8 +10,6 @@ export type Inquiry = z.infer<typeof InquirySchema> & {
   ip_hash: string;
   created_at: string;
 };
-
-export type ProjectGalleryItem = z.infer<typeof ProjectGalleryItemSchema>;
 
 export type Project = z.infer<typeof ProjectSchema> & {
   id: number;

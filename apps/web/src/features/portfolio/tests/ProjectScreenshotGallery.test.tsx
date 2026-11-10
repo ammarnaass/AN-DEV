@@ -43,3 +43,4 @@ describe("ProjectScreenshotGallery component", () => {
     expect(screen.getByRole("button", { name: /إغلاق|Close/i })).toBeDefined();
   });
 });
+

@@ -60,6 +60,16 @@ The existing site is an unmanaged static webpage. It cannot collect structured p
 *   **When**: Ammar adjusts search titles, meta descriptions, Algeria-targeted keywords, verifies Google Search Console tokens, or toggles robots indexing directives.
 *   **Then**: The admin panel displays real-time Desktop & Mobile SERP simulators and social share card simulators with strict character-length health checks; upon saving, updates persist to Neon Postgres and take effect immediately across all client-rendered pages and the dynamic XML sitemap.
 
+### CUJ 6: Evaluator Interacts with Application Showcase, Live Gateway & Hardware/OS Specs
+*   **Given**: A prospective client, engineer, or enterprise evaluator visits `/projects` or a specific case study `/projects/:slug` (such as `anpos`).
+*   **When**: The user opens the project page.
+*   **Then**: The client renders an executive Technical Specs Strip displaying Project Type badge (`Web App`, `Mobile App`, `Desktop App`, `POS System`), Release Version (`v1.2.0`), Package/Installer Size (`24.5 MB`), supported platform icons (`Android`, `iOS`, `Windows`, `macOS`, `Linux`, `Web`, `POS Terminals`), and direct download/action buttons; followed by an interactive Live Preview Gateway with viewport switcher (Desktop / Tablet / Mobile) or responsive Device Frame Mockups with Lightbox zoom inspection.
+
+### CUJ 7: Administrator Manages App Specifications, Platforms, Live Preview, & Screenshot Gallery
+*   **Given**: Ammar authenticates and opens `/admin/projects` -> Project Editor Modal.
+*   **When**: Ammar selects the project type, enters release version and installer size, ticks supported target platforms, configures live preview iframe URL, and uploads application screenshots into the gallery.
+*   **Then**: The data is validated through `ProjectSchema` via Zod, persisted into Neon PostgreSQL, and immediately reflected across `/projects` filters and the `/projects/:slug` case study view.
+
 
 --------------------------------------------------------------------------------
 
@@ -118,7 +128,7 @@ andev/
 
 *   `admins`: `id` (integer primary key), `email` (text unique), `password_hash` (text), `created_at` (text).
 *   `sessions`: `id` (text primary key UUID), `admin_id` (foreign key -> admins.id), `expires_at` (text).
-*   `projects`: `id` (integer primary key), `slug` (text unique), `title_ar` (text), `title_en` (text), `summary_ar` (text), `summary_en` (text), `body_ar` (text), `body_en` (text), `tech_json` (text JSON string array), `cover_image` (text), `live_url` (text nullable), `repo_url` (text nullable), `featured` (integer boolean), `published` (integer boolean), `sort_order` (integer), `created_at` (text), `updated_at` (text).
+*   `projects`: `id` (integer primary key), `slug` (text unique), `title_ar` (text), `title_en` (text), `summary_ar` (text), `summary_en` (text), `body_ar` (text), `body_en` (text), `project_type` (text default 'web': 'web' | 'mobile' | 'desktop' | 'pos' | 'system'), `version` (text default 'v1.0.0'), `package_size` (text default ''), `platforms_json` (text JSON array of supported OS e.g. '["web", "android"]'), `download_url` (text nullable), `enable_live_preview` (boolean default true), `gallery_json` (text JSON array of screenshot items), `tech_json` (text JSON string array), `cover_image` (text), `live_url` (text nullable), `repo_url` (text nullable), `featured` (integer boolean), `published` (integer boolean), `sort_order` (integer), `created_at` (text), `updated_at` (text).
 *   `project_images`: `id` (integer primary key), `project_id` (foreign key -> projects.id cascade), `path` (text), `alt_ar` (text), `alt_en` (text), `sort_order` (integer).
 *   `inquiries`: `id` (integer primary key), `name` (text), `email` (text), `project_type` (text: 'web' | 'mobile' | 'system' | 'other'), `budget_range` (text nullable), `message` (text), `status` (text default 'new': 'new' | 'in_progress' | 'closed'), `admin_note` (text nullable), `ip_hash` (text), `created_at` (text).
 *   `posts`: `id` (integer primary key), `slug` (text unique), `title_ar` (text), `title_en` (text), `body_md_ar` (text), `body_md_en` (text), `published` (integer boolean), `published_at` (text).
@@ -175,6 +185,52 @@ andev/
 }
 ```
 *   **Bi-directional Logic**: Managed via `dir="rtl"` (Arabic) and `dir="ltr"` (English) using CSS logical properties (`margin-inline`, `padding-inline`, `border-inline-start`) to maintain symmetry across both languages without duplication.
+
+### 6. Application Showcase, Live Preview Gateway & Technical Specifications Architecture
+
+#### Technical Specifications & Platform Taxonomy
+Every project case study encapsulates an executive specification metadata block indicating software form factor, release lifecycle, package size, and execution environments:
+*   **Project Types (`project_type`)**:
+    *   `web`: Web Application & Cloud SaaS (منصة ويب وسحابية)
+    *   `mobile`: Mobile Application (تطبيق هواتف ذكية - Android / iOS)
+    *   `desktop`: Desktop Software (برنامج حاسوب مكتبي - Windows / macOS / Linux)
+    *   `pos`: POS & Embedded Terminal (نظام كاشير ونقاط بيع ومحاسبة)
+    *   `system`: Enterprise Distributed System (نظام مؤسسي ولوجستي)
+*   **Platform Matrix (`platforms_json`)**:
+    *   `android`: Android Robot icon + OS badge
+    *   `ios`: Apple icon + iOS badge
+    *   `windows`: Windows icon + Windows badge
+    *   `macos`: Apple icon + macOS badge
+    *   `linux`: Linux/Terminal icon + Linux badge
+    *   `web`: Globe/Browser icon + Web/PWA badge
+    *   `pos_terminals`: Store/Terminal icon + POS Devices badge
+*   **Release Specifications**:
+    *   `version`: semantic version string (e.g. `v1.2.0`, `v2.0.4`)
+    *   `package_size`: human-readable binary or asset size (e.g. `24.5 MB APK`, `48 MB Installer`, `120 KB gzip`)
+    *   `download_url`: direct secure download URL for binary installers, APK files, or release archives.
+
+#### Live Preview Gateway (`ProjectLiveGateway.tsx`)
+Provides an interactive embedded runtime for web platforms and responsive web systems:
+*   **Viewport Emulation Toolbar**: Allows prospective clients to test how the platform responds across different form factors without opening external devices:
+    *   **Desktop Mode**: `100%` fluid width, 16:9 aspect ratio.
+    *   **Tablet Mode**: `768px` fixed width with centered container.
+    *   **Mobile Mode**: `390px` fixed width with realistic smartphone container and rounded bezel.
+*   **Runtime Controls**: Full-screen toggle, iframe refresh/reload button, and fallback external tab launcher.
+*   **Security & Frame Policies**: Controlled iframe sandbox attributes (`sandbox="allow-scripts allow-same-origin allow-forms allow-popups"`). An automatic CSP/X-Frame-Options fallback detection renders a graceful direct launch portal card if third-party headers prevent iframe framing.
+
+#### Device Frame Mockup Gallery (`ProjectScreenshotGallery.tsx`)
+Showcases high-resolution application screenshots within context-aware device frames:
+*   **Device Shells**:
+    *   **Mobile Shell**: iPhone/Android smartphone frame with speaker notch and edge bezels.
+    *   **Browser Shell**: macOS/Chrome style window frame with traffic light controls and address bar.
+    *   **Desktop Shell**: Workstation monitor frame for desktop software.
+*   **Lightbox Zoom & Navigation**: Fullscreen modal inspection with pan-and-zoom, keyboard navigation (Escape to close, Left/Right arrows for next/prev), and caption overlay.
+
+#### Administrative Control & Curation (`ProjectSpecsFields.tsx` & `ProjectGalleryManager.tsx`)
+Empowers administrators to manage all showcase attributes directly within `ProjectEditModal`:
+*   Interactive platform checkboxes and type selectors with instantaneous validation.
+*   Multi-screenshot upload and URL management with drag/reorder capability and caption editing.
+*   Toggle for Live Preview Gateway activation per project.
 
 
 --------------------------------------------------------------------------------
@@ -268,6 +324,21 @@ andev/
 *   `apps/web/src/components/seo/MetaTags.tsx` (Enhanced): Dynamic meta tags, OpenGraph, Twitter Cards, canonical links, hreflang alternates (`ar`, `en`, `x-default`), geo-coordinates (`DZ-16`, Algiers), and Schema.org JSON-LD structured data (`Organization`, `ProfessionalService`, `WebSite`).
 *   `apps/web/src/features/admin/components/SettingsSeoSection.tsx` (Enhanced): Full-featured SEO Management panel featuring meta title/desc controls with length indicators, live Google Desktop & Mobile SERP simulators, live Social Share card simulator, Google Search Console / Bing Webmaster verification codes, and indexing control.
 *   `apps/api/src/routes/public.ts` (Enhanced): Dynamic `/sitemap.xml` XML sitemap and `/robots.txt` generation referencing all published portfolio projects, blog posts, and core agency routes.
+
+#### 5. Application Showcase, Live Preview Gateway & Technical Specifications Engine
+*   `packages/shared/src/schemas/project.ts` (Modify): Extend `ProjectSchema` with `project_type`, `version`, `package_size`, `platforms_json`, `download_url`, `enable_live_preview`, and `gallery_json`.
+*   `apps/api/src/db/schema.ts` (Modify): Update `projects` table with new columns and default values.
+*   `apps/api/src/db/index.ts` (Modify): Include `ALTER TABLE projects ADD COLUMN IF NOT EXISTS ...` migration statements for Postgres.
+*   `apps/api/src/routes/admin.ts` (Modify): Ensure `POST` and `PUT` handle the extended showcase attributes and gallery serialization.
+*   `apps/web/src/features/portfolio/components/ProjectSpecsStrip.tsx` (Create): Executive specs bar showing app type badge, version tag, package size, platform icons row, and direct download launcher.
+*   `apps/web/src/features/portfolio/components/ProjectLiveGateway.tsx` (Create): Interactive live preview iframe with responsive viewport emulator (Desktop 100%, Tablet 768px, Mobile 390px), reload, fullscreen, and CSP fallback card.
+*   `apps/web/src/features/portfolio/components/ProjectScreenshotGallery.tsx` (Create): Context-aware device frame mockups (Mobile shell, Browser shell, Desktop shell) with interactive Lightbox zoom modal.
+*   `apps/web/src/features/portfolio/pages/ProjectDetailPage.tsx` (Modify): Wire `ProjectSpecsStrip`, `ProjectLiveGateway`, and `ProjectScreenshotGallery` into the case study presentation.
+*   `apps/web/src/features/portfolio/pages/ProjectsPage.tsx` (Modify): Upgrade filter pills to use deterministic `project_type` and render platform badges on `ProjectCard`.
+*   `apps/web/src/features/portfolio/components/ProjectCard.tsx` (Modify): Render platform icon indicators, version tag, and app type badge.
+*   `apps/web/src/features/admin/components/ProjectSpecsFields.tsx` (Create): Admin editor component for project type, version, package size, platform checkboxes, and download link.
+*   `apps/web/src/features/admin/components/ProjectGalleryManager.tsx` (Create): Admin editor component for uploading and managing multi-screenshot gallery with device frame selectors.
+*   `apps/web/src/features/admin/components/ProjectEditModal.tsx` (Modify): Integrate specifications and gallery management tabs into the administrative workflow.
 
 --------------------------------------------------------------------------------
 

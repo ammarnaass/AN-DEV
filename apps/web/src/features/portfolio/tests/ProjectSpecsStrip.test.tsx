@@ -48,3 +48,4 @@ describe("ProjectSpecsStrip component", () => {
     expect(downloadLink.getAttribute("href")).toBe("https://example.com/anpos-setup.exe");
   });
 });
+
