@@ -147,12 +147,6 @@ export const Footer: React.FC = () => {
                 ? "نبني حلولاً رقمية وتطبيقات قابلة للتوسع بدقة هندسية عالية - الجزائر. تجربة برمجية متقدمة تواكب التطور السحابي والخوارزمي بأعلى معايير الجودة."
                 : "Algerian software agency engineering high-performance web, mobile, and custom systems built for scale and reliability with mathematical precision."}
             </p>
-            <div className="flex items-center gap-2 pt-1">
-              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-surface-container border border-line text-secondary font-mono text-xs">
-                <span className="w-2 h-2 rounded-full bg-status-ok animate-pulse" />
-                <span>{locale === "ar" ? "الجزائر العاصمة | أنظمة نشطة" : "Algiers Hub | Active Systems"}</span>
-              </span>
-            </div>
           </div>
 
           {/* Col 2: Navigation Links */}
