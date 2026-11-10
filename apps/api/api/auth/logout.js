@@ -16,11 +16,11 @@ var __export = (target, all) => {
   for (var name in all)
     __defProp(target, name, { get: all[name], enumerable: true });
 };
-var __copyProps = (to, from, except, desc2) => {
+var __copyProps = (to, from, except, desc3) => {
   if (from && typeof from === "object" || typeof from === "function") {
     for (let key of __getOwnPropNames(from))
       if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc2 = __getOwnPropDesc(from, key)) || desc2.enumerable });
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc3 = __getOwnPropDesc(from, key)) || desc3.enumerable });
   }
   return to;
 };
@@ -11708,6 +11708,7 @@ var import_neon_http = require("drizzle-orm/neon-http");
 var schema_exports = {};
 __export(schema_exports, {
   admins: () => admins,
+  bio_links: () => bio_links,
   inquiries: () => inquiries,
   page_views: () => page_views,
   posts: () => posts,
@@ -11789,6 +11790,27 @@ var page_views = (0, import_pg_core.pgTable)("page_views", {
   day: (0, import_pg_core.text)("day").notNull(),
   // YYYY-MM-DD
   count: (0, import_pg_core.integer)("count").notNull().default(1)
+});
+var bio_links = (0, import_pg_core.pgTable)("bio_links", {
+  id: (0, import_pg_core.serial)("id").primaryKey(),
+  title: (0, import_pg_core.text)("title").notNull(),
+  url: (0, import_pg_core.text)("url").notNull(),
+  subtitle: (0, import_pg_core.text)("subtitle"),
+  icon_or_image: (0, import_pg_core.text)("icon_or_image"),
+  font_family: (0, import_pg_core.text)("font_family").notNull().default("cairo"),
+  text_color: (0, import_pg_core.text)("text_color").notNull().default("#ffffff"),
+  bg_color: (0, import_pg_core.text)("bg_color").notNull().default("#1e293b"),
+  border_color: (0, import_pg_core.text)("border_color").notNull().default("#334155"),
+  style_variant: (0, import_pg_core.text)("style_variant").notNull().default("solid"),
+  // solid, gradient, outline, glow
+  gradient_from: (0, import_pg_core.text)("gradient_from"),
+  gradient_to: (0, import_pg_core.text)("gradient_to"),
+  is_active: (0, import_pg_core.boolean)("is_active").notNull().default(true),
+  is_featured: (0, import_pg_core.boolean)("is_featured").notNull().default(false),
+  sort_order: (0, import_pg_core.integer)("sort_order").notNull().default(0),
+  click_count: (0, import_pg_core.integer)("click_count").notNull().default(0),
+  created_at: (0, import_pg_core.text)("created_at").notNull(),
+  updated_at: (0, import_pg_core.text)("updated_at").notNull()
 });
 
 // apps/api/src/db/index.ts
@@ -11873,6 +11895,26 @@ async function initDb(connStr, runMigrations = false) {
         path TEXT NOT NULL,
         day TEXT NOT NULL,
         count INTEGER NOT NULL DEFAULT 1
+      )`,
+      `CREATE TABLE IF NOT EXISTS bio_links (
+        id SERIAL PRIMARY KEY,
+        title TEXT NOT NULL,
+        url TEXT NOT NULL,
+        subtitle TEXT,
+        icon_or_image TEXT,
+        font_family TEXT NOT NULL DEFAULT 'cairo',
+        text_color TEXT NOT NULL DEFAULT '#ffffff',
+        bg_color TEXT NOT NULL DEFAULT '#1e293b',
+        border_color TEXT NOT NULL DEFAULT '#334155',
+        style_variant TEXT NOT NULL DEFAULT 'solid',
+        gradient_from TEXT,
+        gradient_to TEXT,
+        is_active BOOLEAN NOT NULL DEFAULT TRUE,
+        is_featured BOOLEAN NOT NULL DEFAULT FALSE,
+        sort_order INTEGER NOT NULL DEFAULT 0,
+        click_count INTEGER NOT NULL DEFAULT 0,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
       )`
     ];
     for (const stmt of statements) {
@@ -15989,6 +16031,36 @@ var LoginSchema = external_exports.object({
 // packages/shared/src/schemas/settings.ts
 var SettingsSchema = external_exports.record(external_exports.string(), external_exports.string());
 
+// packages/shared/src/schemas/bioLinks.ts
+var BioLinkInputSchema = external_exports.object({
+  title: external_exports.string().min(1, "\u0639\u0646\u0648\u0627\u0646 \u0627\u0644\u0631\u0627\u0628\u0637 \u0645\u0637\u0644\u0648\u0628").max(100, "\u0627\u0644\u0639\u0646\u0648\u0627\u0646 \u0637\u0648\u064A\u0644 \u062C\u062F\u0627\u064B"),
+  url: external_exports.string().min(1, "\u0631\u0627\u0628\u0637 \u0627\u0644\u0648\u062C\u0647\u0629 \u0645\u0637\u0644\u0648\u0628"),
+  subtitle: external_exports.string().max(200, "\u0627\u0644\u0648\u0635\u0641 \u0637\u0648\u064A\u0644 \u062C\u062F\u0627\u064B").optional().default(""),
+  icon_or_image: external_exports.string().optional().default(""),
+  font_family: external_exports.string().default("cairo"),
+  text_color: external_exports.string().default("#ffffff"),
+  bg_color: external_exports.string().default("#1e293b"),
+  border_color: external_exports.string().default("#334155"),
+  style_variant: external_exports.enum(["solid", "gradient", "outline", "glow"]).default("solid"),
+  gradient_from: external_exports.string().optional().default("#0d6efd"),
+  gradient_to: external_exports.string().optional().default("#00f2fe"),
+  is_active: external_exports.boolean().default(true),
+  is_featured: external_exports.boolean().default(false),
+  sort_order: external_exports.number().int().default(0)
+});
+var BioLinkSchema = BioLinkInputSchema.extend({
+  id: external_exports.number().int().positive(),
+  click_count: external_exports.number().int().default(0),
+  created_at: external_exports.string(),
+  updated_at: external_exports.string()
+});
+var ReorderBioLinksSchema = external_exports.array(
+  external_exports.object({
+    id: external_exports.number().int().positive(),
+    sort_order: external_exports.number().int()
+  })
+);
+
 // apps/api/src/routes/auth.ts
 var import_drizzle_orm2 = require("drizzle-orm");
 
@@ -16483,6 +16555,137 @@ async function adminRoutes(app) {
   });
 }
 
+// apps/api/src/routes/bioLinks.ts
+var import_drizzle_orm5 = require("drizzle-orm");
+async function bioLinksRoutes(app) {
+  app.get("/bio-links/public", async (request, reply) => {
+    const db = getDb();
+    const settingsRows = await db.select().from(settings);
+    const settingsMap = {};
+    for (const row of settingsRows) {
+      settingsMap[row.key] = row.value;
+    }
+    const links = await db.select().from(bio_links).where((0, import_drizzle_orm5.eq)(bio_links.is_active, true)).orderBy((0, import_drizzle_orm5.asc)(bio_links.sort_order), (0, import_drizzle_orm5.asc)(bio_links.id));
+    return reply.send({
+      settings: settingsMap,
+      links
+    });
+  });
+  app.post("/bio-links/:id/click", async (request, reply) => {
+    const { id } = request.params;
+    const linkId = parseInt(id, 10);
+    if (isNaN(linkId)) {
+      return reply.status(400).send({ error: "Invalid link ID" });
+    }
+    const db = getDb();
+    await db.update(bio_links).set({
+      click_count: import_drizzle_orm5.sql`${bio_links.click_count} + 1`,
+      updated_at: (/* @__PURE__ */ new Date()).toISOString()
+    }).where((0, import_drizzle_orm5.eq)(bio_links.id, linkId));
+    return reply.send({ success: true });
+  });
+  app.get("/admin/bio-links", { preHandler: [requireAdmin] }, async (request, reply) => {
+    const db = getDb();
+    const links = await db.select().from(bio_links).orderBy((0, import_drizzle_orm5.asc)(bio_links.sort_order), (0, import_drizzle_orm5.asc)(bio_links.id));
+    const settingsRows = await db.select().from(settings);
+    const settingsMap = {};
+    for (const row of settingsRows) {
+      settingsMap[row.key] = row.value;
+    }
+    const totalClicks = links.reduce((sum, link) => sum + (link.click_count || 0), 0);
+    const activeLinks = links.filter((l) => l.is_active).length;
+    return reply.send({
+      links,
+      settings: settingsMap,
+      stats: {
+        totalLinks: links.length,
+        activeLinks,
+        totalClicks
+      }
+    });
+  });
+  app.post("/admin/bio-links", { preHandler: [requireAdmin] }, async (request, reply) => {
+    const parseResult = BioLinkInputSchema.safeParse(request.body);
+    if (!parseResult.success) {
+      return reply.status(400).send({
+        error: "\u0628\u064A\u0627\u0646\u0627\u062A \u0627\u0644\u0631\u0627\u0628\u0637 \u063A\u064A\u0631 \u0635\u062D\u064A\u062D\u0629",
+        details: parseResult.error.format()
+      });
+    }
+    const db = getDb();
+    const now = (/* @__PURE__ */ new Date()).toISOString();
+    const [created] = await db.insert(bio_links).values({
+      ...parseResult.data,
+      created_at: now,
+      updated_at: now
+    }).returning();
+    return reply.status(201).send(created);
+  });
+  app.put("/admin/bio-links/:id", { preHandler: [requireAdmin] }, async (request, reply) => {
+    const { id } = request.params;
+    const linkId = parseInt(id, 10);
+    if (isNaN(linkId)) {
+      return reply.status(400).send({ error: "Invalid link ID" });
+    }
+    const parseResult = BioLinkInputSchema.safeParse(request.body);
+    if (!parseResult.success) {
+      return reply.status(400).send({
+        error: "\u0628\u064A\u0627\u0646\u0627\u062A \u0627\u0644\u0631\u0627\u0628\u0637 \u063A\u064A\u0631 \u0635\u062D\u064A\u062D\u0629",
+        details: parseResult.error.format()
+      });
+    }
+    const db = getDb();
+    const now = (/* @__PURE__ */ new Date()).toISOString();
+    const [updated] = await db.update(bio_links).set({
+      ...parseResult.data,
+      updated_at: now
+    }).where((0, import_drizzle_orm5.eq)(bio_links.id, linkId)).returning();
+    if (!updated) {
+      return reply.status(404).send({ error: "\u0627\u0644\u0631\u0627\u0628\u0637 \u063A\u064A\u0631 \u0645\u0648\u062C\u0648\u062F" });
+    }
+    return reply.send(updated);
+  });
+  app.delete("/admin/bio-links/:id", { preHandler: [requireAdmin] }, async (request, reply) => {
+    const { id } = request.params;
+    const linkId = parseInt(id, 10);
+    if (isNaN(linkId)) {
+      return reply.status(400).send({ error: "Invalid link ID" });
+    }
+    const db = getDb();
+    await db.delete(bio_links).where((0, import_drizzle_orm5.eq)(bio_links.id, linkId));
+    return reply.send({ success: true });
+  });
+  app.put("/admin/bio-links/reorder", { preHandler: [requireAdmin] }, async (request, reply) => {
+    const parseResult = ReorderBioLinksSchema.safeParse(request.body);
+    if (!parseResult.success) {
+      return reply.status(400).send({
+        error: "\u0628\u064A\u0627\u0646\u0627\u062A \u0627\u0644\u062A\u0631\u062A\u064A\u0628 \u063A\u064A\u0631 \u0635\u062D\u064A\u062D\u0629",
+        details: parseResult.error.format()
+      });
+    }
+    const db = getDb();
+    const now = (/* @__PURE__ */ new Date()).toISOString();
+    for (const item of parseResult.data) {
+      await db.update(bio_links).set({
+        sort_order: item.sort_order,
+        updated_at: now
+      }).where((0, import_drizzle_orm5.eq)(bio_links.id, item.id));
+    }
+    return reply.send({ success: true });
+  });
+  app.put("/admin/bio-links/settings", { preHandler: [requireAdmin] }, async (request, reply) => {
+    const parseResult = SettingsSchema.safeParse(request.body);
+    if (!parseResult.success) {
+      return reply.status(400).send({ error: "Invalid settings payload" });
+    }
+    const db = getDb();
+    for (const [key, value] of Object.entries(parseResult.data)) {
+      await db.insert(settings).values({ key, value }).onConflictDoUpdate({ target: settings.key, set: { value } });
+    }
+    return reply.send({ success: true });
+  });
+}
+
 // apps/api/src/app.ts
 async function buildApp(opts = {}) {
   const app = (0, import_fastify.default)(opts);
@@ -16507,6 +16710,7 @@ async function buildApp(opts = {}) {
   await app.register(inquiryRoutes, { prefix: "/api" });
   await app.register(publicRoutes, { prefix: "/api" });
   await app.register(adminRoutes, { prefix: "/api/admin" });
+  await app.register(bioLinksRoutes, { prefix: "/api" });
   return app;
 }
 

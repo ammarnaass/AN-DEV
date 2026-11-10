@@ -8,7 +8,8 @@ import {
   LogOut,
   ExternalLink,
   Database,
-  ShieldCheck
+  ShieldCheck,
+  Link2
 } from "lucide-react";
 import { useAdminAuth } from "../hooks/useAdminAuth";
 import { useAdminStats } from "../hooks/useAdminStats";
@@ -56,6 +57,11 @@ export const AdminLayout: React.FC = () => {
       href: "/admin/projects",
       label: "إدارة المشاريع والأعمال",
       icon: <FolderKanban className="w-4 h-4" />
+    },
+    {
+      href: "/admin/links",
+      label: "صفحة الروابط (Bio Links)",
+      icon: <Link2 className="w-4 h-4" />
     },
     {
       href: "/admin/settings",

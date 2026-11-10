@@ -3,6 +3,7 @@ export { AdminLoginPage } from "./pages/AdminLoginPage";
 export { AdminDashboardPage } from "./pages/AdminDashboardPage";
 export { AdminProjectsPage } from "./pages/AdminProjectsPage";
 export { AdminInquiriesPage } from "./pages/AdminInquiriesPage";
+export { AdminBioLinksPage } from "./pages/AdminBioLinksPage";
 export { AdminSettingsPage } from "./pages/AdminSettingsPage";
 export { adminService } from "./services/admin.service";
 export { useAdminAuth } from "./hooks/useAdminAuth";

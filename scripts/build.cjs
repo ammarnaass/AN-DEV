@@ -116,6 +116,7 @@ const targets = [
   path.resolve(rootDir, "api/posts.js"),
   path.resolve(rootDir, "api/inquiries.js"),
   path.resolve(rootDir, "api/views.js"),
+  path.resolve(rootDir, "api/bio-links.js"),
   path.resolve(rootDir, "apps/api/api/index.js"),
   path.resolve(rootDir, "apps/api/api/[...all].js"),
   path.resolve(rootDir, "apps/api/api/auth/login.js"),
@@ -125,6 +126,7 @@ const targets = [
   path.resolve(rootDir, "apps/api/api/posts.js"),
   path.resolve(rootDir, "apps/api/api/inquiries.js"),
   path.resolve(rootDir, "apps/api/api/views.js"),
+  path.resolve(rootDir, "apps/api/api/bio-links.js"),
 ];
 
 for (const t of targets) {

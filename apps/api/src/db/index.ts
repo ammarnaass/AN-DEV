@@ -86,6 +86,26 @@ export async function initDb(connStr?: string, runMigrations = false) {
         path TEXT NOT NULL,
         day TEXT NOT NULL,
         count INTEGER NOT NULL DEFAULT 1
+      )`,
+      `CREATE TABLE IF NOT EXISTS bio_links (
+        id SERIAL PRIMARY KEY,
+        title TEXT NOT NULL,
+        url TEXT NOT NULL,
+        subtitle TEXT,
+        icon_or_image TEXT,
+        font_family TEXT NOT NULL DEFAULT 'cairo',
+        text_color TEXT NOT NULL DEFAULT '#ffffff',
+        bg_color TEXT NOT NULL DEFAULT '#1e293b',
+        border_color TEXT NOT NULL DEFAULT '#334155',
+        style_variant TEXT NOT NULL DEFAULT 'solid',
+        gradient_from TEXT,
+        gradient_to TEXT,
+        is_active BOOLEAN NOT NULL DEFAULT TRUE,
+        is_featured BOOLEAN NOT NULL DEFAULT FALSE,
+        sort_order INTEGER NOT NULL DEFAULT 0,
+        click_count INTEGER NOT NULL DEFAULT 0,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
       )`
     ];
 

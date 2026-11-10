@@ -1,5 +1,5 @@
 import { getDb, initDb } from "./index";
-import { admins, projects, settings, posts } from "./schema";
+import { admins, projects, settings, posts, bio_links } from "./schema";
 import { hashPassword } from "../services/auth";
 import { eq } from "drizzle-orm";
 
@@ -41,7 +41,13 @@ export async function seedDatabase() {
     location_ar: "الجزائر العاصمة، الجزائر",
     location_en: "Algiers, Algeria",
     tagline_ar: "نطوّر برمجيات تُحدث فرقاً حقيقياً في أعمالكم",
-    tagline_en: "We engineer software that transforms your business"
+    tagline_en: "We engineer software that transforms your business",
+    bio_page_title: "AN DEV | وكالة البرمجيات والأنظمة السحابية",
+    bio_page_bio: "نبني حلولاً رقمية وتطبيقات قابلة للتوسع بدقة هندسية عالية. تواصل معنا أو تصفح أعمالنا وأحدث حلولنا التقنية.",
+    bio_page_avatar: "/brand/logo-squircle.webp",
+    bio_page_bg_type: "mesh",
+    bio_page_bg_value: "#090d16",
+    bio_page_socials: "whatsapp,telegram,linkedin,github,facebook,instagram"
   };
 
   for (const [key, value] of Object.entries(defaultSettings)) {
@@ -309,6 +315,112 @@ At AN DEV, web performance is a core competitive requirement rather than an afte
   const [existingPost] = await db.select().from(posts).where(eq(posts.slug, samplePost.slug));
   if (!existingPost) {
     await db.insert(posts).values(samplePost);
+  }
+
+  // 5. Seed Bio Links
+  const existingLinks = await db.select().from(bio_links);
+  if (existingLinks.length === 0) {
+    const initialLinks = [
+      {
+        title: "طلب مشروع جديد أو استشارة برمجية",
+        url: "/contact",
+        subtitle: "عرض سعر مخصص وخطة هندسية لتطبيقك خلال 48 ساعة",
+        icon_or_image: "Sparkles",
+        font_family: "cairo",
+        text_color: "#ffffff",
+        bg_color: "#0d6efd",
+        border_color: "#3b82f6",
+        style_variant: "gradient",
+        gradient_from: "#0d6efd",
+        gradient_to: "#00d2ff",
+        is_active: true,
+        is_featured: true,
+        sort_order: 1,
+        click_count: 24,
+        created_at: now,
+        updated_at: now
+      },
+      {
+        title: "معرض الأعمال والمشاريع المنفذة",
+        url: "/projects",
+        subtitle: "دراسات حالة لأنظمة المؤسسات وتطبيقات الويب والموبايل",
+        icon_or_image: "FolderKanban",
+        font_family: "cairo",
+        text_color: "#ffffff",
+        bg_color: "#1e293b",
+        border_color: "#334155",
+        style_variant: "solid",
+        gradient_from: "#1e293b",
+        gradient_to: "#0f172a",
+        is_active: true,
+        is_featured: false,
+        sort_order: 2,
+        click_count: 18,
+        created_at: now,
+        updated_at: now
+      },
+      {
+        title: "محادثة فورية مع المستشار التقني عبر واتساب",
+        url: "https://wa.me/213550123456",
+        subtitle: "رد سريع ومباشر على كافة استفساراتكم التقنية",
+        icon_or_image: "MessageCircle",
+        font_family: "cairo",
+        text_color: "#ffffff",
+        bg_color: "#128c7e",
+        border_color: "#25d366",
+        style_variant: "solid",
+        gradient_from: "#128c7e",
+        gradient_to: "#25d366",
+        is_active: true,
+        is_featured: false,
+        sort_order: 3,
+        click_count: 35,
+        created_at: now,
+        updated_at: now
+      },
+      {
+        title: "مدونة AN DEV الهندسية",
+        url: "/blog",
+        subtitle: "مقالات تقنية معمارية حول تطوير الأنظمة السحابية والذكاء الاصطناعي",
+        icon_or_image: "BookOpen",
+        font_family: "cairo",
+        text_color: "#ffffff",
+        bg_color: "#1e293b",
+        border_color: "#334155",
+        style_variant: "solid",
+        gradient_from: "#1e293b",
+        gradient_to: "#0f172a",
+        is_active: true,
+        is_featured: false,
+        sort_order: 4,
+        click_count: 11,
+        created_at: now,
+        updated_at: now
+      },
+      {
+        title: "زيارة الموقع الإلكتروني الرسمي",
+        url: "/",
+        subtitle: "البوابة الرقمية الكاملة لشركة AN DEV للبرمجيات",
+        icon_or_image: "Globe",
+        font_family: "cairo",
+        text_color: "#ffffff",
+        bg_color: "#0f172a",
+        border_color: "#1e293b",
+        style_variant: "outline",
+        gradient_from: "#0f172a",
+        gradient_to: "#1e293b",
+        is_active: true,
+        is_featured: false,
+        sort_order: 5,
+        click_count: 42,
+        created_at: now,
+        updated_at: now
+      }
+    ];
+
+    for (const link of initialLinks) {
+      await db.insert(bio_links).values(link);
+    }
   }
 }
 

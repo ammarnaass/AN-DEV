@@ -77,3 +77,24 @@ export const page_views = pgTable("page_views", {
   day: text("day").notNull(), // YYYY-MM-DD
   count: integer("count").notNull().default(1)
 });
+
+export const bio_links = pgTable("bio_links", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  url: text("url").notNull(),
+  subtitle: text("subtitle"),
+  icon_or_image: text("icon_or_image"),
+  font_family: text("font_family").notNull().default("cairo"),
+  text_color: text("text_color").notNull().default("#ffffff"),
+  bg_color: text("bg_color").notNull().default("#1e293b"),
+  border_color: text("border_color").notNull().default("#334155"),
+  style_variant: text("style_variant").notNull().default("solid"), // solid, gradient, outline, glow
+  gradient_from: text("gradient_from"),
+  gradient_to: text("gradient_to"),
+  is_active: boolean("is_active").notNull().default(true),
+  is_featured: boolean("is_featured").notNull().default(false),
+  sort_order: integer("sort_order").notNull().default(0),
+  click_count: integer("click_count").notNull().default(0),
+  created_at: text("created_at").notNull(),
+  updated_at: text("updated_at").notNull()
+});

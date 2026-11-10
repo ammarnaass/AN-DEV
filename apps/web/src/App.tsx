@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { I18nProvider } from "./lib/i18n";
 import { Navbar } from "./components/layout/Navbar";
 import { Footer } from "./components/layout/Footer";
 import { NotFoundPage } from "./pages/NotFoundPage";
+import { BioLinksPage } from "./pages/BioLinksPage";
 
 // Feature modules public API imports
 import { HomePage } from "./features/home";
@@ -17,6 +18,7 @@ import {
   AdminDashboardPage,
   AdminInquiriesPage,
   AdminProjectsPage,
+  AdminBioLinksPage,
   AdminSettingsPage,
 } from "./features/admin";
 
@@ -33,10 +35,11 @@ const queryClient = new QueryClient({
 const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
   const isAdmin = location.pathname.startsWith("/admin");
+  const isBioPage = location.pathname.startsWith("/links") || location.pathname.startsWith("/bio");
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    if (!isAdmin) {
+    if (!isAdmin && !isBioPage) {
       // F10: Cookieless aggregate page view counter
       fetch("/api/views", {
         method: "POST",
@@ -44,13 +47,13 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         body: JSON.stringify({ path: location.pathname }),
       }).catch(() => {});
     }
-  }, [location.pathname, isAdmin]);
+  }, [location.pathname, isAdmin, isBioPage]);
 
   return (
     <div className="flex flex-col min-h-screen">
-      {!isAdmin && <Navbar />}
+      {!isAdmin && !isBioPage && <Navbar />}
       <main className="flex-1">{children}</main>
-      {!isAdmin && <Footer />}
+      {!isAdmin && !isBioPage && <Footer />}
     </div>
   );
 };
@@ -70,12 +73,17 @@ export function App() {
               <Route path="/blog/:slug" element={<PostDetailPage />} />
               <Route path="/contact" element={<ContactPage />} />
 
+              {/* Bio Links Standalone Route */}
+              <Route path="/links" element={<BioLinksPage />} />
+              <Route path="/bio" element={<Navigate to="/links" replace />} />
+
               {/* Admin Routes */}
               <Route path="/admin/login" element={<AdminLoginPage />} />
               <Route path="/admin" element={<AdminLayout />}>
                 <Route index element={<AdminDashboardPage />} />
                 <Route path="inquiries" element={<AdminInquiriesPage />} />
                 <Route path="projects" element={<AdminProjectsPage />} />
+                <Route path="links" element={<AdminBioLinksPage />} />
                 <Route path="settings" element={<AdminSettingsPage />} />
               </Route>
 

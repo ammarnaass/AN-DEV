@@ -7,6 +7,7 @@ import { authRoutes } from "./routes/auth";
 import { inquiryRoutes } from "./routes/inquiries";
 import { publicRoutes } from "./routes/public";
 import { adminRoutes } from "./routes/admin";
+import { bioLinksRoutes } from "./routes/bioLinks";
 import path from "path";
 
 export interface BuildAppOptions extends FastifyServerOptions {
@@ -48,6 +49,7 @@ export async function buildApp(opts: BuildAppOptions = {}): Promise<FastifyInsta
   await app.register(inquiryRoutes, { prefix: "/api" });
   await app.register(publicRoutes, { prefix: "/api" });
   await app.register(adminRoutes, { prefix: "/api/admin" });
+  await app.register(bioLinksRoutes, { prefix: "/api" });
 
   return app;
 }
