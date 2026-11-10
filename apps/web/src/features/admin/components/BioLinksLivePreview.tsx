@@ -70,6 +70,16 @@ const SOCIAL_SVGS: Record<string, { color: string; path: string }> = {
   },
 };
 
+const isColorDark = (hex: string): boolean => {
+  if (!hex || !hex.startsWith("#")) return true;
+  const clean = hex.replace("#", "");
+  const r = parseInt(clean.substring(0, 2), 16) || 0;
+  const g = parseInt(clean.substring(2, 4), 16) || 0;
+  const b = parseInt(clean.substring(4, 6), 16) || 0;
+  const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+  return brightness < 140;
+};
+
 export const BioLinksLivePreview: React.FC<BioLinksLivePreviewProps> = ({
   settings,
   links,
@@ -101,40 +111,42 @@ export const BioLinksLivePreview: React.FC<BioLinksLivePreviewProps> = ({
   );
 
   // Dynamic preview background
-  let previewBgColor = previewDark ? "#090d16" : "#f4f7fd";
-  let previewBgImage: string | undefined = undefined;
+  let previewBgColor: string;
+  let previewBgImage: string;
 
   if (bgType === "color") {
-    if (bgValue && bgValue !== "#090d16" && bgValue !== "#030712") {
-      previewBgColor = bgValue;
-    } else {
-      previewBgColor = previewDark ? "#090d16" : "#f4f7fd";
-    }
-  } else if (bgType === "gradient") {
+    // 1. SOLID COLOR:
     if (previewDark) {
-      previewBgImage = `linear-gradient(180deg, ${bgValue || "#090d16"} 0%, #050811 100%)`;
-      previewBgColor = "#090d16";
+      previewBgColor = bgValue || "#090d16";
     } else {
-      const isDarkDefault =
-        !bgValue ||
-        bgValue === "#090d16" ||
-        bgValue === "#030712" ||
-        bgValue === "#0a0a0a";
-      previewBgImage = isDarkDefault
-        ? "linear-gradient(180deg, #ffffff 0%, #e8f0fe 100%)"
-        : `linear-gradient(180deg, ${bgValue} 0%, #f4f7fd 100%)`;
+      previewBgColor = isColorDark(bgValue) ? "#f4f7fd" : (bgValue || "#f4f7fd");
+    }
+    previewBgImage = "none";
+  } else if (bgType === "gradient") {
+    // 2. DEEP GRADIENT:
+    if (previewDark) {
+      const topColor =
+        bgValue === "#090d16"
+          ? "#131b2e"
+          : bgValue === "#030712"
+          ? "#111827"
+          : bgValue || "#090d16";
+      previewBgColor = topColor;
+      previewBgImage = `linear-gradient(180deg, ${topColor} 0%, #030712 100%)`;
+    } else {
       previewBgColor = "#f4f7fd";
+      previewBgImage = "linear-gradient(180deg, #ffffff 0%, #e2e8f8 100%)";
     }
   } else {
-    // mesh
+    // 3. MESH (Glowing cybernetic neon lights):
     if (previewDark) {
-      previewBgColor = "#090d16";
+      previewBgColor = bgValue || "#090d16";
       previewBgImage =
-        "radial-gradient(circle at 50% 10%, rgba(13, 110, 253, 0.25) 0%, transparent 60%), radial-gradient(circle at 20% 80%, rgba(0, 242, 254, 0.12) 0%, transparent 50%)";
+        "radial-gradient(circle at 50% 10%, rgba(13, 110, 253, 0.28) 0%, transparent 60%), radial-gradient(circle at 20% 80%, rgba(0, 242, 254, 0.14) 0%, transparent 50%)";
     } else {
       previewBgColor = "#f4f7fd";
       previewBgImage =
-        "radial-gradient(circle at 50% 10%, rgba(13, 110, 253, 0.08) 0%, transparent 60%), radial-gradient(circle at 20% 80%, rgba(2, 132, 199, 0.06) 0%, transparent 50%)";
+        "radial-gradient(circle at 50% 10%, rgba(13, 110, 253, 0.10) 0%, transparent 60%), radial-gradient(circle at 20% 80%, rgba(2, 132, 199, 0.08) 0%, transparent 50%)";
     }
   }
 

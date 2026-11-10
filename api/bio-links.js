@@ -16565,6 +16565,8 @@ async function bioLinksRoutes(app) {
     for (const row of settingsRows) {
       settingsMap[row.key] = row.value;
     }
+    settingsMap.bio_page_bg_type = settingsMap.bio_page_bg_type || "mesh";
+    settingsMap.bio_page_bg_value = settingsMap.bio_page_bg_value || "#090d16";
     const links = await db.select().from(bio_links).where((0, import_drizzle_orm5.eq)(bio_links.is_active, true)).orderBy((0, import_drizzle_orm5.asc)(bio_links.sort_order), (0, import_drizzle_orm5.asc)(bio_links.id));
     return reply.send({
       settings: settingsMap,
@@ -16592,6 +16594,8 @@ async function bioLinksRoutes(app) {
     for (const row of settingsRows) {
       settingsMap[row.key] = row.value;
     }
+    settingsMap.bio_page_bg_type = settingsMap.bio_page_bg_type || "mesh";
+    settingsMap.bio_page_bg_value = settingsMap.bio_page_bg_value || "#090d16";
     const totalClicks = links.reduce((sum, link) => sum + (link.click_count || 0), 0);
     const activeLinks = links.filter((l) => l.is_active).length;
     return reply.send({
@@ -16674,13 +16678,13 @@ async function bioLinksRoutes(app) {
     return reply.send({ success: true });
   });
   app.put("/admin/bio-links/settings", { preHandler: [requireAdmin] }, async (request, reply) => {
-    const parseResult = SettingsSchema.safeParse(request.body);
-    if (!parseResult.success) {
-      return reply.status(400).send({ error: "Invalid settings payload" });
-    }
+    const rawBody = request.body || {};
     const db = getDb();
-    for (const [key, value] of Object.entries(parseResult.data)) {
-      await db.insert(settings).values({ key, value }).onConflictDoUpdate({ target: settings.key, set: { value } });
+    for (const [key, val] of Object.entries(rawBody)) {
+      if (typeof key === "string" && key.trim().length > 0) {
+        const value = typeof val === "string" ? val : val == null ? "" : String(val);
+        await db.insert(settings).values({ key, value }).onConflictDoUpdate({ target: settings.key, set: { value } });
+      }
     }
     return reply.send({ success: true });
   });

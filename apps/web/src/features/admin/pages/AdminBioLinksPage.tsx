@@ -84,14 +84,22 @@ export const AdminBioLinksPage: React.FC = () => {
   const [editingLink, setEditingLink] = useState<BioLink | null>(null);
 
   // Appearance & identity settings local state for live preview
-  const [localSettings, setLocalSettings] = useState<Record<string, string>>({});
+  const [localSettings, setLocalSettings] = useState<Record<string, string>>({
+    bio_page_bg_type: "mesh",
+    bio_page_bg_value: "#090d16",
+    ...(initialSettings || {}),
+  });
   const [settingsSuccess, setSettingsSuccess] = useState(false);
   const [avatarUploadError, setAvatarUploadError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (initialSettings) {
-      setLocalSettings(initialSettings);
+      setLocalSettings({
+        bio_page_bg_type: "mesh",
+        bio_page_bg_value: "#090d16",
+        ...initialSettings,
+      });
     }
   }, [initialSettings]);
 
@@ -618,11 +626,30 @@ export const AdminBioLinksPage: React.FC = () => {
 
               {/* Section 2: Background Style Customizer */}
               <div className="p-5 rounded-2xl bg-surface border border-line space-y-5">
-                <div className="flex items-center gap-2 pb-3 border-b border-line">
-                  <Palette className="w-4 h-4 text-secondary" />
-                  <h3 className="text-sm font-bold text-text-primary">
-                    نمط وخلفية الصفحة (Background Style)
-                  </h3>
+                <div className="flex items-center justify-between pb-3 border-b border-line">
+                  <div className="flex items-center gap-2">
+                    <Palette className="w-4 h-4 text-secondary" />
+                    <h3 className="text-sm font-bold text-text-primary">
+                      نمط وخلفية الصفحة (Background Style)
+                    </h3>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      try {
+                        await updateBioSettings(localSettings);
+                        setSettingsSuccess(true);
+                        setTimeout(() => setSettingsSuccess(false), 3000);
+                      } catch {
+                        alert("حدث خطأ أثناء حفظ الإعدادات، يرجى المحاولة مرة أخرى.");
+                      }
+                    }}
+                    disabled={isUpdatingSettings}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 text-xs font-semibold transition-all disabled:opacity-50"
+                  >
+                    <Save className="w-3.5 h-3.5" />
+                    <span>{isUpdatingSettings ? "جاري الحفظ..." : "حفظ المظهر"}</span>
+                  </button>
                 </div>
 
                 {/* Background Type Selection */}
@@ -681,24 +708,29 @@ export const AdminBioLinksPage: React.FC = () => {
                     اللون الأساسي للخلفية
                   </label>
                   <div className="flex flex-wrap items-center gap-2">
-                    {BG_COLOR_PRESETS.map((preset) => (
-                      <button
-                        key={preset.value}
-                        type="button"
-                        onClick={() => handleSettingChange("bio_page_bg_value", preset.value)}
-                        className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-[11px] font-mono transition-all ${
-                          (localSettings.bio_page_bg_value || "#090d16") === preset.value
-                            ? "border-primary bg-primary/10 text-white"
-                            : "border-line bg-surface-container text-text-muted hover:text-text-primary"
-                        }`}
-                      >
-                        <span
-                          className="w-3 h-3 rounded-full border border-white/20 shrink-0"
-                          style={{ backgroundColor: preset.value }}
-                        />
-                        <span>{preset.label}</span>
-                      </button>
-                    ))}
+                    {BG_COLOR_PRESETS.map((preset) => {
+                      const isCurrent =
+                        (localSettings.bio_page_bg_value || "#090d16").toLowerCase() ===
+                        preset.value.toLowerCase();
+                      return (
+                        <button
+                          key={preset.value}
+                          type="button"
+                          onClick={() => handleSettingChange("bio_page_bg_value", preset.value)}
+                          className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-[11px] font-mono transition-all ${
+                            isCurrent
+                              ? "border-primary bg-primary/15 text-primary font-bold shadow-sm"
+                              : "border-line bg-surface-container text-text-muted hover:text-text-primary"
+                          }`}
+                        >
+                          <span
+                            className="w-3 h-3 rounded-full border border-white/20 shrink-0"
+                            style={{ backgroundColor: preset.value }}
+                          />
+                          <span>{preset.label}</span>
+                        </button>
+                      );
+                    })}
                   </div>
 
                   <div className="flex items-center gap-3 pt-1">

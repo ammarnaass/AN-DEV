@@ -20,6 +20,8 @@ export async function bioLinksRoutes(app: FastifyInstance) {
     for (const row of settingsRows) {
       settingsMap[row.key] = row.value;
     }
+    settingsMap.bio_page_bg_type = settingsMap.bio_page_bg_type || "mesh";
+    settingsMap.bio_page_bg_value = settingsMap.bio_page_bg_value || "#090d16";
 
     // Fetch active links ordered by sort_order
     const links = await db
@@ -72,6 +74,8 @@ export async function bioLinksRoutes(app: FastifyInstance) {
     for (const row of settingsRows) {
       settingsMap[row.key] = row.value;
     }
+    settingsMap.bio_page_bg_type = settingsMap.bio_page_bg_type || "mesh";
+    settingsMap.bio_page_bg_value = settingsMap.bio_page_bg_value || "#090d16";
 
     const totalClicks = links.reduce((sum, link) => sum + (link.click_count || 0), 0);
     const activeLinks = links.filter((l) => l.is_active).length;
@@ -189,17 +193,17 @@ export async function bioLinksRoutes(app: FastifyInstance) {
 
   // 8. Update bio page settings
   app.put("/admin/bio-links/settings", { preHandler: [requireAdmin] }, async (request, reply) => {
-    const parseResult = SettingsSchema.safeParse(request.body);
-    if (!parseResult.success) {
-      return reply.status(400).send({ error: "Invalid settings payload" });
-    }
-
+    const rawBody = (request.body as Record<string, any>) || {};
     const db = getDb();
-    for (const [key, value] of Object.entries(parseResult.data)) {
-      await db
-        .insert(settings)
-        .values({ key, value })
-        .onConflictDoUpdate({ target: settings.key, set: { value } });
+
+    for (const [key, val] of Object.entries(rawBody)) {
+      if (typeof key === "string" && key.trim().length > 0) {
+        const value = typeof val === "string" ? val : val == null ? "" : String(val);
+        await db
+          .insert(settings)
+          .values({ key, value })
+          .onConflictDoUpdate({ target: settings.key, set: { value } });
+      }
     }
 
     return reply.send({ success: true });

@@ -203,43 +203,53 @@ export const BioLinksPage: React.FC = () => {
     }
   };
 
+  const isColorDark = (hex: string): boolean => {
+    if (!hex || !hex.startsWith("#")) return true;
+    const clean = hex.replace("#", "");
+    const r = parseInt(clean.substring(0, 2), 16) || 0;
+    const g = parseInt(clean.substring(2, 4), 16) || 0;
+    const b = parseInt(clean.substring(4, 6), 16) || 0;
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+    return brightness < 140;
+  };
+
   // Dual-theme dynamic background resolution
-  let containerBgColor = isDark ? "#090d16" : "#f4f7fd";
-  let containerBgImage: string | undefined = undefined;
+  let containerBgColor: string;
+  let containerBgImage: string;
 
   if (bgType === "color") {
-    // If user provided a specific non-default color, apply it; otherwise fallback to theme base
-    if (bgValue && bgValue !== "#090d16" && bgValue !== "#030712") {
-      containerBgColor = bgValue;
-    } else {
-      containerBgColor = isDark ? "#090d16" : "#f4f7fd";
-    }
-  } else if (bgType === "gradient") {
+    // 1. SOLID COLOR:
     if (isDark) {
-      containerBgImage = `linear-gradient(180deg, ${bgValue || "#090d16"} 0%, #050811 100%)`;
-      containerBgColor = "#090d16";
+      containerBgColor = bgValue || "#090d16";
     } else {
-      const isDarkDefault =
-        !bgValue ||
-        bgValue === "#090d16" ||
-        bgValue === "#030712" ||
-        bgValue === "#0a0a0a" ||
-        bgValue === "#0d1117";
-      containerBgImage = isDarkDefault
-        ? "linear-gradient(180deg, #ffffff 0%, #e2e8f8 100%)"
-        : `linear-gradient(180deg, ${bgValue} 0%, #f4f7fd 100%)`;
+      containerBgColor = isColorDark(bgValue) ? "#f4f7fd" : (bgValue || "#f4f7fd");
+    }
+    containerBgImage = "none";
+  } else if (bgType === "gradient") {
+    // 2. DEEP GRADIENT:
+    if (isDark) {
+      const topColor =
+        bgValue === "#090d16"
+          ? "#131b2e"
+          : bgValue === "#030712"
+          ? "#111827"
+          : bgValue || "#090d16";
+      containerBgColor = topColor;
+      containerBgImage = `linear-gradient(180deg, ${topColor} 0%, #030712 100%)`;
+    } else {
       containerBgColor = "#f4f7fd";
+      containerBgImage = "linear-gradient(180deg, #ffffff 0%, #e2e8f8 100%)";
     }
   } else {
-    // "mesh" (cybernetic glowing mesh)
+    // 3. MESH (Glowing cybernetic neon lights):
     if (isDark) {
-      containerBgColor = "#090d16";
+      containerBgColor = bgValue || "#090d16";
       containerBgImage =
-        "radial-gradient(circle at 50% 8%, rgba(13, 110, 253, 0.22) 0%, transparent 60%), radial-gradient(circle at 15% 75%, rgba(0, 195, 255, 0.12) 0%, transparent 50%), radial-gradient(circle at 85% 85%, rgba(13, 110, 253, 0.10) 0%, transparent 50%)";
+        "radial-gradient(circle at 50% 0%, rgba(13, 110, 253, 0.28) 0%, transparent 60%), radial-gradient(circle at 10% 40%, rgba(0, 195, 255, 0.16) 0%, transparent 50%), radial-gradient(circle at 90% 70%, rgba(13, 110, 253, 0.14) 0%, transparent 50%)";
     } else {
       containerBgColor = "#f4f7fd";
       containerBgImage =
-        "radial-gradient(circle at 50% 8%, rgba(13, 110, 253, 0.08) 0%, transparent 60%), radial-gradient(circle at 15% 75%, rgba(2, 132, 199, 0.06) 0%, transparent 50%), radial-gradient(circle at 85% 85%, rgba(13, 110, 253, 0.05) 0%, transparent 50%)";
+        "radial-gradient(circle at 50% 0%, rgba(13, 110, 253, 0.10) 0%, transparent 60%), radial-gradient(circle at 10% 40%, rgba(2, 132, 199, 0.08) 0%, transparent 50%), radial-gradient(circle at 85% 85%, rgba(13, 110, 253, 0.06) 0%, transparent 50%)";
     }
   }
 
