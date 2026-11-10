@@ -91,8 +91,9 @@ export async function adminRoutes(app: FastifyInstance) {
   app.post("/projects", async (request, reply) => {
     const parseResult = ProjectSchema.safeParse(request.body);
     if (!parseResult.success) {
+      const firstIssue = parseResult.error.issues[0]?.message;
       return reply.status(400).send({
-        error: "Validation failed",
+        error: firstIssue || "Validation failed",
         details: parseResult.error.format()
       });
     }
@@ -128,8 +129,9 @@ export async function adminRoutes(app: FastifyInstance) {
     const parseResult = ProjectSchema.safeParse(request.body);
 
     if (!parseResult.success) {
+      const firstIssue = parseResult.error.issues[0]?.message;
       return reply.status(400).send({
-        error: "Validation failed",
+        error: firstIssue || "Validation failed",
         details: parseResult.error.format()
       });
     }

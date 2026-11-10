@@ -16004,17 +16004,17 @@ var UpdateInquirySchema = external_exports.object({
 
 // packages/shared/src/schemas/project.ts
 var ProjectSchema = external_exports.object({
-  slug: external_exports.string().min(2).regex(/^[a-z0-9-]+$/, "Slug must be lowercase alphanumeric with hyphens"),
-  title_ar: external_exports.string().min(2),
-  title_en: external_exports.string().min(2),
-  summary_ar: external_exports.string().min(5),
-  summary_en: external_exports.string().min(5),
-  body_ar: external_exports.string().min(10),
-  body_en: external_exports.string().min(10),
+  slug: external_exports.string().min(2, "\u0645\u0639\u0631\u0641 \u0627\u0644\u0631\u0627\u0628\u0637 \u064A\u062C\u0628 \u0623\u0646 \u064A\u0643\u0648\u0646 \u062D\u0631\u0641\u064A\u0646 \u0639\u0644\u0649 \u0627\u0644\u0623\u0642\u0644").regex(/^[a-z0-9-]+$/, "\u0645\u0639\u0631\u0641 \u0627\u0644\u0631\u0627\u0628\u0637 (Slug) \u064A\u062C\u0628 \u0623\u0646 \u064A\u062D\u062A\u0648\u064A \u0639\u0644\u0649 \u0623\u062D\u0631\u0641 \u0625\u0646\u062C\u0644\u064A\u0632\u064A\u0629 \u0635\u063A\u064A\u0631\u0629 \u0648\u0623\u0631\u0642\u0627\u0645 \u0648\u0634\u0631\u0637\u0627\u062A \u0641\u0642\u0637"),
+  title_ar: external_exports.string().min(2, "\u0639\u0646\u0648\u0627\u0646 \u0627\u0644\u0645\u0634\u0631\u0648\u0639 \u0628\u0627\u0644\u0639\u0631\u0628\u064A\u0629 \u0645\u0637\u0644\u0648\u0628"),
+  title_en: external_exports.string().optional().default(""),
+  summary_ar: external_exports.string().min(5, "\u0627\u0644\u0645\u0644\u062E\u0635 \u0627\u0644\u0642\u0635\u064A\u0631 \u0628\u0627\u0644\u0639\u0631\u0628\u064A\u0629 \u0645\u0637\u0644\u0648\u0628"),
+  summary_en: external_exports.string().optional().default(""),
+  body_ar: external_exports.string().min(10, "\u062A\u0641\u0627\u0635\u064A\u0644 \u0627\u0644\u0645\u0634\u0631\u0648\u0639 \u0628\u0627\u0644\u0639\u0631\u0628\u064A\u0629 \u0645\u0637\u0644\u0648\u0628\u0629"),
+  body_en: external_exports.string().optional().default(""),
   tech_json: external_exports.array(external_exports.string()).default([]),
-  cover_image: external_exports.string().min(1),
-  live_url: external_exports.string().url().or(external_exports.literal("")).optional(),
-  repo_url: external_exports.string().url().or(external_exports.literal("")).optional(),
+  cover_image: external_exports.string().min(1, "\u0635\u0648\u0631\u0629 \u0627\u0644\u063A\u0644\u0627\u0641 \u0645\u0637\u0644\u0648\u0628\u0629"),
+  live_url: external_exports.string().optional().nullable().default(""),
+  repo_url: external_exports.string().optional().nullable().default(""),
   featured: external_exports.boolean().default(false),
   published: external_exports.boolean().default(true),
   sort_order: external_exports.number().int().default(0)
@@ -16444,25 +16444,36 @@ var import_path = __toESM(require("path"));
 var import_fs = __toESM(require("fs"));
 var import_crypto3 = __toESM(require("crypto"));
 async function processAndSaveImage(fileBuffer, subDir = "projects") {
-  const uploadsDir = import_path.default.resolve(process.cwd(), "uploads", subDir);
-  if (!import_fs.default.existsSync(uploadsDir)) {
-    import_fs.default.mkdirSync(uploadsDir, { recursive: true });
-  }
-  const filename = `${Date.now()}-${import_crypto3.default.randomBytes(6).toString("hex")}.webp`;
-  const targetPath = import_path.default.join(uploadsDir, filename);
   const sharpModule = await import("sharp");
   const sharp = sharpModule.default || sharpModule;
   const image = sharp(fileBuffer);
   const metadata = await image.metadata();
-  await image.resize({
+  const resized = image.resize({
     width: Math.min(metadata.width || 1920, 1920),
     withoutEnlargement: true
-  }).webp({ quality: 85 }).toFile(targetPath);
-  return {
-    path: `/uploads/${subDir}/${filename}`,
-    width: metadata.width || 0,
-    height: metadata.height || 0
-  };
+  }).webp({ quality: 85 });
+  try {
+    const uploadsDir = import_path.default.resolve(process.cwd(), "uploads", subDir);
+    if (!import_fs.default.existsSync(uploadsDir)) {
+      import_fs.default.mkdirSync(uploadsDir, { recursive: true });
+    }
+    const filename = `${Date.now()}-${import_crypto3.default.randomBytes(6).toString("hex")}.webp`;
+    const targetPath = import_path.default.join(uploadsDir, filename);
+    await resized.toFile(targetPath);
+    return {
+      path: `/uploads/${subDir}/${filename}`,
+      width: metadata.width || 0,
+      height: metadata.height || 0
+    };
+  } catch {
+    const webpBuffer = await resized.toBuffer();
+    const base64 = webpBuffer.toString("base64");
+    return {
+      path: `data:image/webp;base64,${base64}`,
+      width: metadata.width || 0,
+      height: metadata.height || 0
+    };
+  }
 }
 
 // apps/api/src/routes/admin.ts
@@ -16525,8 +16536,9 @@ async function adminRoutes(app) {
   app.post("/projects", async (request, reply) => {
     const parseResult = ProjectSchema.safeParse(request.body);
     if (!parseResult.success) {
+      const firstIssue = parseResult.error.issues[0]?.message;
       return reply.status(400).send({
-        error: "Validation failed",
+        error: firstIssue || "Validation failed",
         details: parseResult.error.format()
       });
     }
@@ -16557,8 +16569,9 @@ async function adminRoutes(app) {
     const { id } = request.params;
     const parseResult = ProjectSchema.safeParse(request.body);
     if (!parseResult.success) {
+      const firstIssue = parseResult.error.issues[0]?.message;
       return reply.status(400).send({
-        error: "Validation failed",
+        error: firstIssue || "Validation failed",
         details: parseResult.error.format()
       });
     }

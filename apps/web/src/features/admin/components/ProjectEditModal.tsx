@@ -47,7 +47,18 @@ export const ProjectEditModal: React.FC<ProjectEditModalProps> = ({
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Immediately read file as base64 for instant preview and fallback
+    const reader = new FileReader();
+    reader.onload = (uploadEvent) => {
+      const base64Url = uploadEvent.target?.result as string;
+      if (base64Url) {
+        setForm(prev => ({ ...prev, cover_image: base64Url }));
+      }
+    };
+    reader.readAsDataURL(file);
+
     setIsUploading(true);
+    setError(null);
     const formData = new FormData();
     formData.append("file", file);
 
@@ -57,12 +68,18 @@ export const ProjectEditModal: React.FC<ProjectEditModalProps> = ({
         body: formData,
         credentials: "include"
       });
-      const data = await res.json();
-      if (data.path) {
-        setForm(prev => ({ ...prev, cover_image: data.path }));
+      if (res.ok) {
+        const data = await res.json();
+        if (data.path) {
+          setForm(prev => ({ ...prev, cover_image: data.path }));
+        }
+      } else {
+        // Keep the local base64 preview without blocking the user
+        console.warn("Upload server returned non-200 status, using base64 fallback");
       }
-    } catch {
-      setError("فشل رفع الصورة");
+    } catch (uploadErr) {
+      console.warn("Upload fetch failed, using local base64 fallback:", uploadErr);
+      // Base64 already previewed by FileReader
     } finally {
       setIsUploading(false);
     }
@@ -77,9 +94,44 @@ export const ProjectEditModal: React.FC<ProjectEditModalProps> = ({
     setIsSaving(true);
     setError(null);
 
+    // Sanitize slug
+    let cleanSlug = (form.slug || "").trim().toLowerCase()
+      .replace(/[^a-z0-9-]/g, "-")
+      .replace(/-+/g, "-")
+      .replace(/^-|-$/g, "");
+    if (!cleanSlug) {
+      cleanSlug = "project-" + Date.now();
+    }
+
+    // Auto-fallback English fields from Arabic if empty
+    const title_en = form.title_en?.trim() ? form.title_en.trim() : form.title_ar.trim();
+    const summary_en = form.summary_en?.trim() ? form.summary_en.trim() : form.summary_ar.trim();
+    const body_en = form.body_en?.trim() ? form.body_en.trim() : form.body_ar.trim();
+
+    // Sanitize URLs
+    let cleanRepoUrl = (form.repo_url || "").trim();
+    if (cleanRepoUrl.includes("...") || cleanRepoUrl === "https://github.com/") {
+      cleanRepoUrl = "";
+    }
+
+    let cleanLiveUrl = (form.live_url || "").trim();
+    if (cleanLiveUrl.includes("...")) {
+      cleanLiveUrl = "";
+    }
+
     const techArray = techInput.split(",").map(s => s.trim()).filter(Boolean);
     const payload = {
       ...form,
+      slug: cleanSlug,
+      title_ar: form.title_ar.trim(),
+      title_en,
+      summary_ar: form.summary_ar.trim(),
+      summary_en,
+      body_ar: form.body_ar.trim(),
+      body_en,
+      live_url: cleanLiveUrl,
+      repo_url: cleanRepoUrl,
+      cover_image: form.cover_image?.trim() || "/uploads/projects/default.webp",
       id: project?.id,
       tech_json: techArray
     };
@@ -195,21 +247,60 @@ export const ProjectEditModal: React.FC<ProjectEditModalProps> = ({
             </div>
           </div>
 
-          {/* Image Upload */}
-          <div className="space-y-2 pt-2 border-t border-line">
-            <label className="block text-xs font-mono text-mute">صورة الغلاف (تحويل تلقائي إلى WebP)</label>
-            <div className="flex items-center gap-4">
-              <label className="cursor-pointer inline-flex items-center gap-2 px-3 py-2 rounded border border-line bg-surface hover:border-accent text-xs font-semibold">
-                <Upload className="w-4 h-4 text-accent" />
-                <span>{isUploading ? "جاري الرفع..." : "اختر صورة"}</span>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileUpload}
-                  className="hidden"
-                />
-              </label>
-              <span className="text-xs font-mono text-mute truncate flex-1">{form.cover_image}</span>
+          {/* Image Upload & Path */}
+          <div className="space-y-3 pt-2 border-t border-line">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-mono text-mute font-semibold">صورة الغلاف (Cover Image)</label>
+              {form.cover_image && form.cover_image !== "/uploads/projects/default.webp" && (
+                <button
+                  type="button"
+                  onClick={() => setForm(prev => ({ ...prev, cover_image: "/uploads/projects/default.webp" }))}
+                  className="text-[11px] text-accent hover:underline"
+                >
+                  استعادة الصورة الافتراضية
+                </button>
+              )}
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+              {form.cover_image && (
+                <div className="w-20 h-14 rounded-lg overflow-hidden border border-line bg-surface-container flex-shrink-0 relative group shadow-sm">
+                  <img
+                    src={form.cover_image}
+                    alt="Cover preview"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src = "/uploads/projects/default.webp";
+                    }}
+                  />
+                </div>
+              )}
+
+              <div className="flex-1 w-full space-y-2">
+                <div className="flex items-center gap-3">
+                  <label className="cursor-pointer inline-flex items-center gap-2 px-3 py-2 rounded border border-line bg-surface hover:border-accent text-xs font-semibold transition-colors">
+                    <Upload className="w-4 h-4 text-accent" />
+                    <span>{isUploading ? "جاري الرفع..." : "اختر صورة من جهازك"}</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileUpload}
+                      className="hidden"
+                    />
+                  </label>
+                  <span className="text-[11px] text-mute">تحويل تلقائي ومعاينة فورية</span>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={form.cover_image}
+                    onChange={e => setForm({ ...form, cover_image: e.target.value })}
+                    placeholder="/uploads/projects/default.webp أو رابط صورة خارجي"
+                    className="w-full h-9 px-3 rounded border border-line bg-bg/50 text-xs font-mono"
+                  />
+                </div>
+              </div>
             </div>
           </div>
 
