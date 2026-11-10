@@ -16357,8 +16357,11 @@ async function publicRoutes(app) {
     const formatted = rows.map((r) => ({
       ...r,
       tech: safeJsonParse(r.tech_json, []),
+      tech_json: safeJsonParse(r.tech_json, []),
       platforms: safeJsonParse(r.platforms_json, ["web"]),
-      gallery: safeJsonParse(r.gallery_json, [])
+      platforms_json: safeJsonParse(r.platforms_json, ["web"]),
+      gallery: safeJsonParse(r.gallery_json, []),
+      gallery_json: safeJsonParse(r.gallery_json, [])
     }));
     return reply.send(formatted);
   });
@@ -16373,8 +16376,11 @@ async function publicRoutes(app) {
     return reply.send({
       ...project,
       tech: safeJsonParse(project.tech_json, []),
+      tech_json: safeJsonParse(project.tech_json, []),
       platforms: safeJsonParse(project.platforms_json, ["web"]),
+      platforms_json: safeJsonParse(project.platforms_json, ["web"]),
       gallery: safeJsonParse(project.gallery_json, []),
+      gallery_json: safeJsonParse(project.gallery_json, []),
       images
     });
   });
@@ -16585,8 +16591,11 @@ async function adminRoutes(app) {
     return reply.send(rows.map((r) => ({
       ...r,
       tech: safeJsonParse2(r.tech_json, []),
+      tech_json: safeJsonParse2(r.tech_json, []),
       platforms: safeJsonParse2(r.platforms_json, ["web"]),
-      gallery: safeJsonParse2(r.gallery_json, [])
+      platforms_json: safeJsonParse2(r.platforms_json, ["web"]),
+      gallery: safeJsonParse2(r.gallery_json, []),
+      gallery_json: safeJsonParse2(r.gallery_json, [])
     })));
   });
   app.post("/projects", async (request, reply) => {

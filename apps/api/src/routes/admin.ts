@@ -94,8 +94,11 @@ export async function adminRoutes(app: FastifyInstance) {
     return reply.send(rows.map(r => ({
       ...r,
       tech: safeJsonParse(r.tech_json, []),
+      tech_json: safeJsonParse(r.tech_json, []),
       platforms: safeJsonParse(r.platforms_json, ["web"]),
-      gallery: safeJsonParse(r.gallery_json, [])
+      platforms_json: safeJsonParse(r.platforms_json, ["web"]),
+      gallery: safeJsonParse(r.gallery_json, []),
+      gallery_json: safeJsonParse(r.gallery_json, [])
     })));
   });
 

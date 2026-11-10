@@ -44,8 +44,11 @@ export async function publicRoutes(app: FastifyInstance) {
     const formatted = rows.map(r => ({
       ...r,
       tech: safeJsonParse(r.tech_json, []),
+      tech_json: safeJsonParse(r.tech_json, []),
       platforms: safeJsonParse(r.platforms_json, ["web"]),
-      gallery: safeJsonParse(r.gallery_json, [])
+      platforms_json: safeJsonParse(r.platforms_json, ["web"]),
+      gallery: safeJsonParse(r.gallery_json, []),
+      gallery_json: safeJsonParse(r.gallery_json, [])
     }));
 
     return reply.send(formatted);
@@ -72,8 +75,11 @@ export async function publicRoutes(app: FastifyInstance) {
     return reply.send({
       ...project,
       tech: safeJsonParse(project.tech_json, []),
+      tech_json: safeJsonParse(project.tech_json, []),
       platforms: safeJsonParse(project.platforms_json, ["web"]),
+      platforms_json: safeJsonParse(project.platforms_json, ["web"]),
       gallery: safeJsonParse(project.gallery_json, []),
+      gallery_json: safeJsonParse(project.gallery_json, []),
       images
     });
   });

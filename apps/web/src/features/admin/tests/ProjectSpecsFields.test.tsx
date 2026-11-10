@@ -44,5 +44,38 @@ describe("ProjectSpecsFields component", () => {
     fireEvent.click(androidCheckbox);
     expect(onPlatformsChange).toHaveBeenCalledWith(["windows", "pos_terminals", "android"]);
   });
+
+  it("safely handles stringified platforms without crashing on filter", () => {
+    const onPlatformsChange = vi.fn();
+
+    render(
+      <ProjectSpecsFields
+        projectType="web"
+        onTypeChange={vi.fn()}
+        version="v1.0.0"
+        onVersionChange={vi.fn()}
+        packageSize="10 MB"
+        onPackageSizeChange={vi.fn()}
+        platforms={'["web"]' as any}
+        onPlatformsChange={onPlatformsChange}
+        downloadUrl=""
+        onDownloadUrlChange={vi.fn()}
+        enableLivePreview={true}
+        onEnableLivePreviewChange={vi.fn()}
+      />
+    );
+
+    // Clicking web removes it
+    const webBtn = screen.getByTestId("platform-checkbox-web");
+    fireEvent.click(webBtn);
+    expect(onPlatformsChange).toHaveBeenCalledWith([]);
+
+    // Select all button works
+    const selectAllBtn = screen.getByText("تحديد الكل");
+    fireEvent.click(selectAllBtn);
+    expect(onPlatformsChange).toHaveBeenCalledWith([
+      "web", "android", "ios", "windows", "macos", "linux", "pos_terminals"
+    ]);
+  });
 });
 

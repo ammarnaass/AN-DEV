@@ -15,6 +15,17 @@ interface ProjectEditModalProps {
 
 const SECTIONS: Array<"content" | "specs" | "gallery" | "links"> = ["content", "specs", "gallery", "links"];
 
+function parseArrayField<T>(val: any, fallback: T[]): T[] {
+  if (Array.isArray(val)) return val;
+  if (typeof val === "string") {
+    try {
+      const parsed = JSON.parse(val);
+      if (Array.isArray(parsed)) return parsed;
+    } catch {}
+  }
+  return fallback;
+}
+
 export const ProjectEditModal: React.FC<ProjectEditModalProps> = ({
   project,
   onClose,
@@ -31,6 +42,15 @@ export const ProjectEditModal: React.FC<ProjectEditModalProps> = ({
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const initialPlatforms = parseArrayField<string>(
+    project?.platforms_json ?? (project as any)?.platforms,
+    ["web"]
+  );
+  const initialGallery = parseArrayField<ProjectGalleryItem>(
+    project?.gallery_json ?? (project as any)?.gallery,
+    []
+  );
+
   const [form, setForm] = useState<ProjectInput>({
     slug: project?.slug || "",
     title_ar: project?.title_ar || "",
@@ -42,18 +62,10 @@ export const ProjectEditModal: React.FC<ProjectEditModalProps> = ({
     project_type: (project?.project_type as any) || "web",
     version: project?.version || "v1.0.0",
     package_size: project?.package_size || "",
-    platforms_json: Array.isArray(project?.platforms_json)
-      ? project.platforms_json
-      : typeof project?.platforms_json === "string"
-      ? JSON.parse(project.platforms_json || '["web"]')
-      : ["web"],
+    platforms_json: initialPlatforms,
     download_url: project?.download_url || "",
     enable_live_preview: project?.enable_live_preview ?? true,
-    gallery_json: Array.isArray(project?.gallery_json)
-      ? project.gallery_json
-      : typeof project?.gallery_json === "string"
-      ? JSON.parse(project.gallery_json || "[]")
-      : [],
+    gallery_json: initialGallery,
     tech_json: project?.tech_json ? (typeof project.tech_json === "string" ? JSON.parse(project.tech_json) : project.tech_json) : [],
     cover_image: project?.cover_image || "/uploads/projects/default.webp",
     live_url: project?.live_url || "",

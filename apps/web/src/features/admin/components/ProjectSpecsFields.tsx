@@ -40,6 +40,18 @@ const AVAILABLE_PLATFORMS = [
   { id: "pos_terminals", label_ar: "أجهزة الكاشير POS", label_en: "POS Terminals" }
 ];
 
+function parsePlatforms(val: any): string[] {
+  if (Array.isArray(val)) return val;
+  if (typeof val === "string") {
+    try {
+      const parsed = JSON.parse(val);
+      if (Array.isArray(parsed)) return parsed;
+    } catch {}
+    if (val.trim()) return [val.trim()];
+  }
+  return ["web"];
+}
+
 export const ProjectSpecsFields: React.FC<ProjectSpecsFieldsProps> = ({
   projectType,
   onTypeChange,
@@ -54,12 +66,23 @@ export const ProjectSpecsFields: React.FC<ProjectSpecsFieldsProps> = ({
   enableLivePreview,
   onEnableLivePreviewChange
 }) => {
+  const currentPlatforms = parsePlatforms(platforms);
+
   const togglePlatform = (platformId: string) => {
-    if (platforms.includes(platformId)) {
-      onPlatformsChange(platforms.filter(p => p !== platformId));
+    const list = parsePlatforms(platforms);
+    if (list.includes(platformId)) {
+      onPlatformsChange(list.filter(p => p !== platformId));
     } else {
-      onPlatformsChange([...platforms, platformId]);
+      onPlatformsChange([...list, platformId]);
     }
+  };
+
+  const selectAllPlatforms = () => {
+    onPlatformsChange(AVAILABLE_PLATFORMS.map(p => p.id));
+  };
+
+  const clearAllPlatforms = () => {
+    onPlatformsChange([]);
   };
 
   return (
@@ -160,18 +183,36 @@ export const ProjectSpecsFields: React.FC<ProjectSpecsFieldsProps> = ({
 
       {/* 3. Supported Platforms Multi-Select Buttons */}
       <div className="space-y-2 pt-2 border-t border-line">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between gap-2">
           <label className="block text-xs font-mono text-text-muted font-semibold">
             منصات التشغيل المدعومة (Supported Platforms)
           </label>
-          <span className="text-[11px] font-mono text-secondary">
-            {platforms.length} منصات محددة
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="text-[11px] font-mono text-secondary">
+              {currentPlatforms.length} منصات محددة
+            </span>
+            <span className="text-text-muted text-[10px]">|</span>
+            <button
+              type="button"
+              onClick={selectAllPlatforms}
+              className="text-[11px] font-mono text-secondary hover:underline cursor-pointer"
+            >
+              تحديد الكل
+            </button>
+            <span className="text-text-muted text-[10px]">|</span>
+            <button
+              type="button"
+              onClick={clearAllPlatforms}
+              className="text-[11px] font-mono text-text-muted hover:text-err cursor-pointer"
+            >
+              إلغاء التحديد
+            </button>
+          </div>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
           {AVAILABLE_PLATFORMS.map(p => {
-            const isChecked = platforms.includes(p.id);
+            const isChecked = currentPlatforms.includes(p.id);
             return (
               <button
                 key={p.id}
@@ -188,12 +229,12 @@ export const ProjectSpecsFields: React.FC<ProjectSpecsFieldsProps> = ({
                     : "bg-surface-container border-line text-text-muted hover:border-secondary/40 hover:text-text-primary"
                 }`}
               >
-                <div className="flex items-center gap-2 min-w-0">
+                <div className="flex items-center gap-2 min-w-0 pointer-events-none">
                   <PlatformIcon platform={p.id} className="w-4 h-4 text-secondary shrink-0" />
                   <span className="text-xs font-semibold truncate">{p.label_ar}</span>
                 </div>
                 <div
-                  className={`w-4 h-4 rounded flex items-center justify-center shrink-0 border transition-colors ${
+                  className={`w-4 h-4 rounded flex items-center justify-center shrink-0 border pointer-events-none transition-colors ${
                     isChecked
                       ? "bg-secondary text-white border-secondary"
                       : "border-line bg-surface text-transparent"
