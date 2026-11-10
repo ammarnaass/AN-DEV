@@ -13,6 +13,8 @@ interface ProjectEditModalProps {
   onSaved: () => void;
 }
 
+const SECTIONS: Array<"content" | "specs" | "gallery" | "links"> = ["content", "specs", "gallery", "links"];
+
 export const ProjectEditModal: React.FC<ProjectEditModalProps> = ({
   project,
   onClose,
@@ -101,6 +103,18 @@ export const ProjectEditModal: React.FC<ProjectEditModalProps> = ({
 
   const handleFieldChange = (field: keyof ProjectInput, value: string) => {
     setForm(prev => ({ ...prev, [field]: value }));
+  };
+
+  const currentSectionIdx = SECTIONS.indexOf(activeSection);
+  const goToPrevSection = () => {
+    if (currentSectionIdx > 0) {
+      setActiveSection(SECTIONS[currentSectionIdx - 1]);
+    }
+  };
+  const goToNextSection = () => {
+    if (currentSectionIdx < SECTIONS.length - 1) {
+      setActiveSection(SECTIONS[currentSectionIdx + 1]);
+    }
   };
 
   const handleSave = async (e: React.FormEvent) => {
@@ -198,7 +212,7 @@ export const ProjectEditModal: React.FC<ProjectEditModalProps> = ({
               }`}
             >
               <FileText className="w-3.5 h-3.5" />
-              <span>المحتوى والترجمة</span>
+              <span>1. المحتوى والترجمة</span>
             </button>
 
             <button
@@ -211,7 +225,7 @@ export const ProjectEditModal: React.FC<ProjectEditModalProps> = ({
               }`}
             >
               <Layers className="w-3.5 h-3.5" />
-              <span>المواصفات والمنصات</span>
+              <span>2. المواصفات والمنصات</span>
             </button>
 
             <button
@@ -224,7 +238,7 @@ export const ProjectEditModal: React.FC<ProjectEditModalProps> = ({
               }`}
             >
               <Images className="w-3.5 h-3.5" />
-              <span>الصور والمعرض</span>
+              <span>3. الصور والمعرض</span>
             </button>
 
             <button
@@ -237,7 +251,7 @@ export const ProjectEditModal: React.FC<ProjectEditModalProps> = ({
               }`}
             >
               <LinkIcon className="w-3.5 h-3.5" />
-              <span>الروابط والنشر</span>
+              <span>4. الروابط والنشر</span>
             </button>
           </div>
 
@@ -431,19 +445,40 @@ export const ProjectEditModal: React.FC<ProjectEditModalProps> = ({
             </div>
           )}
 
-          {/* Action buttons */}
-          <div className="flex items-center justify-between pt-4 border-t border-line">
+          {/* Action and Step Navigation Buttons */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-line">
             <span className="text-xs font-mono text-text-muted">
-              {activeSection === "content" && "الخطوة 1 من 4: المحتوى"}
+              {activeSection === "content" && "الخطوة 1 من 4: المحتوى والترجمة"}
               {activeSection === "specs" && "الخطوة 2 من 4: المواصفات والمنصات"}
               {activeSection === "gallery" && "الخطوة 3 من 4: المعرض والمعاينة"}
               {activeSection === "links" && "الخطوة 4 من 4: الروابط والنشر"}
             </span>
 
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-2.5">
               <Button type="button" variant="ghost" size="sm" onClick={onClose}>
                 إلغاء
               </Button>
+
+              {currentSectionIdx > 0 && (
+                <button
+                  type="button"
+                  onClick={goToPrevSection}
+                  className="px-3.5 py-1.5 rounded-lg border border-line bg-surface-container hover:bg-surface text-xs font-semibold text-text-primary transition-colors cursor-pointer"
+                >
+                  ← السابق
+                </button>
+              )}
+
+              {currentSectionIdx < SECTIONS.length - 1 && (
+                <button
+                  type="button"
+                  onClick={goToNextSection}
+                  className="px-4 py-1.5 rounded-lg bg-secondary/15 border border-secondary/40 text-secondary hover:bg-secondary/25 text-xs font-bold transition-all shadow-sm cursor-pointer"
+                >
+                  التالي →
+                </button>
+              )}
+
               <Button type="submit" variant="primary" size="sm" isLoading={isSaving}>
                 حفظ المشروع
               </Button>

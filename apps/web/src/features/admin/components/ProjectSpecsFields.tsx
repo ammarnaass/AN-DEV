@@ -1,6 +1,6 @@
 import React from "react";
 import { PlatformIcon } from "../../portfolio/components/PlatformIcon";
-import { Layers, Tag, HardDrive, Download, Globe } from "lucide-react";
+import { Layers, Tag, HardDrive, Download, Globe, Smartphone, Laptop, Store, Check } from "lucide-react";
 
 export interface ProjectSpecsFieldsProps {
   projectType: "web" | "mobile" | "desktop" | "pos" | "system";
@@ -16,6 +16,19 @@ export interface ProjectSpecsFieldsProps {
   enableLivePreview: boolean;
   onEnableLivePreviewChange: (val: boolean) => void;
 }
+
+const PROJECT_TYPE_OPTIONS: Array<{
+  id: "web" | "mobile" | "desktop" | "pos" | "system";
+  label_ar: string;
+  label_en: string;
+  icon: React.ComponentType<{ className?: string }>;
+}> = [
+  { id: "web", label_ar: "منصة ويب / SaaS", label_en: "Web App", icon: Globe },
+  { id: "mobile", label_ar: "تطبيق هواتف", label_en: "Mobile App", icon: Smartphone },
+  { id: "desktop", label_ar: "برنامج مكتبي", label_en: "Desktop App", icon: Laptop },
+  { id: "pos", label_ar: "نظام كاشير POS", label_en: "POS System", icon: Store },
+  { id: "system", label_ar: "نظام مؤسسي سحابي", label_en: "Enterprise System", icon: Layers }
+];
 
 const AVAILABLE_PLATFORMS = [
   { id: "web", label_ar: "ويب / متصفحات", label_en: "Web / PWA" },
@@ -50,11 +63,10 @@ export const ProjectSpecsFields: React.FC<ProjectSpecsFieldsProps> = ({
   };
 
   return (
-    <div className="space-y-5 animate-fadeIn text-start">
-      {/* App Type, Version, and Size in a 3-column grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {/* Project Type */}
-        <div className="space-y-1">
+    <div className="space-y-6 animate-fadeIn text-start">
+      {/* 1. Project Type Selector - Visual Cards + Select */}
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
           <label
             htmlFor="specs-project-type"
             className="flex items-center gap-1.5 text-xs font-mono text-text-muted font-semibold"
@@ -62,20 +74,51 @@ export const ProjectSpecsFields: React.FC<ProjectSpecsFieldsProps> = ({
             <Layers className="w-3.5 h-3.5 text-secondary" />
             <span>نوع التطبيق (Project Type) *</span>
           </label>
-          <select
-            id="specs-project-type"
-            value={projectType}
-            onChange={e => onTypeChange(e.target.value as any)}
-            className="w-full h-10 px-3 rounded-lg border border-line bg-surface-container text-text-primary text-sm font-semibold focus:outline-none focus:border-secondary"
-          >
-            <option value="web">منصة ويب / SaaS (Web App)</option>
-            <option value="mobile">تطبيق هواتف ذكية (Mobile App)</option>
-            <option value="desktop">برنامج حاسوب مكتبي (Desktop App)</option>
-            <option value="pos">نظام كاشير ونقاط بيع (POS System)</option>
-            <option value="system">نظام مؤسسي سحابي (Enterprise System)</option>
-          </select>
+          <span className="text-[11px] font-mono text-secondary">
+            {PROJECT_TYPE_OPTIONS.find(o => o.id === projectType)?.label_ar}
+          </span>
         </div>
 
+        {/* Quick-Select Buttons Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+          {PROJECT_TYPE_OPTIONS.map(opt => {
+            const IconComponent = opt.icon;
+            const isSelected = projectType === opt.id;
+            return (
+              <button
+                key={opt.id}
+                type="button"
+                onClick={() => onTypeChange(opt.id)}
+                className={`flex flex-col items-center justify-center gap-1.5 p-2.5 rounded-xl border text-center transition-all cursor-pointer ${
+                  isSelected
+                    ? "bg-secondary/15 border-secondary text-text-primary shadow-sm ring-1 ring-secondary/30 font-bold"
+                    : "bg-surface-container border-line text-text-muted hover:border-secondary/40 hover:text-text-primary"
+                }`}
+              >
+                <IconComponent className={`w-4 h-4 ${isSelected ? "text-secondary" : "text-text-muted"}`} />
+                <span className="text-[11px] leading-tight truncate w-full">{opt.label_ar}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Hidden / accessible fallback select keeping label bindings */}
+        <select
+          id="specs-project-type"
+          value={projectType}
+          onChange={e => onTypeChange(e.target.value as any)}
+          className="sr-only"
+        >
+          {PROJECT_TYPE_OPTIONS.map(opt => (
+            <option key={opt.id} value={opt.id}>
+              {opt.label_ar} ({opt.label_en})
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* 2. Version and Size in a 2-column grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* Version */}
         <div className="space-y-1">
           <label
@@ -115,40 +158,56 @@ export const ProjectSpecsFields: React.FC<ProjectSpecsFieldsProps> = ({
         </div>
       </div>
 
-      {/* Supported Platforms Multi-Select Grid */}
+      {/* 3. Supported Platforms Multi-Select Buttons */}
       <div className="space-y-2 pt-2 border-t border-line">
-        <label className="block text-xs font-mono text-text-muted font-semibold">
-          منصات التشغيل المدعومة (Supported Platforms)
-        </label>
+        <div className="flex items-center justify-between">
+          <label className="block text-xs font-mono text-text-muted font-semibold">
+            منصات التشغيل المدعومة (Supported Platforms)
+          </label>
+          <span className="text-[11px] font-mono text-secondary">
+            {platforms.length} منصات محددة
+          </span>
+        </div>
+
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
           {AVAILABLE_PLATFORMS.map(p => {
             const isChecked = platforms.includes(p.id);
             return (
-              <label
+              <button
                 key={p.id}
+                type="button"
                 data-testid={`platform-checkbox-${p.id}`}
-                onClick={() => togglePlatform(p.id)}
-                className={`flex items-center gap-2 p-2.5 rounded-lg border cursor-pointer select-none transition-all ${
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  togglePlatform(p.id);
+                }}
+                className={`flex items-center justify-between gap-2 p-2.5 rounded-lg border text-start transition-all cursor-pointer select-none ${
                   isChecked
-                    ? "bg-secondary/15 border-secondary text-text-primary shadow-sm"
-                    : "bg-surface-container border-line text-text-muted hover:border-secondary/40"
+                    ? "bg-secondary/15 border-secondary text-text-primary shadow-sm ring-1 ring-secondary/30"
+                    : "bg-surface-container border-line text-text-muted hover:border-secondary/40 hover:text-text-primary"
                 }`}
               >
-                <input
-                  type="checkbox"
-                  checked={isChecked}
-                  onChange={() => {}}
-                  className="hidden"
-                />
-                <PlatformIcon platform={p.id} className="w-4 h-4 text-secondary shrink-0" />
-                <span className="text-xs font-medium truncate">{p.label_ar}</span>
-              </label>
+                <div className="flex items-center gap-2 min-w-0">
+                  <PlatformIcon platform={p.id} className="w-4 h-4 text-secondary shrink-0" />
+                  <span className="text-xs font-semibold truncate">{p.label_ar}</span>
+                </div>
+                <div
+                  className={`w-4 h-4 rounded flex items-center justify-center shrink-0 border transition-colors ${
+                    isChecked
+                      ? "bg-secondary text-white border-secondary"
+                      : "border-line bg-surface text-transparent"
+                  }`}
+                >
+                  <Check className="w-3 h-3" />
+                </div>
+              </button>
             );
           })}
         </div>
       </div>
 
-      {/* Download URL & Live Preview Toggle */}
+      {/* 4. Download URL & Live Preview Toggle */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-line">
         <div className="space-y-1">
           <label
@@ -168,19 +227,30 @@ export const ProjectSpecsFields: React.FC<ProjectSpecsFieldsProps> = ({
           />
         </div>
 
-        <div className="flex items-center gap-3 pt-6">
-          <label className="flex items-center gap-2.5 text-xs font-semibold cursor-pointer select-none">
-            <input
-              type="checkbox"
-              checked={enableLivePreview}
-              onChange={e => onEnableLivePreviewChange(e.target.checked)}
-              className="rounded border-line text-secondary focus:ring-secondary"
-            />
-            <div className="flex items-center gap-1.5">
-              <Globe className="w-4 h-4 text-secondary" />
-              <span>تفعيل بوابة المعاينة الحية التفاعلية (Live Iframe Gateway)</span>
+        <div className="flex items-end pb-1">
+          <button
+            type="button"
+            onClick={() => onEnableLivePreviewChange(!enableLivePreview)}
+            className={`w-full flex items-center justify-between gap-3 p-2.5 rounded-lg border text-xs font-semibold cursor-pointer select-none transition-all ${
+              enableLivePreview
+                ? "bg-secondary/15 border-secondary text-text-primary shadow-sm ring-1 ring-secondary/30"
+                : "bg-surface-container border-line text-text-muted hover:border-secondary/40"
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              <Globe className="w-4 h-4 text-secondary shrink-0" />
+              <span>تفعيل بوابة المعاينة الحية (Live Iframe Gateway)</span>
             </div>
-          </label>
+            <div
+              className={`w-4 h-4 rounded flex items-center justify-center shrink-0 border transition-colors ${
+                enableLivePreview
+                  ? "bg-secondary text-white border-secondary"
+                  : "border-line bg-surface text-transparent"
+              }`}
+            >
+              <Check className="w-3 h-3" />
+            </div>
+          </button>
         </div>
       </div>
     </div>
