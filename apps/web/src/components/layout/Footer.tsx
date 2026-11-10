@@ -130,6 +130,10 @@ export const Footer: React.FC = () => {
     ? settings.location_ar || "الجزائر العاصمة، الجمهورية الجزائرية"
     : settings.location_en || "Algiers, Algeria";
 
+  const footerDescription = locale === "ar"
+    ? settings.footer_description_ar || "نبني حلولاً رقمية وتطبيقات قابلة للتوسع بدقة هندسية عالية - ا. تجربة برمجية متقدمة تواكب التطور السحابي والخوارزمي بأعلى معايير الجودة."
+    : settings.footer_description_en || "Algerian software agency engineering high-performance web, mobile, and custom systems built for scale and reliability with mathematical precision.";
+
   // Active social links based on settings
   const activeSocialLinks = SOCIAL_ITEMS.filter(
     (item) => !!settings[item.key]?.trim()
@@ -143,9 +147,7 @@ export const Footer: React.FC = () => {
           <div className="lg:col-span-5 flex flex-col gap-4">
             <Logo size={38} />
             <p className="text-text-muted text-sm max-w-md leading-relaxed">
-              {locale === "ar"
-                ? "نبني حلولاً رقمية وتطبيقات قابلة للتوسع بدقة هندسية عالية - الجزائر. تجربة برمجية متقدمة تواكب التطور السحابي والخوارزمي بأعلى معايير الجودة."
-                : "Algerian software agency engineering high-performance web, mobile, and custom systems built for scale and reliability with mathematical precision."}
+              {footerDescription}
             </p>
           </div>
 

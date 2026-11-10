@@ -8,6 +8,7 @@ import { render, screen, fireEvent, cleanup } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SettingsLogoSection } from "../components/SettingsLogoSection";
 import { SettingsSocialSection } from "../components/SettingsSocialSection";
+import { SettingsSeoSection } from "../components/SettingsSeoSection";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: false } },
@@ -62,5 +63,26 @@ describe("AdminSettingsSections", () => {
     expect(screen.getByText("2 منصات مفعلة")).toBeInTheDocument();
     expect(screen.getByText("صفحة فيسبوك الرسمية")).toBeInTheDocument();
     expect(screen.getByText("منظمة GitHub التقنية")).toBeInTheDocument();
+  });
+
+  it("renders SettingsSeoSection and triggers onChange for footer description", () => {
+    const handleChange = vi.fn();
+    const mockSettings = {
+      tagline_ar: "نطوّر برمجيات",
+      tagline_en: "We engineer software",
+      footer_description_ar: "نبني حلولاً رقمية وتطبيقات قابلة للتوسع بدقة هندسية عالية - ا.",
+      footer_description_en: "Algerian software agency",
+    };
+
+    renderWithProviders(
+      <SettingsSeoSection settings={mockSettings} onChange={handleChange} />
+    );
+
+    expect(screen.getByText("إعدادات الـ SEO والظهور الرقمي")).toBeInTheDocument();
+    expect(screen.getByText("نص نبذة الموقع في التذييل (Footer Bio بالعربية)")).toBeInTheDocument();
+
+    const textarea = screen.getByDisplayValue(mockSettings.footer_description_ar);
+    fireEvent.change(textarea, { target: { value: "نص جديد معدل" } });
+    expect(handleChange).toHaveBeenCalledWith("footer_description_ar", "نص جديد معدل");
   });
 });

@@ -42,6 +42,8 @@ export async function seedDatabase() {
     location_en: "Algiers, Algeria",
     tagline_ar: "نطوّر برمجيات تُحدث فرقاً حقيقياً في أعمالكم",
     tagline_en: "We engineer software that transforms your business",
+    footer_description_ar: "نبني حلولاً رقمية وتطبيقات قابلة للتوسع بدقة هندسية عالية - ا. تجربة برمجية متقدمة تواكب التطور السحابي والخوارزمي بأعلى معايير الجودة.",
+    footer_description_en: "Algerian software agency engineering high-performance web, mobile, and custom systems built for scale and reliability with mathematical precision.",
     bio_page_title: "AN DEV | وكالة البرمجيات والأنظمة السحابية",
     bio_page_bio: "نبني حلولاً رقمية وتطبيقات قابلة للتوسع بدقة هندسية عالية. تواصل معنا أو تصفح أعمالنا وأحدث حلولنا التقنية.",
     bio_page_avatar: "/brand/logo-squircle.webp",

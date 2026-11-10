@@ -42,6 +42,36 @@ export const SettingsSeoSection: React.FC<SettingsSeoSectionProps> = ({
             className="w-full h-11 px-4 rounded-lg border border-line bg-surface-container text-text-primary text-sm font-mono focus:outline-none focus:border-secondary"
           />
         </div>
+
+        <div className="space-y-1.5 pt-3 border-t border-line">
+          <label className="block text-xs font-mono text-text-muted font-semibold">
+            نص نبذة الموقع في التذييل (Footer Bio بالعربية)
+          </label>
+          <textarea
+            rows={3}
+            value={settings.footer_description_ar ?? ""}
+            onChange={e => onChange("footer_description_ar", e.target.value)}
+            placeholder="نبني حلولاً رقمية وتطبيقات قابلة للتوسع بدقة هندسية عالية - ا. تجربة برمجية متقدمة تواكب التطور السحابي والخوارزمي بأعلى معايير الجودة."
+            className="w-full p-3 rounded-lg border border-line bg-surface-container text-text-primary text-sm focus:outline-none focus:border-secondary leading-relaxed resize-y"
+          />
+          <p className="text-[11px] text-text-muted">
+            النص التعريفي الذي يظهر تحت شعار AN DEV في أسفل كافة صفحات الموقع (Footer).
+          </p>
+        </div>
+
+        <div className="space-y-1.5">
+          <label className="block text-xs font-mono text-text-muted font-semibold">
+            نص نبذة الموقع في التذييل (Footer Bio بالإنجليزية)
+          </label>
+          <textarea
+            rows={2}
+            dir="ltr"
+            value={settings.footer_description_en ?? ""}
+            onChange={e => onChange("footer_description_en", e.target.value)}
+            placeholder="Algerian software agency engineering high-performance web, mobile, and custom systems built for scale and reliability with mathematical precision."
+            className="w-full p-3 rounded-lg border border-line bg-surface-container text-text-primary text-sm font-mono focus:outline-none focus:border-secondary leading-relaxed resize-y"
+          />
+        </div>
       </div>
     </div>
   );
