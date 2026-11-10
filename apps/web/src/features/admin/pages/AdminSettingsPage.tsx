@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Save, RotateCcw, CheckCircle2, Terminal } from "lucide-react";
 import { useAdminSettings } from "../hooks/useAdminSettings";
+import { SettingsLogoSection } from "../components/SettingsLogoSection";
 import { SettingsContactSection } from "../components/SettingsContactSection";
 import { SettingsSocialSection } from "../components/SettingsSocialSection";
 import { SettingsSeoSection } from "../components/SettingsSeoSection";
@@ -87,6 +88,7 @@ export const AdminSettingsPage: React.FC = () => {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-8">
+        <SettingsLogoSection settings={settings} onChange={handleChange} />
         <SettingsContactSection settings={settings} onChange={handleChange} />
         <SettingsSocialSection settings={settings} onChange={handleChange} />
         <SettingsSeoSection settings={settings} onChange={handleChange} />

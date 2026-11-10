@@ -153,3 +153,4 @@ flowchart LR
 
 - المنصة مهيأة بنظام **CI/CD التلقائي**:
 - في كل مرة تقوم بعمل `git push origin main`، سيبدأ Vercel بناءً وتحديثاً تلقائياً للموقع بدون أي توقف في الخدمة (Zero-Downtime Deployment).
+

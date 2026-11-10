@@ -13,6 +13,7 @@ export function useAdminSettings() {
     mutationFn: (payload: Record<string, string>) => adminService.updateSettings(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-settings"] });
+      queryClient.invalidateQueries({ queryKey: ["public-settings"] });
     },
   });
 
