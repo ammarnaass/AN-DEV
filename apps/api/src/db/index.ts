@@ -8,7 +8,7 @@ let dbInstance: ReturnType<typeof drizzle> | null = null;
 let rawSql: ReturnType<typeof neon> | null = null;
 let isInitialized = false;
 
-export async function initDb(connStr?: string, runMigrations = false) {
+export async function initDb(connStr?: string, runMigrations = true) {
   if (!dbInstance) {
     const connectionString = connStr || process.env.DATABASE_URL || DEFAULT_CONNECTION;
     rawSql = neon(connectionString);

@@ -213,29 +213,40 @@ export const BioLinksPage: React.FC = () => {
     return brightness < 140;
   };
 
+  const adjustBrightness = (hex: string, percent: number): string => {
+    if (!hex || !hex.startsWith("#")) return hex;
+    const clean = hex.replace("#", "");
+    if (clean.length !== 6) return hex;
+    const num = parseInt(clean, 16);
+    if (isNaN(num)) return hex;
+    const amt = Math.round(2.55 * percent);
+    const R = Math.min(255, Math.max(0, (num >> 16) + amt));
+    const G = Math.min(255, Math.max(0, ((num >> 8) & 0x00ff) + amt));
+    const B = Math.min(255, Math.max(0, (num & 0x0000ff) + amt));
+    return "#" + ((1 << 24) + (R << 16) + (G << 8) + B).toString(16).slice(1);
+  };
+
   // Dual-theme dynamic background resolution
   let containerBgColor: string;
   let containerBgImage: string;
 
+  const effectiveBg = bgValue || "#090d16";
+
   if (bgType === "color") {
     // 1. SOLID COLOR:
     if (isDark) {
-      containerBgColor = bgValue || "#090d16";
+      containerBgColor = effectiveBg;
     } else {
-      containerBgColor = isColorDark(bgValue) ? "#f4f7fd" : (bgValue || "#f4f7fd");
+      containerBgColor = isColorDark(effectiveBg) ? "#f4f7fd" : effectiveBg;
     }
     containerBgImage = "none";
   } else if (bgType === "gradient") {
     // 2. DEEP GRADIENT:
     if (isDark) {
-      const topColor =
-        bgValue === "#090d16"
-          ? "#131b2e"
-          : bgValue === "#030712"
-          ? "#111827"
-          : bgValue || "#090d16";
+      const topColor = adjustBrightness(effectiveBg, 22);
+      const bottomColor = adjustBrightness(effectiveBg, -15);
       containerBgColor = topColor;
-      containerBgImage = `linear-gradient(180deg, ${topColor} 0%, #030712 100%)`;
+      containerBgImage = `linear-gradient(180deg, ${topColor} 0%, ${bottomColor} 100%)`;
     } else {
       containerBgColor = "#f4f7fd";
       containerBgImage = "linear-gradient(180deg, #ffffff 0%, #e2e8f8 100%)";
@@ -243,9 +254,9 @@ export const BioLinksPage: React.FC = () => {
   } else {
     // 3. MESH (Glowing cybernetic neon lights):
     if (isDark) {
-      containerBgColor = bgValue || "#090d16";
+      containerBgColor = effectiveBg;
       containerBgImage =
-        "radial-gradient(circle at 50% 0%, rgba(13, 110, 253, 0.28) 0%, transparent 60%), radial-gradient(circle at 10% 40%, rgba(0, 195, 255, 0.16) 0%, transparent 50%), radial-gradient(circle at 90% 70%, rgba(13, 110, 253, 0.14) 0%, transparent 50%)";
+        "radial-gradient(circle at 50% 0%, rgba(13, 110, 253, 0.35) 0%, transparent 60%), radial-gradient(circle at 10% 40%, rgba(0, 195, 255, 0.20) 0%, transparent 50%), radial-gradient(circle at 90% 70%, rgba(13, 110, 253, 0.18) 0%, transparent 50%)";
     } else {
       containerBgColor = "#f4f7fd";
       containerBgImage =

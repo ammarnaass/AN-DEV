@@ -639,16 +639,29 @@ export const AdminBioLinksPage: React.FC = () => {
                       try {
                         await updateBioSettings(localSettings);
                         setSettingsSuccess(true);
-                        setTimeout(() => setSettingsSuccess(false), 3000);
-                      } catch {
-                        alert("حدث خطأ أثناء حفظ الإعدادات، يرجى المحاولة مرة أخرى.");
+                        setTimeout(() => setSettingsSuccess(false), 3500);
+                      } catch (err: any) {
+                        alert(err?.message || "حدث خطأ أثناء حفظ الإعدادات، يرجى المحاولة مرة أخرى.");
                       }
                     }}
                     disabled={isUpdatingSettings}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 text-xs font-semibold transition-all disabled:opacity-50"
+                    className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all shadow-xs disabled:opacity-50 ${
+                      settingsSuccess
+                        ? "bg-status-ok/20 text-status-ok border border-status-ok/40"
+                        : "bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30"
+                    }`}
                   >
-                    <Save className="w-3.5 h-3.5" />
-                    <span>{isUpdatingSettings ? "جاري الحفظ..." : "حفظ المظهر"}</span>
+                    {settingsSuccess ? (
+                      <>
+                        <CheckCircle2 className="w-3.5 h-3.5 text-status-ok shrink-0" />
+                        <span>تم حفظ المظهر بنجاح!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Save className="w-3.5 h-3.5 shrink-0" />
+                        <span>{isUpdatingSettings ? "جاري الحفظ..." : "حفظ المظهر"}</span>
+                      </>
+                    )}
                   </button>
                 </div>
 
@@ -803,10 +816,23 @@ export const AdminBioLinksPage: React.FC = () => {
                 <button
                   type="submit"
                   disabled={isUpdatingSettings}
-                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-primary-container text-white text-xs sm:text-sm font-semibold hover:bg-primary/90 transition-all shadow-[0_0_16px_rgba(13,110,253,0.35)] disabled:opacity-50"
+                  className={`inline-flex items-center gap-2 px-6 py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all shadow-md disabled:opacity-50 ${
+                    settingsSuccess
+                      ? "bg-status-ok text-white shadow-[0_0_16px_rgba(34,197,94,0.35)]"
+                      : "bg-primary-container text-white hover:bg-primary/90 shadow-[0_0_16px_rgba(13,110,253,0.35)]"
+                  }`}
                 >
-                  <Save className="w-4 h-4" />
-                  <span>{isUpdatingSettings ? "جاري الحفظ..." : "حفظ كل الإعدادات والمظهر"}</span>
+                  {settingsSuccess ? (
+                    <>
+                      <CheckCircle2 className="w-4 h-4 shrink-0" />
+                      <span>تم حفظ كل الإعدادات بنجاح!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Save className="w-4 h-4 shrink-0" />
+                      <span>{isUpdatingSettings ? "جاري الحفظ..." : "حفظ كل الإعدادات والمظهر"}</span>
+                    </>
+                  )}
                 </button>
               </div>
             </form>

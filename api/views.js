@@ -11818,7 +11818,7 @@ var DEFAULT_CONNECTION = "postgresql://neondb_owner:npg_s2hjOkANc3tF@ep-damp-bir
 var dbInstance = null;
 var rawSql = null;
 var isInitialized = false;
-async function initDb(connStr, runMigrations = false) {
+async function initDb(connStr, runMigrations = true) {
   if (!dbInstance) {
     const connectionString = connStr || process.env.DATABASE_URL || DEFAULT_CONNECTION;
     rawSql = (0, import_serverless.neon)(connectionString);
