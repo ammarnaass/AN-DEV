@@ -138,7 +138,7 @@ export const Footer: React.FC = () => {
   return (
     <footer className="w-full bg-surface-container-lowest border-t border-line mt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-line">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10">
           {/* Col 1: Brand & Operational Status */}
           <div className="lg:col-span-5 flex flex-col gap-4">
             <Logo size={38} />
@@ -248,18 +248,6 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
             </ul>
-          </div>
-        </div>
-
-        {/* Bottom Bar */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-text-muted">
-          <div>
-            &copy; {new Date().getFullYear()} {settings.logo_name_prefix || "AN"} {settings.logo_name_suffix || "DEV"}. All Rights Reserved. // {settings.logo_tagline || "Code · Create · Solve"}
-          </div>
-          <div className="flex items-center gap-4">
-            <span className="text-secondary font-semibold">Algeria Tech Hub</span>
-            <span>•</span>
-            <span>Vite + React + PostgreSQL</span>
           </div>
         </div>
       </div>

@@ -20,3 +20,4 @@ export function usePublicSettings() {
     isLoading: query.isLoading,
   };
 }
+
