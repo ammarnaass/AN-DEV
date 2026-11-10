@@ -11,15 +11,17 @@ export const ProjectsPage: React.FC = () => {
   const { data: projects = [], isLoading } = useProjects();
 
   const filters = [
-    { id: "all", label_ar: "الكل (6)", label_en: "All (6)" },
+    { id: "all", label_ar: `الكل (${projects.length})`, label_en: `All (${projects.length})` },
     { id: "web", label_ar: "تطبيقات ويب", label_en: "Web Apps" },
     { id: "mobile", label_ar: "تطبيقات موبايل", label_en: "Mobile Apps" },
-    { id: "saas", label_ar: "منصات SaaS", label_en: "SaaS Platforms" },
+    { id: "pos", label_ar: "أنظمة كاشير ونقاط بيع", label_en: "POS Systems" },
+    { id: "desktop", label_ar: "برامج مكتبية", label_en: "Desktop Apps" },
     { id: "system", label_ar: "أنظمة مؤسسية", label_en: "Enterprise Systems" }
   ];
 
   const filteredProjects = projects.filter(p => {
     if (activeFilter === "all") return true;
+    if (p.project_type && p.project_type === activeFilter) return true;
     const tech = (typeof p.tech_json === "string" ? p.tech_json : JSON.stringify(p.tech_json || [])).toLowerCase();
     const title = (p.title_ar + " " + p.title_en).toLowerCase();
     const summary = (p.summary_ar + " " + p.summary_en).toLowerCase();
@@ -27,9 +29,10 @@ export const ProjectsPage: React.FC = () => {
 
     if (activeFilter === "web") return combined.includes("web") || combined.includes("react") || combined.includes("ويب");
     if (activeFilter === "mobile") return combined.includes("mobile") || combined.includes("flutter") || combined.includes("موبايل");
-    if (activeFilter === "saas") return combined.includes("saas") || combined.includes("منصة") || combined.includes("b2b");
-    if (activeFilter === "system") return combined.includes("system") || combined.includes("api") || combined.includes("لوجستي") || combined.includes("عيادات");
-    return true;
+    if (activeFilter === "pos") return combined.includes("pos") || combined.includes("كاشير") || combined.includes("نقطة بيع");
+    if (activeFilter === "desktop") return combined.includes("desktop") || combined.includes("electron") || combined.includes("حاسوب");
+    if (activeFilter === "system") return combined.includes("system") || combined.includes("erp") || combined.includes("لوجستي");
+    return false;
   });
 
   return (

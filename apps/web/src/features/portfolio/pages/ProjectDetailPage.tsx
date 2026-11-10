@@ -3,6 +3,9 @@ import { useParams, Link } from "react-router-dom";
 import { useI18n } from "../../../lib/i18n";
 import { useProjectDetail, useProjects } from "../hooks/useProjects";
 import { ProjectKpis } from "../components/ProjectKpis";
+import { ProjectSpecsStrip } from "../components/ProjectSpecsStrip";
+import { ProjectLiveGateway } from "../components/ProjectLiveGateway";
+import { ProjectScreenshotGallery } from "../components/ProjectScreenshotGallery";
 import { Button } from "../../../components/ui/Button";
 import {
   ArrowLeft,
@@ -130,11 +133,17 @@ export const ProjectDetailPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Engineering Impact KPI Grid Component */}
-      <ProjectKpis />
+      {/* Executive Technical Specifications Strip */}
+      <ProjectSpecsStrip project={project} />
 
-      {/* Main Cover Image */}
-      {project.cover_image && (
+      {/* Live Interactive Gateway or Cover Image */}
+      {project.enable_live_preview && project.live_url ? (
+        <ProjectLiveGateway
+          liveUrl={project.live_url}
+          title={title}
+          coverImage={project.cover_image}
+        />
+      ) : project.cover_image ? (
         <div className="rounded-2xl border border-line overflow-hidden bg-surface-container shadow-card">
           <img
             src={project.cover_image}
@@ -142,7 +151,22 @@ export const ProjectDetailPage: React.FC = () => {
             className="w-full max-h-[500px] object-cover"
           />
         </div>
-      )}
+      ) : null}
+
+      {/* Engineering Impact KPI Grid Component */}
+      <ProjectKpis />
+
+      {/* Multi-Screenshot Device Frame Mockups Gallery */}
+      {(() => {
+        const galleryItems = Array.isArray(project.gallery_json)
+          ? project.gallery_json
+          : typeof project.gallery_json === "string"
+          ? JSON.parse(project.gallery_json || "[]")
+          : (project as any).gallery || [];
+        return galleryItems.length > 0 ? (
+          <ProjectScreenshotGallery items={galleryItems} title={title} />
+        ) : null;
+      })()}
 
       {/* Tech Arsenal Tags */}
       <div className="space-y-3 pt-2">
