@@ -781,6 +781,7 @@ export const AdminBioLinksPage: React.FC = () => {
                   {[
                     { key: "whatsapp", label: "WhatsApp", placeholder: "https://wa.me/213555000000 أو رقم الهاتف" },
                     { key: "telegram", label: "Telegram", placeholder: "https://t.me/yourusername" },
+                    { key: "facebook", label: "Facebook", placeholder: "https://facebook.com/yourpage أو رابط صفحة فيسبوك" },
                     { key: "linkedin", label: "LinkedIn", placeholder: "https://linkedin.com/in/yourcompany" },
                     { key: "github", label: "GitHub", placeholder: "https://github.com/yourhandle" },
                     { key: "twitter", label: "X / Twitter", placeholder: "https://x.com/yourhandle" },

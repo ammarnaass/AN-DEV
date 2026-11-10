@@ -381,11 +381,24 @@ export const BioLinksPage: React.FC = () => {
             <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
               {activeSocials.map((social) => {
                 const url = resolvedSettings[social.key] || "";
-                const targetUrl = url.startsWith("http")
-                  ? url
-                  : social.key === "whatsapp"
-                  ? `https://wa.me/${url.replace(/[^0-9]/g, "")}`
-                  : `https://${url}`;
+                let targetUrl = url;
+                if (!targetUrl.startsWith("http")) {
+                  if (social.key === "whatsapp") {
+                    targetUrl = `https://wa.me/${url.replace(/[^0-9]/g, "")}`;
+                  } else if (social.key === "telegram") {
+                    targetUrl = `https://t.me/${url.replace(/^@/, "")}`;
+                  } else if (social.key === "facebook") {
+                    targetUrl = url.includes("facebook.com") ? `https://${url}` : `https://facebook.com/${url}`;
+                  } else if (social.key === "instagram") {
+                    targetUrl = url.includes("instagram.com") ? `https://${url}` : `https://instagram.com/${url.replace(/^@/, "")}`;
+                  } else if (social.key === "twitter") {
+                    targetUrl = url.includes("x.com") || url.includes("twitter.com") ? `https://${url}` : `https://x.com/${url.replace(/^@/, "")}`;
+                  } else if (social.key === "youtube") {
+                    targetUrl = url.includes("youtube.com") ? `https://${url}` : `https://youtube.com/${url.startsWith("@") ? url : "@" + url}`;
+                  } else {
+                    targetUrl = `https://${url}`;
+                  }
+                }
 
                 return (
                   <a
