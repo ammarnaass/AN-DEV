@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useI18n } from "../../lib/i18n";
 import { Logo } from "./Logo";
+import { useTheme } from "../../hooks/useTheme";
 import { Button } from "../ui/Button";
 import { Menu, X, Sun, Moon, Globe, ArrowLeft, ArrowRight } from "lucide-react";
 
@@ -10,30 +11,7 @@ export const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
-
-  const [isDark, setIsDark] = useState(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("andev-theme");
-      if (saved) return saved === "dark";
-      return document.documentElement.getAttribute("data-theme") !== "light";
-    }
-    return true;
-  });
-
-  useEffect(() => {
-    const root = document.documentElement;
-    if (isDark) {
-      root.setAttribute("data-theme", "dark");
-      root.classList.add("dark");
-      root.classList.remove("light");
-      localStorage.setItem("andev-theme", "dark");
-    } else {
-      root.setAttribute("data-theme", "light");
-      root.classList.add("light");
-      root.classList.remove("dark");
-      localStorage.setItem("andev-theme", "light");
-    }
-  }, [isDark]);
+  const { isDark, toggleTheme } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -42,10 +20,6 @@ export const Navbar: React.FC = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  const toggleTheme = () => {
-    setIsDark(prev => !prev);
-  };
 
   const navLinks = [
     { href: "/", label: locale === "ar" ? "الرئيسية" : "Home" },

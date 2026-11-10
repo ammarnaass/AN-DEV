@@ -205,3 +205,4 @@ export async function bioLinksRoutes(app: FastifyInstance) {
     return reply.send({ success: true });
   });
 }
+

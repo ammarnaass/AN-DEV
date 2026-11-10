@@ -635,7 +635,7 @@ export const AdminBioLinksPage: React.FC = () => {
                       {
                         id: "mesh",
                         title: "شبكة متوهجة (Mesh)",
-                        desc: "إضاءة نيون هادئة مع شبكة هندسية داكنة",
+                        desc: "إضاءة نيون هادئة متكيفة تلقائياً مع الوضعين الداكن والفاتح",
                       },
                       {
                         id: "color",

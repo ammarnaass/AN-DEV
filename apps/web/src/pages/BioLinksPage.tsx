@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { usePublicBioLinks } from "../features/bioLinks/hooks/useBioLinks";
+import { useTheme } from "../hooks/useTheme";
 import {
   Share2,
   Check,
@@ -18,6 +19,8 @@ import {
   ShieldCheck,
   Send,
   Zap,
+  Sun,
+  Moon,
 } from "lucide-react";
 
 // Icon resolver helper for dynamic icon strings
@@ -128,6 +131,7 @@ const SOCIAL_DEFS: SocialIconDef[] = [
 
 export const BioLinksPage: React.FC = () => {
   const { links, settings, isLoading, trackClick } = usePublicBioLinks();
+  const { isDark, toggleTheme } = useTheme();
   const [copied, setCopied] = useState(false);
 
   const title = settings.bio_page_title || "AN DEV | وكالة البرمجيات";
@@ -199,60 +203,120 @@ export const BioLinksPage: React.FC = () => {
     }
   };
 
+  // Dual-theme dynamic background resolution
+  let containerBgColor = isDark ? "#090d16" : "#f4f7fd";
+  let containerBgImage: string | undefined = undefined;
+
+  if (bgType === "color") {
+    // If user provided a specific non-default color, apply it; otherwise fallback to theme base
+    if (bgValue && bgValue !== "#090d16" && bgValue !== "#030712") {
+      containerBgColor = bgValue;
+    } else {
+      containerBgColor = isDark ? "#090d16" : "#f4f7fd";
+    }
+  } else if (bgType === "gradient") {
+    if (isDark) {
+      containerBgImage = `linear-gradient(180deg, ${bgValue || "#090d16"} 0%, #050811 100%)`;
+      containerBgColor = "#090d16";
+    } else {
+      const isDarkDefault =
+        !bgValue ||
+        bgValue === "#090d16" ||
+        bgValue === "#030712" ||
+        bgValue === "#0a0a0a" ||
+        bgValue === "#0d1117";
+      containerBgImage = isDarkDefault
+        ? "linear-gradient(180deg, #ffffff 0%, #e2e8f8 100%)"
+        : `linear-gradient(180deg, ${bgValue} 0%, #f4f7fd 100%)`;
+      containerBgColor = "#f4f7fd";
+    }
+  } else {
+    // "mesh" (cybernetic glowing mesh)
+    if (isDark) {
+      containerBgColor = "#090d16";
+      containerBgImage =
+        "radial-gradient(circle at 50% 8%, rgba(13, 110, 253, 0.22) 0%, transparent 60%), radial-gradient(circle at 15% 75%, rgba(0, 195, 255, 0.12) 0%, transparent 50%), radial-gradient(circle at 85% 85%, rgba(13, 110, 253, 0.10) 0%, transparent 50%)";
+    } else {
+      containerBgColor = "#f4f7fd";
+      containerBgImage =
+        "radial-gradient(circle at 50% 8%, rgba(13, 110, 253, 0.08) 0%, transparent 60%), radial-gradient(circle at 15% 75%, rgba(2, 132, 199, 0.06) 0%, transparent 50%), radial-gradient(circle at 85% 85%, rgba(13, 110, 253, 0.05) 0%, transparent 50%)";
+    }
+  }
+
   return (
     <div
       dir="rtl"
       className="min-h-screen relative overflow-x-hidden selection:bg-primary/20 selection:text-secondary flex flex-col justify-between py-10 px-4 sm:px-6 transition-colors duration-300"
       style={{
-        backgroundColor: bgType === "color" ? bgValue : "#090d16",
-        backgroundImage:
-          bgType === "gradient"
-            ? `linear-gradient(180deg, ${bgValue} 0%, #050811 100%)`
-            : bgType === "mesh"
-            ? "radial-gradient(circle at 50% 10%, rgba(13, 110, 253, 0.18) 0%, transparent 60%), radial-gradient(circle at 20% 80%, rgba(0, 242, 254, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 90%, rgba(13, 110, 253, 0.08) 0%, transparent 50%)"
-            : undefined,
+        backgroundColor: containerBgColor,
+        backgroundImage: containerBgImage,
       }}
     >
-      {/* Subtle Top Floating Share Button */}
-      <div className="max-w-md mx-auto w-full flex items-center justify-between pb-6">
+      {/* Top Floating Action Header Bar */}
+      <div className="max-w-md mx-auto w-full flex items-center justify-between pb-6 select-none">
         <Link
           to="/"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface/60 backdrop-blur-md border border-line text-xs font-mono text-text-muted hover:text-text-primary hover:border-secondary/40 transition-colors"
-          title="العودة للموقع الرسمي"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface/80 backdrop-blur-md border border-line text-xs font-mono text-text-muted hover:text-text-primary hover:border-secondary/40 transition-colors shadow-sm"
+          title="العودة للموقع الرئيسي"
         >
           <ArrowUpRight className="w-3.5 h-3.5 rotate-180 text-secondary" />
           <span>الموقع الرسمي</span>
         </Link>
 
-        <button
-          onClick={handleShare}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface/60 backdrop-blur-md border border-line text-xs font-mono text-text-muted hover:text-secondary hover:border-secondary/40 transition-colors cursor-pointer"
-          title="مشاركة الصفحة"
-        >
-          {copied ? (
-            <>
-              <Check className="w-3.5 h-3.5 text-status-ok" />
-              <span className="text-status-ok font-semibold">تم النسخ!</span>
-            </>
-          ) : (
-            <>
-              <Share2 className="w-3.5 h-3.5" />
-              <span>مشاركة</span>
-            </>
-          )}
-        </button>
+        <div className="flex items-center gap-2">
+          {/* Dual-Theme Switcher Button */}
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="w-8 h-8 rounded-full bg-surface/80 backdrop-blur-md border border-line flex items-center justify-center text-text-muted hover:text-secondary hover:border-secondary/40 transition-colors shadow-sm cursor-pointer"
+            title={isDark ? "تفعيل الوضع المشرق (Light Mode)" : "تفعيل الوضع المظلم (Dark Mode)"}
+            aria-label="Toggle Theme Mode"
+          >
+            {isDark ? (
+              <Sun className="w-3.5 h-3.5 text-amber-400" />
+            ) : (
+              <Moon className="w-3.5 h-3.5 text-sky-600" />
+            )}
+          </button>
+
+          {/* Share Button */}
+          <button
+            type="button"
+            onClick={handleShare}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface/80 backdrop-blur-md border border-line text-xs font-mono text-text-muted hover:text-secondary hover:border-secondary/40 transition-colors cursor-pointer shadow-sm"
+            title="مشاركة الصفحة"
+          >
+            {copied ? (
+              <>
+                <Check className="w-3.5 h-3.5 text-status-ok" />
+                <span className="text-status-ok font-semibold">تم النسخ!</span>
+              </>
+            ) : (
+              <>
+                <Share2 className="w-3.5 h-3.5" />
+                <span>مشاركة</span>
+              </>
+            )}
+          </button>
+        </div>
       </div>
 
-      {/* Main Content Container (Mobile-Optimized Width) */}
+      {/* Main Content Container (Mobile-First Width) */}
       <main className="max-w-md mx-auto w-full space-y-7 flex-1 flex flex-col items-center text-center">
         {/* Profile Header & Large Hero Image */}
         <div className="flex flex-col items-center space-y-4">
           <div className="relative group">
-            {/* Outer Glow Halo */}
-            <div className="absolute -inset-1.5 bg-gradient-to-r from-primary via-secondary to-accent rounded-[32px] blur-lg opacity-40 group-hover:opacity-75 transition duration-500 animate-pulse" />
+            {/* Outer Glow Halo with adaptive opacity */}
+            <div
+              className={`absolute -inset-1.5 bg-gradient-to-r from-primary via-secondary to-accent rounded-[32px] transition duration-500 animate-pulse ${
+                isDark
+                  ? "opacity-40 blur-lg group-hover:opacity-75"
+                  : "opacity-25 blur-md group-hover:opacity-50"
+              }`}
+            />
 
             {/* Profile Avatar Container */}
-            <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-3xl overflow-hidden border-2 border-line bg-surface flex items-center justify-center shadow-2xl transition-transform duration-300 group-hover:scale-105">
+            <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-3xl overflow-hidden border-2 border-line bg-surface flex items-center justify-center shadow-xl transition-transform duration-300 group-hover:scale-105">
               <img
                 src={avatar}
                 alt={title}
@@ -280,7 +344,7 @@ export const BioLinksPage: React.FC = () => {
             <h1 className="text-xl sm:text-2xl font-black text-text-primary tracking-tight flex items-center justify-center gap-1.5">
               <span>{title}</span>
               <span
-                className="w-4 h-4 rounded-full bg-secondary text-surface flex items-center justify-center text-[10px] font-bold shrink-0"
+                className="w-4 h-4 rounded-full bg-secondary text-white flex items-center justify-center text-[10px] font-bold shrink-0 shadow-sm"
                 title="حساب رسمي موثق"
               >
                 ✓
@@ -308,10 +372,7 @@ export const BioLinksPage: React.FC = () => {
                     href={targetUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="p-2.5 rounded-2xl bg-surface/75 backdrop-blur-md border border-line text-text-muted hover:text-text-primary transition-all duration-200 hover:scale-110 shadow-sm"
-                    style={{
-                      borderColor: "rgba(255, 255, 255, 0.08)",
-                    }}
+                    className="p-2.5 rounded-2xl bg-surface/85 backdrop-blur-md border border-line text-text-muted hover:text-text-primary transition-all duration-200 hover:scale-110 shadow-sm hover:border-secondary/40"
                     title={social.name}
                     aria-label={social.name}
                   >
@@ -359,37 +420,105 @@ export const BioLinksPage: React.FC = () => {
               const isOutline = link.style_variant === "outline";
               const isGlow = link.style_variant === "glow" || link.is_featured;
 
+              // Dual-theme adaptive colors calculation
+              let cardTextColor: string | undefined = link.text_color;
+              let cardBgColor: string | undefined = link.bg_color;
+              let cardBorderColor: string | undefined = link.border_color;
+              let cardBgImage: string | undefined = undefined;
+
+              if (isDark) {
+                cardTextColor = cardTextColor || "#ffffff";
+                cardBgColor = isOutline
+                  ? "transparent"
+                  : isGradient
+                  ? undefined
+                  : cardBgColor || "#1e293b";
+                cardBorderColor =
+                  cardBorderColor ||
+                  (isOutline ? "rgba(255, 255, 255, 0.22)" : "rgba(255, 255, 255, 0.10)");
+                if (isGradient) {
+                  cardBgImage = `linear-gradient(135deg, ${link.gradient_from || "#0d6efd"} 0%, ${
+                    link.gradient_to || "#00c3ff"
+                  } 100%)`;
+                }
+              } else {
+                // Light Mode
+                if (isOutline) {
+                  cardBgColor = "transparent";
+                  if (
+                    !cardTextColor ||
+                    cardTextColor.toLowerCase() === "#ffffff" ||
+                    cardTextColor.toLowerCase() === "#fff"
+                  ) {
+                    cardTextColor = "#0b132b"; // WCAG AAA dark slate text
+                  }
+                  if (
+                    !cardBorderColor ||
+                    cardBorderColor === "#334155" ||
+                    cardBorderColor.includes("255, 255, 255")
+                  ) {
+                    cardBorderColor = "rgba(15, 23, 42, 0.18)";
+                  }
+                } else if (isGradient) {
+                  cardBgImage = `linear-gradient(135deg, ${link.gradient_from || "#0d6efd"} 0%, ${
+                    link.gradient_to || "#0099ff"
+                  } 100%)`;
+                  cardTextColor = "#ffffff";
+                  cardBorderColor = "rgba(13, 110, 253, 0.25)";
+                } else {
+                  // Solid variant
+                  const isDefaultDarkContainer =
+                    !cardBgColor ||
+                    cardBgColor === "#1e293b" ||
+                    cardBgColor === "#0f172a" ||
+                    cardBgColor === "#090d16";
+
+                  if (isDefaultDarkContainer) {
+                    cardBgColor = "#ffffff";
+                    cardTextColor = "#0b132b";
+                    cardBorderColor = "rgba(15, 23, 42, 0.10)";
+                  } else {
+                    cardTextColor = cardTextColor || "#ffffff";
+                    cardBorderColor = cardBorderColor || "transparent";
+                  }
+                }
+              }
+
+              const shadowStyle = isGlow
+                ? isDark
+                  ? `0 0 24px ${(link.gradient_from || link.bg_color || "#0d6efd")}40`
+                  : `0 8px 24px -4px ${(link.gradient_from || link.bg_color || "#0d6efd")}35`
+                : isDark
+                ? "0 4px 20px -2px rgba(0, 0, 0, 0.35)"
+                : "0 4px 16px -2px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04)";
+
               return (
                 <button
                   key={link.id}
                   onClick={() => handleLinkClick(link.id, link.url)}
-                  className={`group relative w-full p-4 rounded-2xl text-start transition-all duration-200 active:scale-[0.98] flex items-center justify-between gap-3 shadow-md hover:shadow-xl cursor-pointer ${
+                  className={`group relative w-full p-4 rounded-2xl text-start transition-all duration-200 active:scale-[0.98] flex items-center justify-between gap-3 cursor-pointer ${
                     isGlow ? "animate-none hover:scale-[1.02]" : "hover:scale-[1.01]"
                   }`}
                   style={{
                     fontFamily: getFontFamilyStyle(link.font_family),
-                    color: link.text_color || "#ffffff",
-                    backgroundColor: isOutline
-                      ? "transparent"
-                      : isGradient
-                      ? undefined
-                      : link.bg_color || "#1e293b",
-                    backgroundImage: isGradient
-                      ? `linear-gradient(135deg, ${link.gradient_from || "#0d6efd"} 0%, ${
-                          link.gradient_to || "#00f2fe"
-                        } 100%)`
-                      : undefined,
-                    borderColor: link.border_color || "rgba(255, 255, 255, 0.12)",
+                    color: cardTextColor,
+                    backgroundColor: cardBgColor,
+                    backgroundImage: cardBgImage,
+                    borderColor: cardBorderColor,
                     borderWidth: "1px",
-                    boxShadow: isGlow
-                      ? `0 0 24px ${(link.gradient_from || link.bg_color || "#0d6efd")}40`
-                      : undefined,
+                    boxShadow: shadowStyle,
                   }}
                 >
                   {/* Left: Icon & Titles */}
                   <div className="flex items-center gap-3.5 flex-1 min-w-0">
                     {iconComponent && (
-                      <div className="w-10 h-10 rounded-xl bg-black/20 flex items-center justify-center shrink-0 border border-white/10 group-hover:scale-110 transition-transform">
+                      <div
+                        className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 ${
+                          isGradient || isDark
+                            ? "bg-black/20 border border-white/10"
+                            : "bg-black/5 border border-black/10"
+                        }`}
+                      >
                         {iconComponent}
                       </div>
                     )}
@@ -399,7 +528,13 @@ export const BioLinksPage: React.FC = () => {
                           {link.title}
                         </span>
                         {link.is_featured && (
-                          <span className="px-2 py-0.5 rounded-md bg-white/20 text-white text-[10px] font-mono font-bold shrink-0">
+                          <span
+                            className={`px-2 py-0.5 rounded-md text-[10px] font-mono font-bold shrink-0 ${
+                              isGradient || isDark
+                                ? "bg-white/20 text-white"
+                                : "bg-primary/10 text-primary border border-primary/20"
+                            }`}
+                          >
                             مميز
                           </span>
                         )}
@@ -413,7 +548,11 @@ export const BioLinksPage: React.FC = () => {
                   </div>
 
                   {/* Right: Arrow indicator */}
-                  <div className="w-7 h-7 rounded-lg bg-black/15 flex items-center justify-center shrink-0 group-hover:translate-x-[-2px] transition-transform">
+                  <div
+                    className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 group-hover:translate-x-[-2px] transition-transform ${
+                      isGradient || isDark ? "bg-black/20" : "bg-black/5"
+                    }`}
+                  >
                     {link.url.startsWith("http") ? (
                       <ExternalLink className="w-4 h-4 opacity-75 group-hover:opacity-100" />
                     ) : (
