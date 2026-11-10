@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useBlogPostDetail } from "../hooks/useBlog";
 import { BenchmarkBanner } from "../components/BenchmarkBanner";
+import { MetaTags } from "../../../components/seo/MetaTags";
 
 export const PostDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -43,9 +44,17 @@ export const PostDetailPage: React.FC = () => {
 
   const title = locale === "ar" ? post.title_ar : post.title_en;
   const body = locale === "ar" ? post.body_md_ar : post.body_md_en;
+  const plainSnippet = body.replace(/[#*`\n]/g, " ").slice(0, 160).trim();
 
   return (
     <article className="pt-24 sm:pt-28 pb-20 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 text-start">
+      <MetaTags
+        title={title}
+        description={plainSnippet}
+        url={`/blog/${post.slug}`}
+        type="article"
+        publishedTime={post.published_at}
+      />
       {/* Top Breadcrumbs & Badges Bar */}
       <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-line">
         <div className="flex items-center gap-2 font-mono text-xs text-text-muted">

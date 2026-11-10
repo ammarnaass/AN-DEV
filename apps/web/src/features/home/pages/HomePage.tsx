@@ -8,6 +8,7 @@ import { TechStack } from "../components/TechStack";
 import { Services } from "../components/Services";
 import { Process } from "../components/Process";
 import { HomeConversionCta } from "../components/HomeConversionCta";
+import { MetaTags } from "../../../components/seo/MetaTags";
 
 export const HomePage: React.FC = () => {
   const { locale, isRtl } = useI18n();
@@ -16,6 +17,7 @@ export const HomePage: React.FC = () => {
 
   return (
     <div className="flex flex-col w-full overflow-hidden">
+      <MetaTags />
       {/* 1. Hero Section */}
       <Hero />
 

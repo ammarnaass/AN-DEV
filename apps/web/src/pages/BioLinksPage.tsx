@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { usePublicBioLinks } from "../features/bioLinks/hooks/useBioLinks";
 import { useTheme } from "../hooks/useTheme";
+import { MetaTags } from "../components/seo/MetaTags";
 import {
   Share2,
   Check,
@@ -273,6 +274,13 @@ export const BioLinksPage: React.FC = () => {
         backgroundImage: containerBgImage,
       }}
     >
+      <MetaTags
+        title={title}
+        description={bio}
+        image={avatar}
+        url="/links"
+        type="profile"
+      />
       {/* Top Floating Action Header Bar */}
       <div className="max-w-md mx-auto w-full flex items-center justify-between pb-6 select-none">
         <Link

@@ -4,6 +4,7 @@ import { Terminal, Rss } from "lucide-react";
 import { useBlogPosts } from "../hooks/useBlog";
 import { FeaturedPostCard } from "../components/FeaturedPostCard";
 import { PostCard } from "../components/PostCard";
+import { MetaTags } from "../../../components/seo/MetaTags";
 
 export const BlogPage: React.FC = () => {
   const { locale } = useI18n();
@@ -22,6 +23,15 @@ export const BlogPage: React.FC = () => {
 
   return (
     <div className="w-full pt-24 sm:pt-28 pb-20 bg-background overflow-hidden">
+      <MetaTags
+        title={locale === "ar" ? "المدونة الهندسية والتقنية" : "Engineering & Tech Blog"}
+        description={
+          locale === "ar"
+            ? "مقالات وتحليلات برمجية معمقة في تطوير البرمجيات السحابية، أمن الأنظمة، وهندسة قواعد البيانات من فريق AN DEV."
+            : "In-depth technical articles on cloud systems, database engineering, and high-performance software."
+        }
+        url="/blog"
+      />
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         {/* Ambient Glows */}
         <div className="absolute -top-40 right-1/4 w-96 h-96 rounded-full bg-secondary/10 blur-[130px] pointer-events-none" />

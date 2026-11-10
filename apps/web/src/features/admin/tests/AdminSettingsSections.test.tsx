@@ -78,11 +78,16 @@ describe("AdminSettingsSections", () => {
       <SettingsSeoSection settings={mockSettings} onChange={handleChange} />
     );
 
-    expect(screen.getByText("إعدادات الـ SEO والظهور الرقمي")).toBeInTheDocument();
-    expect(screen.getByText("نص نبذة الموقع في التذييل (Footer Bio بالعربية)")).toBeInTheDocument();
+    expect(screen.getByText("مركز إدارة الـ SEO وتصدر محركات البحث (SEO Engine Hub)")).toBeInTheDocument();
+    expect(screen.getByText("نبذة وتوصيف الموقع في التذييل (Footer Bio بالعربية)")).toBeInTheDocument();
 
     const textarea = screen.getByDisplayValue(mockSettings.footer_description_ar);
     fireEvent.change(textarea, { target: { value: "نص جديد معدل" } });
     expect(handleChange).toHaveBeenCalledWith("footer_description_ar", "نص جديد معدل");
+
+    // Test tab switching to Google SERP simulator
+    const serpTabBtn = screen.getByText("محاكي Google SERP");
+    fireEvent.click(serpTabBtn);
+    expect(screen.getByText(/محاكاة بطاقة Google الحقيقية/)).toBeInTheDocument();
   });
 });

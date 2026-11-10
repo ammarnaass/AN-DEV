@@ -12,6 +12,7 @@ import {
   CheckCircle2,
   ShieldCheck
 } from "lucide-react";
+import { MetaTags } from "../../../components/seo/MetaTags";
 
 export const ProjectDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -58,6 +59,13 @@ export const ProjectDetailPage: React.FC = () => {
 
   return (
     <article className="pt-24 sm:pt-28 pb-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 text-start">
+      <MetaTags
+        title={title}
+        description={summary}
+        image={project.cover_image}
+        url={`/projects/${project.slug}`}
+        type="article"
+      />
       {/* Top Breadcrumbs & Badges Bar */}
       <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-line">
         <div className="flex items-center gap-2 font-mono text-xs sm:text-sm text-text-muted">

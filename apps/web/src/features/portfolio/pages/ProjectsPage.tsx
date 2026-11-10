@@ -3,6 +3,7 @@ import { useI18n } from "../../../lib/i18n";
 import { useProjects } from "../hooks/useProjects";
 import { ProjectCard } from "../components/ProjectCard";
 import { Terminal } from "lucide-react";
+import { MetaTags } from "../../../components/seo/MetaTags";
 
 export const ProjectsPage: React.FC = () => {
   const { locale } = useI18n();
@@ -33,6 +34,15 @@ export const ProjectsPage: React.FC = () => {
 
   return (
     <div className="w-full pt-24 sm:pt-28 pb-20 bg-background overflow-hidden">
+      <MetaTags
+        title={locale === "ar" ? "معرض المشاريع وسابقة الأعمال" : "Portfolio & Case Studies"}
+        description={
+          locale === "ar"
+            ? "استعرض نماذج وسابقة مشاريع AN DEV في بناء تطبيقات الويب، الهواتف الذكية، وأنظمة المؤسسات السحابية في الجزائر."
+            : "Explore AN DEV showcase of production web applications, mobile apps, and enterprise systems."
+        }
+        url="/projects"
+      />
       <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="absolute -top-32 right-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute top-20 left-10 w-80 h-80 bg-secondary/10 rounded-full blur-3xl pointer-events-none" />

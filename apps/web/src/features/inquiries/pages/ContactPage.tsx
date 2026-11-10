@@ -4,12 +4,22 @@ import { Terminal } from "lucide-react";
 import { InquiryForm } from "../components/InquiryForm";
 import { ContactChannels } from "../components/ContactChannels";
 import { ContactFaq } from "../components/ContactFaq";
+import { MetaTags } from "../../../components/seo/MetaTags";
 
 export const ContactPage: React.FC = () => {
   const { locale } = useI18n();
 
   return (
     <div className="w-full pt-24 sm:pt-28 pb-20 bg-background overflow-hidden">
+      <MetaTags
+        title={locale === "ar" ? "طلب مشروع واستشارة تقنية" : "Start a Project & Consultation"}
+        description={
+          locale === "ar"
+            ? "تواصل مع مهندسي AN DEV لمناقشة مشروعك البرمجي، والحصول على عرض سعر فني دقيق واستشارة هندسية سريعة خلال 48 ساعة."
+            : "Connect with AN DEV engineers to discuss your software project and receive a tailored technical proposal."
+        }
+        url="/contact"
+      />
       {/* Ambient Glows */}
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="absolute -top-32 right-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none" />

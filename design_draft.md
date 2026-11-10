@@ -50,6 +50,16 @@ The existing site is an unmanaged static webpage. It cannot collect structured p
 *   **When**: The visitor filters by category (e.g. `mobile`) and clicks a project card.
 *   **Then**: The client routes to `/projects/:slug`, rendering bilingual details (Challenge, Solution, Results), tech chips, and an image gallery with zoomable screenshots.
 
+### CUJ 4: Search Engine Crawlers & Social Platforms Index AN DEV
+*   **Given**: A Google, Bing, or social media crawler (or user sharing a link on WhatsApp/LinkedIn/Twitter) requests any page on `andev.dz`.
+*   **When**: The crawler requests the page or XML sitemap (`/sitemap.xml`, `/robots.txt`).
+*   **Then**: The platform serves high-fidelity localized metadata, Canonical URLs, Schema.org JSON-LD structured data (Organization, ProfessionalService, WebSite), OpenGraph/Twitter Cards, and geo-targeting coordinates for Algiers, enabling rich snippets, top local search ranking, and instant social cards.
+
+### CUJ 5: Administrator Configures SEO & Verifies Search Engine Indexing
+*   **Given**: Ammar navigates to `/admin/settings` -> SEO Hub.
+*   **When**: Ammar adjusts search titles, meta descriptions, Algeria-targeted keywords, verifies Google Search Console tokens, or toggles robots indexing directives.
+*   **Then**: The admin panel displays real-time Desktop & Mobile SERP simulators and social share card simulators with strict character-length health checks; upon saving, updates persist to Neon Postgres and take effect immediately across all client-rendered pages and the dynamic XML sitemap.
+
 
 --------------------------------------------------------------------------------
 
@@ -253,6 +263,11 @@ andev/
 *   `apps/web/src/pages/admin/AdminProjectEditModal.tsx` (Create): Bilingual project editor with image uploader.
 *   `apps/web/src/pages/admin/AdminSettingsPage.tsx` (Create): Site settings editor for contact coordinates and SEO defaults.
 *   `apps/web/src/App.tsx` (Create): Application router wiring public and admin routes.
+
+#### 4. Search Engine Optimization (SEO) & Structured Data Engine
+*   `apps/web/src/components/seo/MetaTags.tsx` (Enhanced): Dynamic meta tags, OpenGraph, Twitter Cards, canonical links, hreflang alternates (`ar`, `en`, `x-default`), geo-coordinates (`DZ-16`, Algiers), and Schema.org JSON-LD structured data (`Organization`, `ProfessionalService`, `WebSite`).
+*   `apps/web/src/features/admin/components/SettingsSeoSection.tsx` (Enhanced): Full-featured SEO Management panel featuring meta title/desc controls with length indicators, live Google Desktop & Mobile SERP simulators, live Social Share card simulator, Google Search Console / Bing Webmaster verification codes, and indexing control.
+*   `apps/api/src/routes/public.ts` (Enhanced): Dynamic `/sitemap.xml` XML sitemap and `/robots.txt` generation referencing all published portfolio projects, blog posts, and core agency routes.
 
 --------------------------------------------------------------------------------
 
