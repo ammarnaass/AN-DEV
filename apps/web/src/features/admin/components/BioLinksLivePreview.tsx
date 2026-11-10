@@ -97,6 +97,24 @@ const adjustBrightness = (hex: string, percent: number): string => {
   return "#" + ((1 << 24) + (R << 16) + (G << 8) + B).toString(16).slice(1);
 };
 
+const getFontFamilyStyle = (font?: string) => {
+  switch (font?.toLowerCase()) {
+    case "ibm":
+    case "ibm plex arabic":
+      return "'IBM Plex Sans Arabic', sans-serif";
+    case "tajawal":
+      return "'Tajawal', sans-serif";
+    case "inter":
+      return "'Inter', sans-serif";
+    case "mono":
+    case "jetbrains mono":
+      return "'JetBrains Mono', monospace";
+    case "cairo":
+    default:
+      return "'Cairo', sans-serif";
+  }
+};
+
 export const BioLinksLivePreview: React.FC<BioLinksLivePreviewProps> = ({
   settings,
   links,
@@ -366,11 +384,79 @@ export const BioLinksLivePreview: React.FC<BioLinksLivePreviewProps> = ({
                   }
                 }
 
+                const isCustomImg =
+                  link.icon_or_image?.startsWith("http") ||
+                  link.icon_or_image?.startsWith("data:");
+                const isBanner = isCustomImg && link.image_size === "banner";
+
+                let imgSizeClasses = "w-7 h-7";
+                if (link.image_size === "sm") imgSizeClasses = "w-5 h-5";
+                else if (link.image_size === "lg") imgSizeClasses = "w-9 h-9";
+
+                let imgRadiusClasses = "rounded-lg";
+                if (link.image_radius === "full") imgRadiusClasses = "rounded-full";
+                else if (link.image_radius === "none") imgRadiusClasses = "rounded-sm";
+
+                const imgFitClass =
+                  link.image_fit === "contain" ? "object-contain p-0.5" : "object-cover";
+
+                if (isBanner) {
+                  return (
+                    <div
+                      key={link.id}
+                      className="rounded-xl border text-start flex flex-col overflow-hidden shadow-sm transition-transform"
+                      style={{
+                        fontFamily: getFontFamilyStyle(link.font_family),
+                        color: cardTextColor,
+                        backgroundColor: cardBgColor,
+                        backgroundImage: cardBgImage,
+                        borderColor: cardBorderColor,
+                        boxShadow: isGlow
+                          ? `0 0 12px ${(link.gradient_from || link.bg_color || "#0d6efd")}40`
+                          : undefined,
+                      }}
+                    >
+                      <div className="w-full h-18 overflow-hidden bg-black/20 relative">
+                        <img
+                          src={link.icon_or_image}
+                          alt={link.title}
+                          className={`w-full h-full ${imgFitClass}`}
+                        />
+                        {link.is_featured && (
+                          <div className="absolute top-1 end-1 px-1.5 py-0.5 rounded-full bg-secondary text-white text-[7px] font-bold shadow">
+                            مميز ★
+                          </div>
+                        )}
+                      </div>
+                      <div className="p-2 flex items-center justify-between gap-1.5 w-full">
+                        <div className="min-w-0 flex-1">
+                          <div className="text-[11px] font-bold truncate leading-tight">
+                            {link.title}
+                          </div>
+                          {link.subtitle && (
+                            <div className="text-[9px] opacity-75 truncate leading-tight pt-0.5">
+                              {link.subtitle}
+                            </div>
+                          )}
+                        </div>
+                        <div className="shrink-0 opacity-70">
+                          {link.url.startsWith("http") ? (
+                            <ExternalLink className="w-3 h-3" />
+                          ) : (
+                            <ArrowUpRight className="w-3 h-3" />
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }
+
                 return (
                   <div
                     key={link.id}
-                    className="p-2.5 rounded-xl border text-start flex items-center justify-between gap-2 shadow-sm transition-transform"
+                    className="p-2 rounded-xl border text-start flex items-center justify-between gap-2 shadow-sm transition-transform"
                     style={{
+                      fontFamily: getFontFamilyStyle(link.font_family),
                       color: cardTextColor,
                       backgroundColor: cardBgColor,
                       backgroundImage: cardBgImage,
@@ -381,7 +467,19 @@ export const BioLinksLivePreview: React.FC<BioLinksLivePreviewProps> = ({
                     }}
                   >
                     <div className="flex items-center gap-2 min-w-0 flex-1">
-                      {link.icon_or_image && (
+                      {isCustomImg ? (
+                        <div
+                          className={`${imgSizeClasses} ${imgRadiusClasses} overflow-hidden border shrink-0 bg-black/10 flex items-center justify-center ${
+                            isGradient || previewDark ? "border-white/15" : "border-black/10"
+                          }`}
+                        >
+                          <img
+                            src={link.icon_or_image}
+                            alt=""
+                            className={`w-full h-full ${imgFitClass}`}
+                          />
+                        </div>
+                      ) : link.icon_or_image ? (
                         <div
                           className={`w-6 h-6 rounded-md flex items-center justify-center shrink-0 ${
                             isGradient || previewDark ? "bg-black/20" : "bg-black/5"
@@ -389,7 +487,7 @@ export const BioLinksLivePreview: React.FC<BioLinksLivePreviewProps> = ({
                         >
                           {ICON_MAP[link.icon_or_image] || <Sparkles className="w-3 h-3" />}
                         </div>
-                      )}
+                      ) : null}
                       <div className="min-w-0">
                         <div className="text-[11px] font-bold truncate leading-tight">
                           {link.title}

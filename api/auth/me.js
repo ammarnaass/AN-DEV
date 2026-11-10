@@ -11797,6 +11797,9 @@ var bio_links = (0, import_pg_core.pgTable)("bio_links", {
   url: (0, import_pg_core.text)("url").notNull(),
   subtitle: (0, import_pg_core.text)("subtitle"),
   icon_or_image: (0, import_pg_core.text)("icon_or_image"),
+  image_size: (0, import_pg_core.text)("image_size").notNull().default("md"),
+  image_radius: (0, import_pg_core.text)("image_radius").notNull().default("md"),
+  image_fit: (0, import_pg_core.text)("image_fit").notNull().default("cover"),
   font_family: (0, import_pg_core.text)("font_family").notNull().default("cairo"),
   text_color: (0, import_pg_core.text)("text_color").notNull().default("#ffffff"),
   bg_color: (0, import_pg_core.text)("bg_color").notNull().default("#1e293b"),
@@ -11814,7 +11817,7 @@ var bio_links = (0, import_pg_core.pgTable)("bio_links", {
 });
 
 // apps/api/src/db/index.ts
-var DEFAULT_CONNECTION = "postgresql://neondb_owner:npg_s2hjOkANc3tF@ep-damp-bird-zajgsfr3-pooler.c-2.eu-west-2.aws.neon.tech/neondb?sslmode=require";
+var DEFAULT_CONNECTION = "postgresql://neondb_owner:npg_s2hjOkANc3tF@ep-damp-bird-zajgsfr3.c-2.eu-west-2.aws.neon.tech/neondb?sslmode=require";
 var dbInstance = null;
 var rawSql = null;
 var isInitialized = false;
@@ -11902,6 +11905,9 @@ async function initDb(connStr, runMigrations = true) {
         url TEXT NOT NULL,
         subtitle TEXT,
         icon_or_image TEXT,
+        image_size TEXT NOT NULL DEFAULT 'md',
+        image_radius TEXT NOT NULL DEFAULT 'md',
+        image_fit TEXT NOT NULL DEFAULT 'cover',
         font_family TEXT NOT NULL DEFAULT 'cairo',
         text_color TEXT NOT NULL DEFAULT '#ffffff',
         bg_color TEXT NOT NULL DEFAULT '#1e293b',
@@ -11915,7 +11921,10 @@ async function initDb(connStr, runMigrations = true) {
         click_count INTEGER NOT NULL DEFAULT 0,
         created_at TEXT NOT NULL,
         updated_at TEXT NOT NULL
-      )`
+      )`,
+      `ALTER TABLE bio_links ADD COLUMN IF NOT EXISTS image_size TEXT NOT NULL DEFAULT 'md'`,
+      `ALTER TABLE bio_links ADD COLUMN IF NOT EXISTS image_radius TEXT NOT NULL DEFAULT 'md'`,
+      `ALTER TABLE bio_links ADD COLUMN IF NOT EXISTS image_fit TEXT NOT NULL DEFAULT 'cover'`
     ];
     for (const stmt of statements) {
       try {
@@ -16037,6 +16046,9 @@ var BioLinkInputSchema = external_exports.object({
   url: external_exports.string().min(1, "\u0631\u0627\u0628\u0637 \u0627\u0644\u0648\u062C\u0647\u0629 \u0645\u0637\u0644\u0648\u0628"),
   subtitle: external_exports.string().max(200, "\u0627\u0644\u0648\u0635\u0641 \u0637\u0648\u064A\u0644 \u062C\u062F\u0627\u064B").optional().default(""),
   icon_or_image: external_exports.string().optional().default(""),
+  image_size: external_exports.enum(["sm", "md", "lg", "banner"]).optional().default("md"),
+  image_radius: external_exports.enum(["none", "md", "full"]).optional().default("md"),
+  image_fit: external_exports.enum(["contain", "cover"]).optional().default("cover"),
   font_family: external_exports.string().default("cairo"),
   text_color: external_exports.string().default("#ffffff"),
   bg_color: external_exports.string().default("#1e293b"),

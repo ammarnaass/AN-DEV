@@ -2,7 +2,7 @@ import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 import * as schema from "./schema";
 
-const DEFAULT_CONNECTION = "postgresql://neondb_owner:npg_s2hjOkANc3tF@ep-damp-bird-zajgsfr3-pooler.c-2.eu-west-2.aws.neon.tech/neondb?sslmode=require";
+const DEFAULT_CONNECTION = "postgresql://neondb_owner:npg_s2hjOkANc3tF@ep-damp-bird-zajgsfr3.c-2.eu-west-2.aws.neon.tech/neondb?sslmode=require";
 
 let dbInstance: ReturnType<typeof drizzle> | null = null;
 let rawSql: ReturnType<typeof neon> | null = null;
@@ -93,6 +93,9 @@ export async function initDb(connStr?: string, runMigrations = true) {
         url TEXT NOT NULL,
         subtitle TEXT,
         icon_or_image TEXT,
+        image_size TEXT NOT NULL DEFAULT 'md',
+        image_radius TEXT NOT NULL DEFAULT 'md',
+        image_fit TEXT NOT NULL DEFAULT 'cover',
         font_family TEXT NOT NULL DEFAULT 'cairo',
         text_color TEXT NOT NULL DEFAULT '#ffffff',
         bg_color TEXT NOT NULL DEFAULT '#1e293b',
@@ -106,7 +109,10 @@ export async function initDb(connStr?: string, runMigrations = true) {
         click_count INTEGER NOT NULL DEFAULT 0,
         created_at TEXT NOT NULL,
         updated_at TEXT NOT NULL
-      )`
+      )`,
+      `ALTER TABLE bio_links ADD COLUMN IF NOT EXISTS image_size TEXT NOT NULL DEFAULT 'md'`,
+      `ALTER TABLE bio_links ADD COLUMN IF NOT EXISTS image_radius TEXT NOT NULL DEFAULT 'md'`,
+      `ALTER TABLE bio_links ADD COLUMN IF NOT EXISTS image_fit TEXT NOT NULL DEFAULT 'cover'`
     ];
 
     for (const stmt of statements) {

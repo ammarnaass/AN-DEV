@@ -435,20 +435,21 @@ export const BioLinksPage: React.FC = () => {
             </div>
           ) : (
             links.map((link) => {
-              const iconComponent = link.icon_or_image
-                ? ICON_MAP[link.icon_or_image] || (
-                    link.icon_or_image.startsWith("http") ||
-                    link.icon_or_image.startsWith("data:") ? (
-                      <img
-                        src={link.icon_or_image}
-                        alt=""
-                        className="w-5 h-5 rounded-md object-cover"
-                      />
-                    ) : (
-                      <Sparkles className="w-5 h-5 shrink-0" />
-                    )
-                  )
-                : null;
+              const isCustomImg =
+                link.icon_or_image?.startsWith("http") ||
+                link.icon_or_image?.startsWith("data:");
+              const isBanner = isCustomImg && link.image_size === "banner";
+
+              let imgSizeClasses = "w-14 h-14";
+              if (link.image_size === "sm") imgSizeClasses = "w-10 h-10";
+              else if (link.image_size === "lg") imgSizeClasses = "w-20 h-20";
+
+              let imgRadiusClasses = "rounded-2xl";
+              if (link.image_radius === "full") imgRadiusClasses = "rounded-full";
+              else if (link.image_radius === "none") imgRadiusClasses = "rounded-lg";
+
+              const imgFitClass =
+                link.image_fit === "contain" ? "object-contain p-1" : "object-cover";
 
               const isGradient = link.style_variant === "gradient";
               const isOutline = link.style_variant === "outline";
@@ -526,11 +527,71 @@ export const BioLinksPage: React.FC = () => {
                 ? "0 4px 20px -2px rgba(0, 0, 0, 0.35)"
                 : "0 4px 16px -2px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04)";
 
+              if (isBanner) {
+                return (
+                  <button
+                    key={link.id}
+                    onClick={() => handleLinkClick(link.id, link.url)}
+                    className={`group relative w-full overflow-hidden rounded-2xl text-start transition-all duration-200 active:scale-[0.98] flex flex-col cursor-pointer ${
+                      isGlow ? "animate-none hover:scale-[1.02]" : "hover:scale-[1.01]"
+                    }`}
+                    style={{
+                      fontFamily: getFontFamilyStyle(link.font_family),
+                      color: cardTextColor,
+                      backgroundColor: cardBgColor,
+                      backgroundImage: cardBgImage,
+                      borderColor: cardBorderColor,
+                      borderWidth: "1px",
+                      boxShadow: shadowStyle,
+                    }}
+                  >
+                    {/* Top Banner Image */}
+                    <div className="w-full h-36 sm:h-44 overflow-hidden bg-black/20 relative">
+                      <img
+                        src={link.icon_or_image}
+                        alt={link.title}
+                        className={`w-full h-full ${imgFitClass} transition-transform duration-300 group-hover:scale-105`}
+                      />
+                      {link.is_featured && (
+                        <div className="absolute top-3 end-3 px-2.5 py-0.5 rounded-full bg-secondary/90 text-white text-[10px] font-mono font-bold shadow-md">
+                          مميز ★
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Bottom Content Bar */}
+                    <div className="p-4 flex items-center justify-between gap-3 w-full">
+                      <div className="flex flex-col min-w-0">
+                        <span className="font-bold text-base leading-snug truncate">
+                          {link.title}
+                        </span>
+                        {link.subtitle && (
+                          <span className="text-xs opacity-80 leading-normal line-clamp-2 pt-0.5">
+                            {link.subtitle}
+                          </span>
+                        )}
+                      </div>
+                      <div
+                        className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 group-hover:translate-x-[-2px] transition-transform ${
+                          isGradient || isDark ? "bg-white/10" : "bg-black/5"
+                        }`}
+                      >
+                        {link.url.startsWith("http") ? (
+                          <ExternalLink className="w-4 h-4 opacity-75 group-hover:opacity-100" />
+                        ) : (
+                          <ArrowUpRight className="w-4 h-4 opacity-75 group-hover:opacity-100" />
+                        )}
+                      </div>
+                    </div>
+                  </button>
+                );
+              }
+
               return (
                 <button
                   key={link.id}
                   onClick={() => handleLinkClick(link.id, link.url)}
-                  className={`group relative w-full p-4 rounded-2xl text-start transition-all duration-200 active:scale-[0.98] flex items-center justify-between gap-3 cursor-pointer ${
+                  className={`group relative w-full p-4 rounded-2xl text-start transition-all duration-200 active:scale-[0.98] flex items-center justify-between gap-3.5 cursor-pointer ${
                     isGlow ? "animate-none hover:scale-[1.02]" : "hover:scale-[1.01]"
                   }`}
                   style={{
@@ -543,19 +604,32 @@ export const BioLinksPage: React.FC = () => {
                     boxShadow: shadowStyle,
                   }}
                 >
-                  {/* Left: Icon & Titles */}
+                  {/* Left: Icon or Custom Image & Titles */}
                   <div className="flex items-center gap-3.5 flex-1 min-w-0">
-                    {iconComponent && (
+                    {isCustomImg ? (
                       <div
-                        className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 ${
+                        className={`${imgSizeClasses} ${imgRadiusClasses} overflow-hidden border shrink-0 bg-black/10 flex items-center justify-center transition-transform group-hover:scale-105 ${
+                          isGradient || isDark ? "border-white/15" : "border-black/10"
+                        }`}
+                      >
+                        <img
+                          src={link.icon_or_image}
+                          alt=""
+                          className={`w-full h-full ${imgFitClass}`}
+                        />
+                      </div>
+                    ) : link.icon_or_image && ICON_MAP[link.icon_or_image] ? (
+                      <div
+                        className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 ${
                           isGradient || isDark
                             ? "bg-black/20 border border-white/10"
                             : "bg-black/5 border border-black/10"
                         }`}
                       >
-                        {iconComponent}
+                        {ICON_MAP[link.icon_or_image]}
                       </div>
-                    )}
+                    ) : null}
+
                     <div className="flex flex-col min-w-0">
                       <div className="flex items-center gap-2">
                         <span className="font-bold text-sm sm:text-base leading-snug truncate">
@@ -574,7 +648,7 @@ export const BioLinksPage: React.FC = () => {
                         )}
                       </div>
                       {link.subtitle && (
-                        <span className="text-xs opacity-80 leading-normal truncate pt-0.5">
+                        <span className="text-xs opacity-80 leading-normal line-clamp-2 pt-0.5">
                           {link.subtitle}
                         </span>
                       )}

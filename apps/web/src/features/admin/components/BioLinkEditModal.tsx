@@ -18,6 +18,7 @@ import {
   Send,
   Zap,
   Upload,
+  Image as ImageIcon,
 } from "lucide-react";
 
 interface BioLinkEditModalProps {
@@ -74,6 +75,9 @@ export const BioLinkEditModal: React.FC<BioLinkEditModalProps> = ({
     url: "",
     subtitle: "",
     icon_or_image: "Sparkles",
+    image_size: "md",
+    image_radius: "md",
+    image_fit: "cover",
     font_family: "cairo",
     text_color: "#ffffff",
     bg_color: "#1e293b",
@@ -96,6 +100,9 @@ export const BioLinkEditModal: React.FC<BioLinkEditModalProps> = ({
         url: link.url,
         subtitle: link.subtitle || "",
         icon_or_image: link.icon_or_image || "Sparkles",
+        image_size: link.image_size || "md",
+        image_radius: link.image_radius || "md",
+        image_fit: link.image_fit || "cover",
         font_family: link.font_family || "cairo",
         text_color: link.text_color || "#ffffff",
         bg_color: link.bg_color || "#1e293b",
@@ -113,6 +120,9 @@ export const BioLinkEditModal: React.FC<BioLinkEditModalProps> = ({
         url: "",
         subtitle: "",
         icon_or_image: "Sparkles",
+        image_size: "md",
+        image_radius: "md",
+        image_fit: "cover",
         font_family: "cairo",
         text_color: "#ffffff",
         bg_color: "#1e293b",
@@ -317,12 +327,173 @@ export const BioLinkEditModal: React.FC<BioLinkEditModalProps> = ({
                       className="hidden"
                     />
                   </label>
-                  {form.icon_or_image?.startsWith("data:") && (
-                    <span className="text-[11px] font-mono text-status-ok">
+                  {(form.icon_or_image?.startsWith("data:") || form.icon_or_image?.startsWith("http")) && (
+                    <span className="text-[11px] font-mono text-status-ok font-bold">
                       ✓ صورة مخصصة مرفوعة
                     </span>
                   )}
                 </div>
+
+                {/* Custom Image Settings & Framing */}
+                {(form.icon_or_image?.startsWith("data:") ||
+                  form.icon_or_image?.startsWith("http")) && (
+                  <div className="p-4 rounded-xl border border-secondary/30 bg-surface-container/60 space-y-3.5 mt-2">
+                    <div className="flex items-center justify-between pb-2 border-b border-line">
+                      <span className="text-xs font-bold text-text-primary flex items-center gap-1.5">
+                        <ImageIcon className="w-3.5 h-3.5 text-secondary" />
+                        <span>إعدادات ومقاس الصورة في إطار الرابط</span>
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setForm({ ...form, icon_or_image: "Sparkles" })}
+                        className="text-[11px] text-text-muted hover:text-status-danger underline"
+                      >
+                        إلغاء واستخدام أيقونة
+                      </button>
+                    </div>
+
+                    {/* Image Preview Lockup */}
+                    <div className="flex items-center gap-4 p-2.5 rounded-lg bg-surface border border-line">
+                      <div className="text-[11px] text-text-muted font-mono shrink-0">معاينة الصورة:</div>
+                      <div className="flex items-center gap-3">
+                        <div
+                          className={`border border-line overflow-hidden bg-surface-container flex items-center justify-center transition-all ${
+                            form.image_size === "banner"
+                              ? "w-28 h-12 rounded-lg"
+                              : form.image_size === "lg"
+                              ? "w-16 h-16"
+                              : form.image_size === "sm"
+                              ? "w-9 h-9"
+                              : "w-12 h-12"
+                          } ${
+                            form.image_radius === "full" && form.image_size !== "banner"
+                              ? "rounded-full"
+                              : form.image_radius === "md"
+                              ? "rounded-2xl"
+                              : "rounded-lg"
+                          }`}
+                        >
+                          <img
+                            src={form.icon_or_image}
+                            alt=""
+                            className={`w-full h-full ${
+                              form.image_fit === "contain" ? "object-contain p-1" : "object-cover"
+                            }`}
+                          />
+                        </div>
+                        <div className="text-[11px] space-y-0.5">
+                          <span className="font-bold text-text-primary block">
+                            {form.image_size === "banner"
+                              ? "غلاف علوي عريض"
+                              : form.image_size === "lg"
+                              ? "حجم كبير بارز (76px)"
+                              : form.image_size === "sm"
+                              ? "حجم صغير مدمج (38px)"
+                              : "حجم متوسط متوازن (56px)"}
+                          </span>
+                          <span className="text-text-muted font-mono text-[10px] block">
+                            {form.image_fit === "contain" ? "احتواء كامل بدون قص" : "تغطية وملء الإطار"} •{" "}
+                            {form.image_radius === "full" ? "شكل دائري" : form.image_radius === "md" ? "زوايا ناعمة" : "مستطيل"}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 1. Size Presets */}
+                    <div className="space-y-1.5">
+                      <label className="text-[11px] font-semibold text-text-primary block">
+                        حجم ومقاس الصورة في البطاقة:
+                      </label>
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                        {[
+                          { id: "sm", label: "صغير (38px)", desc: "أيقونة مدمجة" },
+                          { id: "md", label: "متوسط (56px)", desc: "شعار متوازن (افتراضي)" },
+                          { id: "lg", label: "كبير (76px)", desc: "بارز للبرامج والتطبيقات" },
+                          { id: "banner", label: "غلاف عريض", desc: "يمتد في الأعلى" },
+                        ].map((sz) => {
+                          const isSelected = (form.image_size || "md") === sz.id;
+                          return (
+                            <button
+                              key={sz.id}
+                              type="button"
+                              onClick={() => setForm({ ...form, image_size: sz.id as any })}
+                              className={`p-2 rounded-lg border text-start transition-all ${
+                                isSelected
+                                  ? "bg-primary-container text-white border-primary shadow-xs"
+                                  : "bg-surface-container border-line text-text-muted hover:text-text-primary"
+                              }`}
+                            >
+                              <span className="text-xs font-bold block">{sz.label}</span>
+                              <span className="text-[9px] opacity-80 block truncate">{sz.desc}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* 2. Shape / Radius (only when not banner) */}
+                    {form.image_size !== "banner" && (
+                      <div className="space-y-1.5">
+                        <label className="text-[11px] font-semibold text-text-primary block">
+                          شكل وتدوير إطار الصورة:
+                        </label>
+                        <div className="grid grid-cols-3 gap-2">
+                          {[
+                            { id: "md", label: "زوايا ناعمة (Squircle)" },
+                            { id: "full", label: "دائري بالكامل (Circle)" },
+                            { id: "none", label: "مربع بزوايا خفيفة" },
+                          ].map((rad) => {
+                            const isSelected = (form.image_radius || "md") === rad.id;
+                            return (
+                              <button
+                                key={rad.id}
+                                type="button"
+                                onClick={() => setForm({ ...form, image_radius: rad.id as any })}
+                                className={`py-1.5 px-2 rounded-lg border text-xs font-semibold transition-all ${
+                                  isSelected
+                                    ? "bg-primary-container text-white border-primary shadow-xs"
+                                    : "bg-surface-container border-line text-text-muted hover:text-text-primary"
+                                }`}
+                              >
+                                {rad.label}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* 3. Image Fit */}
+                    <div className="space-y-1.5">
+                      <label className="text-[11px] font-semibold text-text-primary block">
+                        طريقة احتواء الصورة داخل الإطار:
+                      </label>
+                      <div className="grid grid-cols-2 gap-2">
+                        {[
+                          { id: "cover", label: "ملء وتغطية الإطار (Cover)", desc: "يملأ المساحة بالكامل بدون حواف فارغة" },
+                          { id: "contain", label: "احتواء كامل (Contain)", desc: "يُظهر كامل أبعاد الشعار والرمز بدون أي قص" },
+                        ].map((fit) => {
+                          const isSelected = (form.image_fit || "cover") === fit.id;
+                          return (
+                            <button
+                              key={fit.id}
+                              type="button"
+                              onClick={() => setForm({ ...form, image_fit: fit.id as any })}
+                              className={`p-2 rounded-lg border text-start transition-all ${
+                                isSelected
+                                  ? "bg-primary-container text-white border-primary shadow-xs"
+                                  : "bg-surface-container border-line text-text-muted hover:text-text-primary"
+                              }`}
+                            >
+                              <span className="text-xs font-bold block">{fit.label}</span>
+                              <span className="text-[9px] opacity-80 block">{fit.desc}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Toggles */}
