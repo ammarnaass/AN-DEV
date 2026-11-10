@@ -112,7 +112,14 @@ export async function initDb(connStr?: string, runMigrations = true) {
       )`,
       `ALTER TABLE bio_links ADD COLUMN IF NOT EXISTS image_size TEXT NOT NULL DEFAULT 'md'`,
       `ALTER TABLE bio_links ADD COLUMN IF NOT EXISTS image_radius TEXT NOT NULL DEFAULT 'md'`,
-      `ALTER TABLE bio_links ADD COLUMN IF NOT EXISTS image_fit TEXT NOT NULL DEFAULT 'cover'`
+      `ALTER TABLE bio_links ADD COLUMN IF NOT EXISTS image_fit TEXT NOT NULL DEFAULT 'cover'`,
+      `ALTER TABLE projects ADD COLUMN IF NOT EXISTS project_type TEXT NOT NULL DEFAULT 'web'`,
+      `ALTER TABLE projects ADD COLUMN IF NOT EXISTS version TEXT NOT NULL DEFAULT 'v1.0.0'`,
+      `ALTER TABLE projects ADD COLUMN IF NOT EXISTS package_size TEXT NOT NULL DEFAULT ''`,
+      `ALTER TABLE projects ADD COLUMN IF NOT EXISTS platforms_json TEXT NOT NULL DEFAULT '["web"]'`,
+      `ALTER TABLE projects ADD COLUMN IF NOT EXISTS download_url TEXT`,
+      `ALTER TABLE projects ADD COLUMN IF NOT EXISTS enable_live_preview BOOLEAN NOT NULL DEFAULT TRUE`,
+      `ALTER TABLE projects ADD COLUMN IF NOT EXISTS gallery_json TEXT NOT NULL DEFAULT '[]'`
     ];
 
     for (const stmt of statements) {

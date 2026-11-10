@@ -84,7 +84,9 @@ export async function adminRoutes(app: FastifyInstance) {
     const rows = await db.select().from(projects).orderBy(projects.sort_order);
     return reply.send(rows.map(r => ({
       ...r,
-      tech: JSON.parse(r.tech_json || "[]")
+      tech: JSON.parse(r.tech_json || "[]"),
+      platforms: JSON.parse(r.platforms_json || '["web"]'),
+      gallery: JSON.parse(r.gallery_json || "[]")
     })));
   });
 
@@ -110,6 +112,13 @@ export async function adminRoutes(app: FastifyInstance) {
       summary_en: data.summary_en,
       body_ar: data.body_ar,
       body_en: data.body_en,
+      project_type: data.project_type,
+      version: data.version,
+      package_size: data.package_size,
+      platforms_json: JSON.stringify(data.platforms_json),
+      download_url: data.download_url || null,
+      enable_live_preview: data.enable_live_preview,
+      gallery_json: JSON.stringify(data.gallery_json),
       tech_json: JSON.stringify(data.tech_json),
       cover_image: data.cover_image,
       live_url: data.live_url || null,
@@ -149,6 +158,13 @@ export async function adminRoutes(app: FastifyInstance) {
         summary_en: data.summary_en,
         body_ar: data.body_ar,
         body_en: data.body_en,
+        project_type: data.project_type,
+        version: data.version,
+        package_size: data.package_size,
+        platforms_json: JSON.stringify(data.platforms_json),
+        download_url: data.download_url || null,
+        enable_live_preview: data.enable_live_preview,
+        gallery_json: JSON.stringify(data.gallery_json),
         tech_json: JSON.stringify(data.tech_json),
         cover_image: data.cover_image,
         live_url: data.live_url || null,
