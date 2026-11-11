@@ -52,15 +52,30 @@ export const project_images = pgTable("project_images", {
 
 export const inquiries = pgTable("inquiries", {
   id: serial("id").primaryKey(),
+  tracking_code: text("tracking_code").unique(),
+  request_type: text("request_type").notNull().default("project"), // 'project' | 'consultation'
   name: text("name").notNull(),
   email: text("email").notNull(),
-  project_type: text("project_type").notNull(),
+  phone: text("phone"),
+  company: text("company"),
+  project_type: text("project_type").notNull().default("web"),
   budget_range: text("budget_range"),
+  consultation_domain: text("consultation_domain").default("general"),
+  preferred_date: text("preferred_date"),
+  preferred_time_slot: text("preferred_time_slot").default("morning"),
+  meeting_mode: text("meeting_mode").default("google_meet"),
+  meeting_link: text("meeting_link"),
+  confirmed_datetime: text("confirmed_datetime"),
+  quote_amount: text("quote_amount"),
+  estimated_timeline: text("estimated_timeline"),
+  cancellation_reason: text("cancellation_reason"),
   message: text("message").notNull(),
-  status: text("status").notNull().default("new"), // 'new' | 'in_progress' | 'closed'
+  status: text("status").notNull().default("pending"), // 'pending' | 'approved' | 'in_progress' | 'completed' | 'cancelled' | 'rejected' | 'new' | 'closed'
   admin_note: text("admin_note"),
+  activity_log_json: text("activity_log_json").notNull().default("[]"),
   ip_hash: text("ip_hash").notNull(),
-  created_at: text("created_at").notNull()
+  created_at: text("created_at").notNull(),
+  updated_at: text("updated_at")
 });
 
 export const posts = pgTable("posts", {

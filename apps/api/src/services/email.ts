@@ -3,8 +3,11 @@ import nodemailer from "nodemailer";
 interface InquiryNotification {
   name: string;
   email: string;
-  project_type: string;
+  phone?: string | null;
+  request_type?: string;
+  project_type?: string;
   budget_range?: string | null;
+  tracking_code?: string;
   message: string;
 }
 
@@ -23,15 +26,18 @@ export async function sendInquiryNotification(inquiry: InquiryNotification) {
     });
 
     try {
+      const typeLabel = inquiry.request_type === "consultation" ? "طلب استشارة تقنية" : "طلب مشروع جديد";
       await transporter.sendMail({
         from: `"AN DEV Platform" <${user}>`,
         to: process.env.ADMIN_NOTIFY_EMAIL || "ammar@andev.dz",
-        subject: `[طلب مشروع جديد] ${inquiry.project_type}: ${inquiry.name}`,
+        subject: `[${typeLabel}] ${inquiry.tracking_code ? `[${inquiry.tracking_code}] ` : ""}${inquiry.name}`,
         text: `
-تم استلام طلب مشروع جديد عبر الموقع:
+تم استلام ${typeLabel} عبر الموقع:
+كود التتبع: ${inquiry.tracking_code || "غير محدد"}
 الاسم: ${inquiry.name}
 البريد: ${inquiry.email}
-نوع المشروع: ${inquiry.project_type}
+الهاتف: ${inquiry.phone || "غير محدد"}
+نوع الطلب: ${inquiry.request_type || "project"} (${inquiry.project_type || "عام"})
 الميزانية التقديرية: ${inquiry.budget_range || "غير محددة"}
 
 تفاصيل الرسالة:
@@ -43,7 +49,7 @@ ${inquiry.message}
     }
   } else {
     // In dev / test environment, log notification
-    console.log(`[Notification] New inquiry from ${inquiry.name} (${inquiry.email}): ${inquiry.project_type}`);
+    console.log(`[Notification] New ${inquiry.request_type || "inquiry"} [${inquiry.tracking_code || "no-code"}] from ${inquiry.name} (${inquiry.email})`);
   }
 }
 

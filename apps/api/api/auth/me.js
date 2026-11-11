@@ -4967,7 +4967,7 @@ var require_le_unix = __commonJS({
 var require_mime_node = __commonJS({
   "node_modules/nodemailer/lib/mime-node/index.js"(exports2, module2) {
     "use strict";
-    var crypto4 = require("crypto");
+    var crypto5 = require("crypto");
     var fs2 = require("fs");
     var punycode = require_punycode();
     var PassThrough = require("stream").PassThrough;
@@ -4984,7 +4984,7 @@ var require_mime_node = __commonJS({
       constructor(contentType, options) {
         this.nodeCounter = 0;
         options = options || {};
-        this.baseBoundary = options.baseBoundary || crypto4.randomBytes(8).toString("hex");
+        this.baseBoundary = options.baseBoundary || crypto5.randomBytes(8).toString("hex");
         this.boundaryPrefix = options.boundaryPrefix || "--_NmP";
         this.disableFileAccess = !!options.disableFileAccess;
         this.disableUrlAccess = !!options.disableUrlAccess;
@@ -5927,8 +5927,8 @@ var require_mime_node = __commonJS({
       _generateMessageId() {
         return "<" + [2, 2, 2, 6].reduce(
           // crux to generate UUID-like random strings
-          (prev, len) => prev + "-" + crypto4.randomBytes(len).toString("hex"),
-          crypto4.randomBytes(4).toString("hex")
+          (prev, len) => prev + "-" + crypto5.randomBytes(len).toString("hex"),
+          crypto5.randomBytes(4).toString("hex")
         ) + "@" + // try to use the domain of the FROM address or fallback to server hostname
         (this.getEnvelope().from || this.hostname || "localhost").split("@").pop() + ">";
       }
@@ -6519,14 +6519,14 @@ var require_relaxed_body = __commonJS({
   "node_modules/nodemailer/lib/dkim/relaxed-body.js"(exports2, module2) {
     "use strict";
     var Transform = require("stream").Transform;
-    var crypto4 = require("crypto");
+    var crypto5 = require("crypto");
     var RelaxedBody = class extends Transform {
       constructor(options) {
         super();
         options = options || {};
         this.chunkBuffer = [];
         this.chunkBufferLen = 0;
-        this.bodyHash = crypto4.createHash(options.hashAlgo || "sha1");
+        this.bodyHash = crypto5.createHash(options.hashAlgo || "sha1");
         this.remainder = "";
         this.byteLength = 0;
         this.debug = options.debug;
@@ -6629,7 +6629,7 @@ var require_sign = __commonJS({
     "use strict";
     var punycode = require_punycode();
     var mimeFuncs = require_mime_funcs();
-    var crypto4 = require("crypto");
+    var crypto5 = require("crypto");
     module2.exports = (headers, hashAlgo, bodyHash, options) => {
       options = options || {};
       let defaultFieldNames = "From:Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive";
@@ -6638,7 +6638,7 @@ var require_sign = __commonJS({
       let dkimHeader = generateDKIMHeader(options.domainName, options.keySelector, canonicalizedHeaderData.fieldNames, hashAlgo, bodyHash);
       let signer, signature;
       canonicalizedHeaderData.headers += "dkim-signature:" + relaxedHeaderLine(dkimHeader);
-      signer = crypto4.createSign(("rsa-" + hashAlgo).toUpperCase());
+      signer = crypto5.createSign(("rsa-" + hashAlgo).toUpperCase());
       signer.update(canonicalizedHeaderData.headers);
       try {
         signature = signer.sign(options.privateKey, "base64");
@@ -6706,7 +6706,7 @@ var require_dkim = __commonJS({
     var PassThrough = require("stream").PassThrough;
     var fs2 = require("fs");
     var path2 = require("path");
-    var crypto4 = require("crypto");
+    var crypto5 = require("crypto");
     var DKIM_ALGO = "sha256";
     var MAX_MESSAGE_SIZE = 128 * 1024;
     var DKIMSigner = class {
@@ -6719,7 +6719,7 @@ var require_dkim = __commonJS({
         this.chunks = [];
         this.chunklen = 0;
         this.readPos = 0;
-        this.cachePath = this.cacheDir ? path2.join(this.cacheDir, "message." + Date.now() + "-" + crypto4.randomBytes(14).toString("hex")) : false;
+        this.cachePath = this.cacheDir ? path2.join(this.cacheDir, "message." + Date.now() + "-" + crypto5.randomBytes(14).toString("hex")) : false;
         this.cache = false;
         this.headers = false;
         this.bodyHash = false;
@@ -7275,7 +7275,7 @@ var require_mailer = __commonJS({
     var MailMessage = require_mail_message();
     var net = require("net");
     var dns = require("dns");
-    var crypto4 = require("crypto");
+    var crypto5 = require("crypto");
     var Mail = class extends EventEmitter {
       constructor(transporter, options, defaults) {
         super();
@@ -7599,7 +7599,7 @@ var require_mailer = __commonJS({
           }
           let cidCounter = 0;
           html = (html || "").toString().replace(/(<img\b[^<>]{0,1024} src\s{0,20}=[\s"']{0,20})(data:([^;]+);[^"'>\s]+)/gi, (match, prefix, dataUri, mimeType) => {
-            let cid = crypto4.randomBytes(10).toString("hex") + "@localhost";
+            let cid = crypto5.randomBytes(10).toString("hex") + "@localhost";
             if (!mail.data.attachments) {
               mail.data.attachments = [];
             }
@@ -7726,7 +7726,7 @@ var require_smtp_connection = __commonJS({
     var net = require("net");
     var tls = require("tls");
     var os = require("os");
-    var crypto4 = require("crypto");
+    var crypto5 = require("crypto");
     var DataStream = require_data_stream();
     var PassThrough = require("stream").PassThrough;
     var shared = require_shared();
@@ -7737,7 +7737,7 @@ var require_smtp_connection = __commonJS({
     var SMTPConnection = class extends EventEmitter {
       constructor(options) {
         super(options);
-        this.id = crypto4.randomBytes(8).toString("base64").replace(/\W/g, "");
+        this.id = crypto5.randomBytes(8).toString("base64").replace(/\W/g, "");
         this.stage = "init";
         this.options = options || {};
         this.secureConnection = !!this.options.secure;
@@ -8830,7 +8830,7 @@ var require_smtp_connection = __commonJS({
         } else {
           challengeString = challengeMatch[1];
         }
-        let base64decoded = Buffer.from(challengeString, "base64").toString("ascii"), hmacMD5 = crypto4.createHmac("md5", this._auth.credentials.pass);
+        let base64decoded = Buffer.from(challengeString, "base64").toString("ascii"), hmacMD5 = crypto5.createHmac("md5", this._auth.credentials.pass);
         hmacMD5.update(base64decoded);
         let prepended = this._auth.credentials.user + " " + hmacMD5.digest("hex");
         this._responseActions.push((str2) => {
@@ -9141,7 +9141,7 @@ var require_xoauth2 = __commonJS({
     "use strict";
     var Stream = require("stream").Stream;
     var nmfetch = require_fetch();
-    var crypto4 = require("crypto");
+    var crypto5 = require("crypto");
     var shared = require_shared();
     var XOAuth2 = class extends Stream {
       constructor(options, logger) {
@@ -9432,7 +9432,7 @@ var require_xoauth2 = __commonJS({
        */
       jwtSignRS256(payload) {
         payload = ['{"alg":"RS256","typ":"JWT"}', JSON.stringify(payload)].map((val) => this.toBase64URL(val)).join(".");
-        let signature = crypto4.createSign("RSA-SHA256").update(payload).sign(this.options.privateKey);
+        let signature = crypto5.createSign("RSA-SHA256").update(payload).sign(this.options.privateKey);
         return payload + "." + this.toBase64URL(signature);
       }
     };
@@ -11767,16 +11767,32 @@ var project_images = (0, import_pg_core.pgTable)("project_images", {
 });
 var inquiries = (0, import_pg_core.pgTable)("inquiries", {
   id: (0, import_pg_core.serial)("id").primaryKey(),
+  tracking_code: (0, import_pg_core.text)("tracking_code").unique(),
+  request_type: (0, import_pg_core.text)("request_type").notNull().default("project"),
+  // 'project' | 'consultation'
   name: (0, import_pg_core.text)("name").notNull(),
   email: (0, import_pg_core.text)("email").notNull(),
-  project_type: (0, import_pg_core.text)("project_type").notNull(),
+  phone: (0, import_pg_core.text)("phone"),
+  company: (0, import_pg_core.text)("company"),
+  project_type: (0, import_pg_core.text)("project_type").notNull().default("web"),
   budget_range: (0, import_pg_core.text)("budget_range"),
+  consultation_domain: (0, import_pg_core.text)("consultation_domain").default("general"),
+  preferred_date: (0, import_pg_core.text)("preferred_date"),
+  preferred_time_slot: (0, import_pg_core.text)("preferred_time_slot").default("morning"),
+  meeting_mode: (0, import_pg_core.text)("meeting_mode").default("google_meet"),
+  meeting_link: (0, import_pg_core.text)("meeting_link"),
+  confirmed_datetime: (0, import_pg_core.text)("confirmed_datetime"),
+  quote_amount: (0, import_pg_core.text)("quote_amount"),
+  estimated_timeline: (0, import_pg_core.text)("estimated_timeline"),
+  cancellation_reason: (0, import_pg_core.text)("cancellation_reason"),
   message: (0, import_pg_core.text)("message").notNull(),
-  status: (0, import_pg_core.text)("status").notNull().default("new"),
-  // 'new' | 'in_progress' | 'closed'
+  status: (0, import_pg_core.text)("status").notNull().default("pending"),
+  // 'pending' | 'approved' | 'in_progress' | 'completed' | 'cancelled' | 'rejected' | 'new' | 'closed'
   admin_note: (0, import_pg_core.text)("admin_note"),
+  activity_log_json: (0, import_pg_core.text)("activity_log_json").notNull().default("[]"),
   ip_hash: (0, import_pg_core.text)("ip_hash").notNull(),
-  created_at: (0, import_pg_core.text)("created_at").notNull()
+  created_at: (0, import_pg_core.text)("created_at").notNull(),
+  updated_at: (0, import_pg_core.text)("updated_at")
 });
 var posts = (0, import_pg_core.pgTable)("posts", {
   id: (0, import_pg_core.serial)("id").primaryKey(),
@@ -16002,19 +16018,88 @@ var coerce = {
 var NEVER = INVALID;
 
 // packages/shared/src/schemas/inquiry.ts
+var InquiryTypeEnum = external_exports.enum(["project", "consultation"]);
+var InquiryStatusEnum = external_exports.enum([
+  "pending",
+  "approved",
+  "in_progress",
+  "completed",
+  "cancelled",
+  "rejected",
+  "new",
+  "closed"
+]);
+var ConsultationDomainEnum = external_exports.enum([
+  "cloud_devops",
+  "security_audit",
+  "feasibility_study",
+  "pos_erp",
+  "ai_agent",
+  "performance_troubleshooting",
+  "general"
+]);
+var MeetingModeEnum = external_exports.enum(["google_meet", "phone", "in_person"]);
+var InquiryActivityEventSchema = external_exports.object({
+  id: external_exports.string(),
+  author: external_exports.enum(["client", "admin", "system"]),
+  action: external_exports.enum([
+    "submitted",
+    "status_changed",
+    "quote_provided",
+    "consultation_scheduled",
+    "cancelled",
+    "rejected",
+    "client_note",
+    "admin_note"
+  ]),
+  title: external_exports.string(),
+  body: external_exports.string().optional(),
+  created_at: external_exports.string()
+});
 var InquirySchema = external_exports.object({
   name: external_exports.string().min(2, "\u0627\u0644\u0627\u0633\u0645 \u0645\u0637\u0644\u0648\u0628 \u0648\u064A\u062C\u0628 \u0623\u0644\u0627 \u064A\u0642\u0644 \u0639\u0646 \u062D\u0631\u0641\u064A\u0646"),
   email: external_exports.string().email("\u0627\u0644\u0628\u0631\u064A\u062F \u0627\u0644\u0625\u0644\u0643\u062A\u0631\u0648\u0646\u064A \u063A\u064A\u0631 \u0635\u0627\u0644\u062D"),
-  project_type: external_exports.enum(["web", "mobile", "system", "other"], {
-    errorMap: () => ({ message: "\u0646\u0648\u0639 \u0627\u0644\u0645\u0634\u0631\u0648\u0639 \u063A\u064A\u0631 \u0635\u0627\u0644\u062D" })
-  }),
+  phone: external_exports.string().optional().default(""),
+  company: external_exports.string().optional().default(""),
+  request_type: InquiryTypeEnum.default("project"),
+  project_type: external_exports.enum(["web", "mobile", "desktop", "pos", "system", "other"]).default("web"),
   budget_range: external_exports.string().optional().default(""),
-  message: external_exports.string().min(10, "\u062A\u0641\u0627\u0635\u064A\u0644 \u0627\u0644\u0641\u0643\u0631\u0629 \u064A\u062C\u0628 \u0623\u0644\u0627 \u062A\u0642\u0644 \u0639\u0646 10 \u0623\u062D\u0631\u0641"),
-  honeypot: external_exports.string().max(0, "Bot detected")
+  // Consultation fields
+  consultation_domain: ConsultationDomainEnum.default("general"),
+  preferred_date: external_exports.string().optional().default(""),
+  preferred_time_slot: external_exports.enum(["morning", "afternoon", "any"]).default("morning"),
+  meeting_mode: MeetingModeEnum.default("google_meet"),
+  // Content & Anti-bot
+  message: external_exports.string().min(10, "\u062A\u0641\u0627\u0635\u064A\u0644 \u0627\u0644\u0637\u0644\u0628 \u0623\u0648 \u0627\u0644\u0627\u0633\u062A\u0634\u0627\u0631\u0629 \u064A\u062C\u0628 \u0623\u0644\u0627 \u062A\u0642\u0644 \u0639\u0646 10 \u0623\u062D\u0631\u0641"),
+  honeypot: external_exports.string().max(0, "Bot detected").optional().default("")
+});
+var ApproveProjectSchema = external_exports.object({
+  quote_amount: external_exports.string().min(1, "\u064A\u0631\u062C\u0649 \u062A\u062D\u062F\u064A\u062F \u0639\u0631\u0636 \u0627\u0644\u0633\u0639\u0631 \u0627\u0644\u062A\u0642\u062F\u064A\u0631\u064A"),
+  estimated_timeline: external_exports.string().min(1, "\u064A\u0631\u062C\u0649 \u062A\u062D\u062F\u064A\u062F \u0627\u0644\u0645\u062F\u0629 \u0627\u0644\u062A\u0642\u062F\u064A\u0631\u064A\u0629 \u0644\u0644\u062A\u0646\u0641\u064A\u0630"),
+  admin_note: external_exports.string().optional()
+});
+var ScheduleConsultationSchema = external_exports.object({
+  confirmed_datetime: external_exports.string().min(1, "\u064A\u0631\u062C\u0649 \u062A\u062D\u062F\u064A\u062F \u062A\u0627\u0631\u064A\u062E \u0648\u062A\u0648\u0642\u064A\u062A \u0627\u0644\u062C\u0644\u0633\u0629"),
+  meeting_mode: MeetingModeEnum.default("google_meet"),
+  meeting_link: external_exports.string().optional().default(""),
+  admin_note: external_exports.string().optional()
+});
+var RejectInquirySchema = external_exports.object({
+  reason: external_exports.string().min(5, "\u064A\u0631\u062C\u0649 \u062A\u0648\u0636\u064A\u062D \u0633\u0628\u0628 \u0627\u0644\u0627\u0639\u062A\u0630\u0627\u0631 \u0623\u0648 \u0627\u0644\u0631\u0641\u0636 \u0644\u0644\u0639\u0645\u064A\u0644")
+});
+var ClientCancelSchema = external_exports.object({
+  reason: external_exports.string().min(3, "\u064A\u0631\u062C\u0649 \u0643\u062A\u0627\u0628\u0629 \u0633\u0628\u0628 \u0627\u0644\u0625\u0644\u063A\u0627\u0621")
+});
+var ClientMessageSchema = external_exports.object({
+  message: external_exports.string().min(3, "\u0646\u0635 \u0627\u0644\u0631\u0633\u0627\u0644\u0629 \u064A\u062C\u0628 \u0623\u0644\u0627 \u064A\u0642\u0644 \u0639\u0646 3 \u0623\u062D\u0631\u0641")
 });
 var UpdateInquirySchema = external_exports.object({
-  status: external_exports.enum(["new", "in_progress", "closed"]),
-  admin_note: external_exports.string().optional()
+  status: InquiryStatusEnum,
+  admin_note: external_exports.string().optional(),
+  quote_amount: external_exports.string().optional(),
+  estimated_timeline: external_exports.string().optional(),
+  confirmed_datetime: external_exports.string().optional(),
+  meeting_link: external_exports.string().optional()
 });
 
 // packages/shared/src/schemas/project.ts
@@ -16266,6 +16351,7 @@ async function authRoutes(app) {
 }
 
 // apps/api/src/routes/inquiries.ts
+var import_drizzle_orm3 = require("drizzle-orm");
 var import_crypto2 = __toESM(require("crypto"));
 
 // apps/api/src/services/email.ts
@@ -16282,15 +16368,18 @@ async function sendInquiryNotification(inquiry) {
       auth: { user, pass }
     });
     try {
+      const typeLabel = inquiry.request_type === "consultation" ? "\u0637\u0644\u0628 \u0627\u0633\u062A\u0634\u0627\u0631\u0629 \u062A\u0642\u0646\u064A\u0629" : "\u0637\u0644\u0628 \u0645\u0634\u0631\u0648\u0639 \u062C\u062F\u064A\u062F";
       await transporter.sendMail({
         from: `"AN DEV Platform" <${user}>`,
         to: process.env.ADMIN_NOTIFY_EMAIL || "ammar@andev.dz",
-        subject: `[\u0637\u0644\u0628 \u0645\u0634\u0631\u0648\u0639 \u062C\u062F\u064A\u062F] ${inquiry.project_type}: ${inquiry.name}`,
+        subject: `[${typeLabel}] ${inquiry.tracking_code ? `[${inquiry.tracking_code}] ` : ""}${inquiry.name}`,
         text: `
-\u062A\u0645 \u0627\u0633\u062A\u0644\u0627\u0645 \u0637\u0644\u0628 \u0645\u0634\u0631\u0648\u0639 \u062C\u062F\u064A\u062F \u0639\u0628\u0631 \u0627\u0644\u0645\u0648\u0642\u0639:
+\u062A\u0645 \u0627\u0633\u062A\u0644\u0627\u0645 ${typeLabel} \u0639\u0628\u0631 \u0627\u0644\u0645\u0648\u0642\u0639:
+\u0643\u0648\u062F \u0627\u0644\u062A\u062A\u0628\u0639: ${inquiry.tracking_code || "\u063A\u064A\u0631 \u0645\u062D\u062F\u062F"}
 \u0627\u0644\u0627\u0633\u0645: ${inquiry.name}
 \u0627\u0644\u0628\u0631\u064A\u062F: ${inquiry.email}
-\u0646\u0648\u0639 \u0627\u0644\u0645\u0634\u0631\u0648\u0639: ${inquiry.project_type}
+\u0627\u0644\u0647\u0627\u062A\u0641: ${inquiry.phone || "\u063A\u064A\u0631 \u0645\u062D\u062F\u062F"}
+\u0646\u0648\u0639 \u0627\u0644\u0637\u0644\u0628: ${inquiry.request_type || "project"} (${inquiry.project_type || "\u0639\u0627\u0645"})
 \u0627\u0644\u0645\u064A\u0632\u0627\u0646\u064A\u0629 \u0627\u0644\u062A\u0642\u062F\u064A\u0631\u064A\u0629: ${inquiry.budget_range || "\u063A\u064A\u0631 \u0645\u062D\u062F\u062F\u0629"}
 
 \u062A\u0641\u0627\u0635\u064A\u0644 \u0627\u0644\u0631\u0633\u0627\u0644\u0629:
@@ -16301,7 +16390,7 @@ ${inquiry.message}
       console.error("Failed to send inquiry email notification:", err);
     }
   } else {
-    console.log(`[Notification] New inquiry from ${inquiry.name} (${inquiry.email}): ${inquiry.project_type}`);
+    console.log(`[Notification] New ${inquiry.request_type || "inquiry"} [${inquiry.tracking_code || "no-code"}] from ${inquiry.name} (${inquiry.email})`);
   }
 }
 
@@ -16309,6 +16398,20 @@ ${inquiry.message}
 var rateLimitMap = /* @__PURE__ */ new Map();
 var RATE_LIMIT_WINDOW_MS = 15 * 60 * 1e3;
 var MAX_REQUESTS = 5;
+function safeParseJson(raw, fallback) {
+  if (!raw) return fallback;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return fallback;
+  }
+}
+function maskEmail(email) {
+  if (!email || !email.includes("@")) return email;
+  const [user, domain] = email.split("@");
+  if (user.length <= 2) return `${user[0]}***@${domain}`;
+  return `${user[0]}***${user[user.length - 1]}@${domain}`;
+}
 async function inquiryRoutes(app) {
   app.post("/inquiries", async (request, reply) => {
     const rawIp = request.ip || "127.0.0.1";
@@ -16328,39 +16431,185 @@ async function inquiryRoutes(app) {
         details: parseResult.error.format()
       });
     }
-    const { name, email, project_type, budget_range, message } = parseResult.data;
+    const data = parseResult.data;
     const db = getDb();
     const createdAt = (/* @__PURE__ */ new Date()).toISOString();
+    const trackingCode = `AND-${(/* @__PURE__ */ new Date()).getFullYear()}-${import_crypto2.default.randomBytes(3).toString("hex").toUpperCase()}`;
+    const initialActivity = [
+      {
+        id: import_crypto2.default.randomUUID(),
+        author: "client",
+        action: "submitted",
+        title: data.request_type === "consultation" ? "\u062A\u0642\u062F\u064A\u0645 \u0637\u0644\u0628 \u0627\u0633\u062A\u0634\u0627\u0631\u0629 \u0645\u0639\u0645\u0627\u0631\u064A\u0629" : "\u062A\u0642\u062F\u064A\u0645 \u0637\u0644\u0628 \u0645\u0634\u0631\u0648\u0639 \u0628\u0631\u0645\u062C\u064A\u0627\u062A",
+        body: `\u062A\u0645 \u0625\u0631\u0633\u0627\u0644 \u0627\u0644\u0637\u0644\u0628 \u0628\u0648\u0627\u0633\u0637\u0629 ${data.name} (${maskEmail(data.email)})`,
+        created_at: createdAt
+      }
+    ];
     const [created] = await db.insert(inquiries).values({
-      name,
-      email,
-      project_type,
-      budget_range: budget_range || null,
-      message,
-      status: "new",
+      tracking_code: trackingCode,
+      request_type: data.request_type,
+      name: data.name,
+      email: data.email,
+      phone: data.phone || null,
+      company: data.company || null,
+      project_type: data.project_type,
+      budget_range: data.budget_range || null,
+      consultation_domain: data.consultation_domain || "general",
+      preferred_date: data.preferred_date || null,
+      preferred_time_slot: data.preferred_time_slot || "morning",
+      meeting_mode: data.meeting_mode || "google_meet",
+      message: data.message,
+      status: "pending",
+      activity_log_json: JSON.stringify(initialActivity),
       ip_hash: ipHash,
-      created_at: createdAt
+      created_at: createdAt,
+      updated_at: createdAt
     }).returning();
     timestamps.push(now);
     rateLimitMap.set(ipHash, timestamps);
     sendInquiryNotification({
-      name,
-      email,
-      project_type,
-      budget_range,
-      message
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      request_type: data.request_type,
+      project_type: data.project_type,
+      budget_range: data.budget_range,
+      tracking_code: trackingCode,
+      message: data.message
     }).catch(() => {
     });
     return reply.status(201).send({
       success: true,
       id: created.id,
-      message: "\u062A\u0645 \u0627\u0633\u062A\u0644\u0627\u0645 \u0637\u0644\u0628\u0643 \u0628\u0646\u062C\u0627\u062D\u060C \u0633\u0646\u0642\u0648\u0645 \u0628\u0627\u0644\u0631\u062F \u0639\u0644\u064A\u0643 \u062E\u0644\u0627\u0644 \u064A\u0648\u0645\u064A \u0639\u0645\u0644"
+      tracking_code: trackingCode,
+      status: "pending",
+      message: data.request_type === "consultation" ? "\u062A\u0645 \u0627\u0633\u062A\u0644\u0627\u0645 \u0637\u0644\u0628 \u0627\u0644\u0627\u0633\u062A\u0634\u0627\u0631\u0629 \u0628\u0646\u062C\u0627\u062D\u060C \u0633\u0646\u0631\u0627\u062C\u0639 \u0627\u0644\u0645\u0648\u0639\u062F \u0648\u0646\u062A\u0648\u0627\u0635\u0644 \u0645\u0639\u0643 \u0644\u062A\u0623\u0643\u064A\u062F \u0627\u0644\u062C\u0644\u0633\u0629" : "\u062A\u0645 \u0627\u0633\u062A\u0644\u0627\u0645 \u0637\u0644\u0628 \u0627\u0644\u0645\u0634\u0631\u0648\u0639 \u0628\u0646\u062C\u0627\u062D\u060C \u0633\u0646\u0642\u0648\u0645 \u0628\u062F\u0631\u0627\u0633\u062A\u0647 \u0648\u0627\u0644\u0631\u062F \u0639\u0644\u064A\u0643 \u062E\u0644\u0627\u0644 \u064A\u0648\u0645\u064A \u0639\u0645\u0644"
+    });
+  });
+  app.get("/inquiries/track/:trackingCode", async (request, reply) => {
+    const { trackingCode } = request.params;
+    if (!trackingCode || trackingCode.trim().length < 5) {
+      return reply.status(400).send({ error: "\u0643\u0648\u062F \u0627\u0644\u062A\u062A\u0628\u0639 \u063A\u064A\u0631 \u0635\u0627\u0644\u062D" });
+    }
+    const db = getDb();
+    const cleanCode = trackingCode.trim().toUpperCase();
+    const [row] = await db.select().from(inquiries).where(import_drizzle_orm3.sql`upper(${inquiries.tracking_code}) = ${cleanCode}`);
+    if (!row) {
+      return reply.status(404).send({
+        error: "\u0644\u0645 \u064A\u062A\u0645 \u0627\u0644\u0639\u062B\u0648\u0631 \u0639\u0644\u0649 \u0623\u064A \u0637\u0644\u0628 \u0645\u0631\u062A\u0628\u0637 \u0628\u0643\u0648\u062F \u0627\u0644\u062A\u062A\u0628\u0639 \u0627\u0644\u0645\u062F\u062E\u0644\u060C \u064A\u0631\u062C\u0649 \u0627\u0644\u062A\u062D\u0642\u0642 \u0645\u0646 \u0627\u0644\u0643\u0648\u062F \u0648\u0627\u0644\u0645\u062D\u0627\u0648\u0644\u0629 \u0645\u062C\u062F\u062F\u0627\u064B"
+      });
+    }
+    const activityLog = safeParseJson(row.activity_log_json, []);
+    return reply.send({
+      tracking_code: row.tracking_code,
+      request_type: row.request_type || "project",
+      name: row.name,
+      masked_email: maskEmail(row.email),
+      phone: row.phone,
+      company: row.company,
+      project_type: row.project_type,
+      budget_range: row.budget_range,
+      consultation_domain: row.consultation_domain,
+      preferred_date: row.preferred_date,
+      preferred_time_slot: row.preferred_time_slot,
+      meeting_mode: row.meeting_mode,
+      meeting_link: row.meeting_link,
+      confirmed_datetime: row.confirmed_datetime,
+      quote_amount: row.quote_amount,
+      estimated_timeline: row.estimated_timeline,
+      cancellation_reason: row.cancellation_reason,
+      status: row.status,
+      message: row.message,
+      activity_log: activityLog,
+      created_at: row.created_at,
+      updated_at: row.updated_at
+    });
+  });
+  app.post("/inquiries/track/:trackingCode/cancel", async (request, reply) => {
+    const { trackingCode } = request.params;
+    const parseResult = ClientCancelSchema.safeParse(request.body);
+    if (!parseResult.success) {
+      return reply.status(400).send({
+        error: "\u064A\u0631\u062C\u0649 \u062A\u0648\u0636\u064A\u062D \u0633\u0628\u0628 \u0627\u0644\u0625\u0644\u063A\u0627\u0621",
+        details: parseResult.error.format()
+      });
+    }
+    const db = getDb();
+    const cleanCode = trackingCode.trim().toUpperCase();
+    const [row] = await db.select().from(inquiries).where(import_drizzle_orm3.sql`upper(${inquiries.tracking_code}) = ${cleanCode}`);
+    if (!row) {
+      return reply.status(404).send({ error: "\u0637\u0644\u0628 \u063A\u064A\u0631 \u0645\u0648\u062C\u0648\u062F" });
+    }
+    if (row.status === "completed" || row.status === "cancelled") {
+      return reply.status(400).send({
+        error: `\u0644\u0627 \u064A\u0645\u0643\u0646 \u0625\u0644\u063A\u0627\u0621 \u0627\u0644\u0637\u0644\u0628 \u0644\u0623\u0646\u0647 \u0641\u064A \u062D\u0627\u0644\u0629 (${row.status}) \u0645\u0633\u0628\u0642\u0627\u064B`
+      });
+    }
+    const now = (/* @__PURE__ */ new Date()).toISOString();
+    const existingLog = safeParseJson(row.activity_log_json, []);
+    const updatedLog = [
+      ...existingLog,
+      {
+        id: import_crypto2.default.randomUUID(),
+        author: "client",
+        action: "cancelled",
+        title: "\u0625\u0644\u063A\u0627\u0621 \u0627\u0644\u0637\u0644\u0628 \u0645\u0646 \u0642\u0650\u0628\u0644 \u0627\u0644\u0639\u0645\u064A\u0644",
+        body: parseResult.data.reason,
+        created_at: now
+      }
+    ];
+    await db.update(inquiries).set({
+      status: "cancelled",
+      cancellation_reason: parseResult.data.reason,
+      activity_log_json: JSON.stringify(updatedLog),
+      updated_at: now
+    }).where((0, import_drizzle_orm3.eq)(inquiries.id, row.id));
+    return reply.send({
+      success: true,
+      message: "\u062A\u0645 \u0625\u0644\u063A\u0627\u0621 \u0627\u0644\u0637\u0644\u0628 \u0628\u0646\u062C\u0627\u062D\u060C \u0646\u0634\u0643\u0631\u0643 \u0639\u0644\u0649 \u0625\u0639\u0644\u0627\u0645\u0646\u0627"
+    });
+  });
+  app.post("/inquiries/track/:trackingCode/message", async (request, reply) => {
+    const { trackingCode } = request.params;
+    const parseResult = ClientMessageSchema.safeParse(request.body);
+    if (!parseResult.success) {
+      return reply.status(400).send({
+        error: "\u0646\u0635 \u0627\u0644\u0631\u0633\u0627\u0644\u0629 \u063A\u064A\u0631 \u0635\u0627\u0644\u062D",
+        details: parseResult.error.format()
+      });
+    }
+    const db = getDb();
+    const cleanCode = trackingCode.trim().toUpperCase();
+    const [row] = await db.select().from(inquiries).where(import_drizzle_orm3.sql`upper(${inquiries.tracking_code}) = ${cleanCode}`);
+    if (!row) {
+      return reply.status(404).send({ error: "\u0637\u0644\u0628 \u063A\u064A\u0631 \u0645\u0648\u062C\u0648\u062F" });
+    }
+    const now = (/* @__PURE__ */ new Date()).toISOString();
+    const existingLog = safeParseJson(row.activity_log_json, []);
+    const updatedLog = [
+      ...existingLog,
+      {
+        id: import_crypto2.default.randomUUID(),
+        author: "client",
+        action: "client_note",
+        title: "\u0631\u0633\u0627\u0644\u0629 / \u0627\u0633\u062A\u0641\u0633\u0627\u0631 \u0625\u0636\u0627\u0641\u064A \u0645\u0646 \u0627\u0644\u0639\u0645\u064A\u0644",
+        body: parseResult.data.message,
+        created_at: now
+      }
+    ];
+    await db.update(inquiries).set({
+      activity_log_json: JSON.stringify(updatedLog),
+      updated_at: now
+    }).where((0, import_drizzle_orm3.eq)(inquiries.id, row.id));
+    return reply.send({
+      success: true,
+      message: "\u062A\u0645 \u0625\u0631\u0633\u0627\u0644 \u0631\u0633\u0627\u0644\u062A\u0643 \u0625\u0644\u0649 \u0627\u0644\u0641\u0631\u064A\u0642 \u0627\u0644\u0647\u0646\u062F\u0633\u064A \u0628\u0646\u062C\u0627\u062D"
     });
   });
 }
 
 // apps/api/src/routes/public.ts
-var import_drizzle_orm3 = require("drizzle-orm");
+var import_drizzle_orm4 = require("drizzle-orm");
 function safeJsonParse(value, fallback) {
   if (!value) return fallback;
   try {
@@ -16393,7 +16642,7 @@ async function publicRoutes(app) {
       repo_url: projects.repo_url,
       featured: projects.featured,
       sort_order: projects.sort_order
-    }).from(projects).where((0, import_drizzle_orm3.eq)(projects.published, true)).orderBy(projects.sort_order);
+    }).from(projects).where((0, import_drizzle_orm4.eq)(projects.published, true)).orderBy(projects.sort_order);
     const formatted = rows.map((r) => ({
       ...r,
       tech: safeJsonParse(r.tech_json, []),
@@ -16410,11 +16659,11 @@ async function publicRoutes(app) {
   app.get("/projects/:slug", async (request, reply) => {
     const { slug } = request.params;
     const db = getDb();
-    const [project] = await db.select().from(projects).where((0, import_drizzle_orm3.and)((0, import_drizzle_orm3.eq)(projects.slug, slug), (0, import_drizzle_orm3.eq)(projects.published, true)));
+    const [project] = await db.select().from(projects).where((0, import_drizzle_orm4.and)((0, import_drizzle_orm4.eq)(projects.slug, slug), (0, import_drizzle_orm4.eq)(projects.published, true)));
     if (!project) {
       return reply.status(404).send({ error: "\u0627\u0644\u0645\u0634\u0631\u0648\u0639 \u063A\u064A\u0631 \u0645\u0648\u062C\u0648\u062F" });
     }
-    const images = await db.select().from(project_images).where((0, import_drizzle_orm3.eq)(project_images.project_id, project.id)).orderBy(project_images.sort_order);
+    const images = await db.select().from(project_images).where((0, import_drizzle_orm4.eq)(project_images.project_id, project.id)).orderBy(project_images.sort_order);
     return reply.send({
       ...project,
       tech: safeJsonParse(project.tech_json, []),
@@ -16436,13 +16685,13 @@ async function publicRoutes(app) {
       title_ar: posts.title_ar,
       title_en: posts.title_en,
       published_at: posts.published_at
-    }).from(posts).where((0, import_drizzle_orm3.eq)(posts.published, true));
+    }).from(posts).where((0, import_drizzle_orm4.eq)(posts.published, true));
     return reply.send(rows);
   });
   app.get("/posts/:slug", async (request, reply) => {
     const { slug } = request.params;
     const db = getDb();
-    const [post] = await db.select().from(posts).where((0, import_drizzle_orm3.and)((0, import_drizzle_orm3.eq)(posts.slug, slug), (0, import_drizzle_orm3.eq)(posts.published, true)));
+    const [post] = await db.select().from(posts).where((0, import_drizzle_orm4.and)((0, import_drizzle_orm4.eq)(posts.slug, slug), (0, import_drizzle_orm4.eq)(posts.published, true)));
     if (!post) {
       return reply.status(404).send({ error: "\u0627\u0644\u0645\u0642\u0627\u0644 \u063A\u064A\u0631 \u0645\u0648\u062C\u0648\u062F" });
     }
@@ -16464,9 +16713,9 @@ async function publicRoutes(app) {
     }
     const today = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
     const db = getDb();
-    const [existing] = await db.select().from(page_views).where((0, import_drizzle_orm3.and)((0, import_drizzle_orm3.eq)(page_views.path, path2), (0, import_drizzle_orm3.eq)(page_views.day, today)));
+    const [existing] = await db.select().from(page_views).where((0, import_drizzle_orm4.and)((0, import_drizzle_orm4.eq)(page_views.path, path2), (0, import_drizzle_orm4.eq)(page_views.day, today)));
     if (existing) {
-      await db.update(page_views).set({ count: existing.count + 1 }).where((0, import_drizzle_orm3.eq)(page_views.id, existing.id));
+      await db.update(page_views).set({ count: existing.count + 1 }).where((0, import_drizzle_orm4.eq)(page_views.id, existing.id));
     } else {
       await db.insert(page_views).values({
         path: path2,
@@ -16488,11 +16737,11 @@ async function publicRoutes(app) {
     const projectRows = await db.select({
       slug: projects.slug,
       updated_at: projects.updated_at
-    }).from(projects).where((0, import_drizzle_orm3.eq)(projects.published, true));
+    }).from(projects).where((0, import_drizzle_orm4.eq)(projects.published, true));
     const postRows = await db.select({
       slug: posts.slug,
       published_at: posts.published_at
-    }).from(posts).where((0, import_drizzle_orm3.eq)(posts.published, true));
+    }).from(posts).where((0, import_drizzle_orm4.eq)(posts.published, true));
     const urls = [
       { loc: `${baseUrl}/`, lastmod: today, changefreq: "daily", priority: "1.0" },
       { loc: `${baseUrl}/projects`, lastmod: today, changefreq: "weekly", priority: "0.9" },
@@ -16533,7 +16782,7 @@ ${urls.map((u) => `  <url>
 }
 
 // apps/api/src/routes/admin.ts
-var import_drizzle_orm4 = require("drizzle-orm");
+var import_drizzle_orm5 = require("drizzle-orm");
 
 // apps/api/src/services/upload.ts
 var import_path = __toESM(require("path"));
@@ -16573,6 +16822,7 @@ async function processAndSaveImage(fileBuffer, subDir = "projects") {
 }
 
 // apps/api/src/routes/admin.ts
+var import_crypto4 = __toESM(require("crypto"));
 function safeJsonParse2(value, fallback) {
   if (!value) return fallback;
   try {
@@ -16585,11 +16835,11 @@ async function adminRoutes(app) {
   app.addHook("preHandler", requireAdmin);
   app.get("/stats", async (request, reply) => {
     const db = getDb();
-    const [inquiriesCount] = await db.select({ count: import_drizzle_orm4.sql`count(*)` }).from(inquiries);
-    const [newInquiriesCount] = await db.select({ count: import_drizzle_orm4.sql`count(*)` }).from(inquiries).where((0, import_drizzle_orm4.eq)(inquiries.status, "new"));
-    const [projectsCount] = await db.select({ count: import_drizzle_orm4.sql`count(*)` }).from(projects).where((0, import_drizzle_orm4.eq)(projects.published, true));
-    const [postsCount] = await db.select({ count: import_drizzle_orm4.sql`count(*)` }).from(posts);
-    const [viewsCount] = await db.select({ sum: import_drizzle_orm4.sql`sum(count)` }).from(page_views);
+    const [inquiriesCount] = await db.select({ count: import_drizzle_orm5.sql`count(*)` }).from(inquiries);
+    const [newInquiriesCount] = await db.select({ count: import_drizzle_orm5.sql`count(*)` }).from(inquiries).where((0, import_drizzle_orm5.or)((0, import_drizzle_orm5.eq)(inquiries.status, "new"), (0, import_drizzle_orm5.eq)(inquiries.status, "pending")));
+    const [projectsCount] = await db.select({ count: import_drizzle_orm5.sql`count(*)` }).from(projects).where((0, import_drizzle_orm5.eq)(projects.published, true));
+    const [postsCount] = await db.select({ count: import_drizzle_orm5.sql`count(*)` }).from(posts);
+    const [viewsCount] = await db.select({ sum: import_drizzle_orm5.sql`sum(count)` }).from(page_views);
     return reply.send({
       total_inquiries: Number(inquiriesCount?.count || 0),
       new_inquiries: Number(newInquiriesCount?.count || 0),
@@ -16599,35 +16849,217 @@ async function adminRoutes(app) {
     });
   });
   app.get("/inquiries", async (request, reply) => {
-    const { status } = request.query;
+    const { status, type, search } = request.query;
     const db = getDb();
     let query = db.select().from(inquiries);
-    if (status && ["new", "in_progress", "closed"].includes(status)) {
-      query = query.where((0, import_drizzle_orm4.eq)(inquiries.status, status));
+    const conditions = [];
+    if (status && status !== "all") {
+      if (status === "pending" || status === "new") {
+        conditions.push((0, import_drizzle_orm5.or)((0, import_drizzle_orm5.eq)(inquiries.status, "pending"), (0, import_drizzle_orm5.eq)(inquiries.status, "new")));
+      } else {
+        conditions.push((0, import_drizzle_orm5.eq)(inquiries.status, status));
+      }
     }
-    const rows = await query.orderBy((0, import_drizzle_orm4.desc)(inquiries.created_at));
-    return reply.send(rows);
+    if (type && ["project", "consultation"].includes(type)) {
+      conditions.push((0, import_drizzle_orm5.eq)(inquiries.request_type, type));
+    }
+    if (search && search.trim().length > 0) {
+      const term = `%${search.trim().toLowerCase()}%`;
+      conditions.push(
+        (0, import_drizzle_orm5.or)(
+          import_drizzle_orm5.sql`lower(${inquiries.name}) LIKE ${term}`,
+          import_drizzle_orm5.sql`lower(${inquiries.email}) LIKE ${term}`,
+          import_drizzle_orm5.sql`lower(coalesce(${inquiries.tracking_code}, '')) LIKE ${term}`,
+          import_drizzle_orm5.sql`lower(coalesce(${inquiries.phone}, '')) LIKE ${term}`,
+          import_drizzle_orm5.sql`lower(coalesce(${inquiries.company}, '')) LIKE ${term}`
+        )
+      );
+    }
+    if (conditions.length > 0) {
+      query = query.where((0, import_drizzle_orm5.and)(...conditions));
+    }
+    const rows = await query.orderBy((0, import_drizzle_orm5.desc)(inquiries.created_at));
+    return reply.send(
+      rows.map((r) => ({
+        ...r,
+        activity_log: safeJsonParse2(r.activity_log_json, [])
+      }))
+    );
   });
   app.patch("/inquiries/:id", async (request, reply) => {
     const { id } = request.params;
     const parseResult = UpdateInquirySchema.safeParse(request.body);
     if (!parseResult.success) {
       return reply.status(400).send({
-        error: "Validation failed",
+        error: "\u0628\u064A\u0627\u0646\u0627\u062A \u063A\u064A\u0631 \u0635\u0627\u0644\u062D\u0629",
         details: parseResult.error.format()
       });
     }
     const db = getDb();
-    const [existing] = await db.select().from(inquiries).where((0, import_drizzle_orm4.eq)(inquiries.id, Number(id)));
+    const [existing] = await db.select().from(inquiries).where((0, import_drizzle_orm5.eq)(inquiries.id, Number(id)));
     if (!existing) {
-      return reply.status(404).send({ error: "Inquiry not found" });
+      return reply.status(404).send({ error: "\u0627\u0644\u0637\u0644\u0628 \u063A\u064A\u0631 \u0645\u0648\u062C\u0648\u062F" });
     }
-    const { status, admin_note } = parseResult.data;
+    const { status, admin_note, quote_amount, estimated_timeline, confirmed_datetime, meeting_link } = parseResult.data;
+    const now = (/* @__PURE__ */ new Date()).toISOString();
+    const existingLog = safeJsonParse2(existing.activity_log_json, []);
+    const updatedLog = [...existingLog];
+    if (status && status !== existing.status) {
+      updatedLog.push({
+        id: import_crypto4.default.randomUUID(),
+        author: "admin",
+        action: "status_changed",
+        title: `\u062A\u062D\u062F\u064A\u062B \u0627\u0644\u062D\u0627\u0644\u0629 \u0625\u0644\u0649 (${status})`,
+        body: admin_note || void 0,
+        created_at: now
+      });
+    } else if (admin_note && admin_note !== existing.admin_note) {
+      updatedLog.push({
+        id: import_crypto4.default.randomUUID(),
+        author: "admin",
+        action: "admin_note",
+        title: "\u0625\u0636\u0627\u0641\u0629 \u0645\u0644\u0627\u062D\u0638\u0629 \u0625\u062F\u0627\u0631\u064A\u0629",
+        body: admin_note,
+        created_at: now
+      });
+    }
     await db.update(inquiries).set({
       status,
-      ...admin_note !== void 0 ? { admin_note } : {}
-    }).where((0, import_drizzle_orm4.eq)(inquiries.id, Number(id)));
-    return reply.send({ success: true, message: "Inquiry updated successfully" });
+      ...admin_note !== void 0 ? { admin_note } : {},
+      ...quote_amount !== void 0 ? { quote_amount } : {},
+      ...estimated_timeline !== void 0 ? { estimated_timeline } : {},
+      ...confirmed_datetime !== void 0 ? { confirmed_datetime } : {},
+      ...meeting_link !== void 0 ? { meeting_link } : {},
+      activity_log_json: JSON.stringify(updatedLog),
+      updated_at: now
+    }).where((0, import_drizzle_orm5.eq)(inquiries.id, Number(id)));
+    return reply.send({ success: true, message: "\u062A\u0645 \u062A\u062D\u062F\u064A\u062B \u0627\u0644\u0637\u0644\u0628 \u0628\u0646\u062C\u0627\u062D" });
+  });
+  app.post("/inquiries/:id/approve", async (request, reply) => {
+    const { id } = request.params;
+    const parseResult = ApproveProjectSchema.safeParse(request.body);
+    if (!parseResult.success) {
+      return reply.status(400).send({
+        error: "\u0628\u064A\u0627\u0646\u0627\u062A \u0627\u0644\u0627\u0639\u062A\u0645\u0627\u062F \u063A\u064A\u0631 \u0635\u0627\u0644\u062D\u0629",
+        details: parseResult.error.format()
+      });
+    }
+    const db = getDb();
+    const [existing] = await db.select().from(inquiries).where((0, import_drizzle_orm5.eq)(inquiries.id, Number(id)));
+    if (!existing) {
+      return reply.status(404).send({ error: "\u0627\u0644\u0637\u0644\u0628 \u063A\u064A\u0631 \u0645\u0648\u062C\u0648\u062F" });
+    }
+    const now = (/* @__PURE__ */ new Date()).toISOString();
+    const existingLog = safeJsonParse2(existing.activity_log_json, []);
+    const { quote_amount, estimated_timeline, admin_note } = parseResult.data;
+    const updatedLog = [
+      ...existingLog,
+      {
+        id: import_crypto4.default.randomUUID(),
+        author: "admin",
+        action: "quote_provided",
+        title: "\u062A\u0645\u062A \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629 \u0639\u0644\u0649 \u0627\u0644\u0645\u0634\u0631\u0648\u0639 \u0648\u062A\u0642\u062F\u064A\u0645 \u0639\u0631\u0636 \u0627\u0644\u0633\u0639\u0631",
+        body: `\u0639\u0631\u0636 \u0627\u0644\u0633\u0639\u0631: ${quote_amount} | \u0627\u0644\u0645\u062F\u0629 \u0627\u0644\u062A\u0642\u062F\u064A\u0631\u064A\u0629: ${estimated_timeline}${admin_note ? `
+\u0645\u0644\u0627\u062D\u0638\u0629: ${admin_note}` : ""}`,
+        created_at: now
+      }
+    ];
+    await db.update(inquiries).set({
+      status: "approved",
+      quote_amount,
+      estimated_timeline,
+      admin_note: admin_note || existing.admin_note,
+      activity_log_json: JSON.stringify(updatedLog),
+      updated_at: now
+    }).where((0, import_drizzle_orm5.eq)(inquiries.id, Number(id)));
+    return reply.send({ success: true, message: "\u062A\u0645\u062A \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629 \u0639\u0644\u0649 \u0627\u0644\u0645\u0634\u0631\u0648\u0639 \u0648\u0625\u0631\u0633\u0627\u0644 \u0627\u0644\u0639\u0631\u0636 \u0644\u0644\u0639\u0645\u064A\u0644" });
+  });
+  app.post("/inquiries/:id/schedule", async (request, reply) => {
+    const { id } = request.params;
+    const parseResult = ScheduleConsultationSchema.safeParse(request.body);
+    if (!parseResult.success) {
+      return reply.status(400).send({
+        error: "\u0628\u064A\u0627\u0646\u0627\u062A \u062C\u062F\u0648\u0644\u0629 \u0627\u0644\u0627\u0633\u062A\u0634\u0627\u0631\u0629 \u063A\u064A\u0631 \u0645\u0643\u062A\u0645\u0644\u0629",
+        details: parseResult.error.format()
+      });
+    }
+    const db = getDb();
+    const [existing] = await db.select().from(inquiries).where((0, import_drizzle_orm5.eq)(inquiries.id, Number(id)));
+    if (!existing) {
+      return reply.status(404).send({ error: "\u0637\u0644\u0628 \u0627\u0644\u0627\u0633\u062A\u0634\u0627\u0631\u0629 \u063A\u064A\u0631 \u0645\u0648\u062C\u0648\u062F" });
+    }
+    const now = (/* @__PURE__ */ new Date()).toISOString();
+    const existingLog = safeJsonParse2(existing.activity_log_json, []);
+    const { confirmed_datetime, meeting_mode, meeting_link, admin_note } = parseResult.data;
+    const updatedLog = [
+      ...existingLog,
+      {
+        id: import_crypto4.default.randomUUID(),
+        author: "admin",
+        action: "consultation_scheduled",
+        title: "\u062A\u0645 \u062A\u0623\u0643\u064A\u062F \u0645\u0648\u0639\u062F \u0627\u0644\u0627\u0633\u062A\u0634\u0627\u0631\u0629 \u0627\u0644\u062A\u0642\u0646\u064A\u0629",
+        body: `\u0627\u0644\u0645\u0648\u0639\u062F: ${confirmed_datetime} | \u0648\u0633\u064A\u0644\u0629 \u0627\u0644\u0627\u062C\u062A\u0645\u0627\u0639: ${meeting_mode}${meeting_link ? `
+\u0627\u0644\u0631\u0627\u0628\u0637: ${meeting_link}` : ""}${admin_note ? `
+\u0645\u0644\u0627\u062D\u0638\u0629: ${admin_note}` : ""}`,
+        created_at: now
+      }
+    ];
+    await db.update(inquiries).set({
+      status: "approved",
+      confirmed_datetime,
+      meeting_mode,
+      meeting_link: meeting_link || null,
+      admin_note: admin_note || existing.admin_note,
+      activity_log_json: JSON.stringify(updatedLog),
+      updated_at: now
+    }).where((0, import_drizzle_orm5.eq)(inquiries.id, Number(id)));
+    return reply.send({ success: true, message: "\u062A\u0645 \u062A\u0623\u0643\u064A\u062F \u0645\u0648\u0639\u062F \u0627\u0644\u0627\u0633\u062A\u0634\u0627\u0631\u0629 \u0648\u062A\u062D\u062F\u064A\u062B \u0631\u0627\u0628\u0637 \u0627\u0644\u0627\u062C\u062A\u0645\u0627\u0639" });
+  });
+  app.post("/inquiries/:id/reject", async (request, reply) => {
+    const { id } = request.params;
+    const parseResult = RejectInquirySchema.safeParse(request.body);
+    if (!parseResult.success) {
+      return reply.status(400).send({
+        error: "\u064A\u0631\u062C\u0649 \u0643\u062A\u0627\u0628\u0629 \u0633\u0628\u0628 \u0627\u0644\u0627\u0639\u062A\u0630\u0627\u0631",
+        details: parseResult.error.format()
+      });
+    }
+    const db = getDb();
+    const [existing] = await db.select().from(inquiries).where((0, import_drizzle_orm5.eq)(inquiries.id, Number(id)));
+    if (!existing) {
+      return reply.status(404).send({ error: "\u0627\u0644\u0637\u0644\u0628 \u063A\u064A\u0631 \u0645\u0648\u062C\u0648\u062F" });
+    }
+    const now = (/* @__PURE__ */ new Date()).toISOString();
+    const existingLog = safeJsonParse2(existing.activity_log_json, []);
+    const { reason } = parseResult.data;
+    const updatedLog = [
+      ...existingLog,
+      {
+        id: import_crypto4.default.randomUUID(),
+        author: "admin",
+        action: "rejected",
+        title: "\u062A\u0645 \u0627\u0644\u0627\u0639\u062A\u0630\u0627\u0631 \u0639\u0646 \u0642\u0628\u0648\u0644 \u0627\u0644\u0637\u0644\u0628",
+        body: reason,
+        created_at: now
+      }
+    ];
+    await db.update(inquiries).set({
+      status: "rejected",
+      cancellation_reason: reason,
+      activity_log_json: JSON.stringify(updatedLog),
+      updated_at: now
+    }).where((0, import_drizzle_orm5.eq)(inquiries.id, Number(id)));
+    return reply.send({ success: true, message: "\u062A\u0645 \u062A\u0633\u062C\u064A\u0644 \u0627\u0644\u0627\u0639\u062A\u0630\u0627\u0631 \u0648\u062A\u062D\u062F\u064A\u062B \u062D\u0627\u0644\u0629 \u0627\u0644\u0637\u0644\u0628" });
+  });
+  app.delete("/inquiries/:id", async (request, reply) => {
+    const { id } = request.params;
+    const db = getDb();
+    const [existing] = await db.select().from(inquiries).where((0, import_drizzle_orm5.eq)(inquiries.id, Number(id)));
+    if (!existing) {
+      return reply.status(404).send({ error: "\u0627\u0644\u0637\u0644\u0628 \u063A\u064A\u0631 \u0645\u0648\u062C\u0648\u062F \u0623\u0648 \u062A\u0645 \u062D\u0630\u0641\u0647 \u0645\u0633\u0628\u0642\u0627\u064B" });
+    }
+    await db.delete(inquiries).where((0, import_drizzle_orm5.eq)(inquiries.id, Number(id)));
+    return reply.send({ success: true, message: "\u062A\u0645 \u062D\u0630\u0641 \u0627\u0644\u0637\u0644\u0628 \u0646\u0647\u0627\u0626\u064A\u0627\u064B \u0645\u0646 \u0642\u0627\u0639\u062F\u0629 \u0627\u0644\u0628\u064A\u0627\u0646\u0627\u062A" });
   });
   app.get("/projects", async (request, reply) => {
     const db = getDb();
@@ -16721,13 +17153,13 @@ async function adminRoutes(app) {
       published: data.published,
       sort_order: data.sort_order,
       updated_at: now
-    }).where((0, import_drizzle_orm4.eq)(projects.id, Number(id)));
+    }).where((0, import_drizzle_orm5.eq)(projects.id, Number(id)));
     return reply.send({ success: true, message: "Project updated" });
   });
   app.delete("/projects/:id", async (request, reply) => {
     const { id } = request.params;
     const db = getDb();
-    await db.delete(projects).where((0, import_drizzle_orm4.eq)(projects.id, Number(id)));
+    await db.delete(projects).where((0, import_drizzle_orm5.eq)(projects.id, Number(id)));
     return reply.send({ success: true });
   });
   app.post("/uploads", async (request, reply) => {
@@ -16762,7 +17194,7 @@ async function adminRoutes(app) {
 }
 
 // apps/api/src/routes/bioLinks.ts
-var import_drizzle_orm5 = require("drizzle-orm");
+var import_drizzle_orm6 = require("drizzle-orm");
 async function bioLinksRoutes(app) {
   app.get("/bio-links/public", async (request, reply) => {
     const db = getDb();
@@ -16773,7 +17205,7 @@ async function bioLinksRoutes(app) {
     }
     settingsMap.bio_page_bg_type = settingsMap.bio_page_bg_type || "mesh";
     settingsMap.bio_page_bg_value = settingsMap.bio_page_bg_value || "#090d16";
-    const links = await db.select().from(bio_links).where((0, import_drizzle_orm5.eq)(bio_links.is_active, true)).orderBy((0, import_drizzle_orm5.asc)(bio_links.sort_order), (0, import_drizzle_orm5.asc)(bio_links.id));
+    const links = await db.select().from(bio_links).where((0, import_drizzle_orm6.eq)(bio_links.is_active, true)).orderBy((0, import_drizzle_orm6.asc)(bio_links.sort_order), (0, import_drizzle_orm6.asc)(bio_links.id));
     return reply.send({
       settings: settingsMap,
       links
@@ -16787,14 +17219,14 @@ async function bioLinksRoutes(app) {
     }
     const db = getDb();
     await db.update(bio_links).set({
-      click_count: import_drizzle_orm5.sql`${bio_links.click_count} + 1`,
+      click_count: import_drizzle_orm6.sql`${bio_links.click_count} + 1`,
       updated_at: (/* @__PURE__ */ new Date()).toISOString()
-    }).where((0, import_drizzle_orm5.eq)(bio_links.id, linkId));
+    }).where((0, import_drizzle_orm6.eq)(bio_links.id, linkId));
     return reply.send({ success: true });
   });
   app.get("/admin/bio-links", { preHandler: [requireAdmin] }, async (request, reply) => {
     const db = getDb();
-    const links = await db.select().from(bio_links).orderBy((0, import_drizzle_orm5.asc)(bio_links.sort_order), (0, import_drizzle_orm5.asc)(bio_links.id));
+    const links = await db.select().from(bio_links).orderBy((0, import_drizzle_orm6.asc)(bio_links.sort_order), (0, import_drizzle_orm6.asc)(bio_links.id));
     const settingsRows = await db.select().from(settings);
     const settingsMap = {};
     for (const row of settingsRows) {
@@ -16849,7 +17281,7 @@ async function bioLinksRoutes(app) {
     const [updated] = await db.update(bio_links).set({
       ...parseResult.data,
       updated_at: now
-    }).where((0, import_drizzle_orm5.eq)(bio_links.id, linkId)).returning();
+    }).where((0, import_drizzle_orm6.eq)(bio_links.id, linkId)).returning();
     if (!updated) {
       return reply.status(404).send({ error: "\u0627\u0644\u0631\u0627\u0628\u0637 \u063A\u064A\u0631 \u0645\u0648\u062C\u0648\u062F" });
     }
@@ -16862,7 +17294,7 @@ async function bioLinksRoutes(app) {
       return reply.status(400).send({ error: "Invalid link ID" });
     }
     const db = getDb();
-    await db.delete(bio_links).where((0, import_drizzle_orm5.eq)(bio_links.id, linkId));
+    await db.delete(bio_links).where((0, import_drizzle_orm6.eq)(bio_links.id, linkId));
     return reply.send({ success: true });
   });
   app.put("/admin/bio-links/reorder", { preHandler: [requireAdmin] }, async (request, reply) => {
@@ -16879,7 +17311,7 @@ async function bioLinksRoutes(app) {
       await db.update(bio_links).set({
         sort_order: item.sort_order,
         updated_at: now
-      }).where((0, import_drizzle_orm5.eq)(bio_links.id, item.id));
+      }).where((0, import_drizzle_orm6.eq)(bio_links.id, item.id));
     }
     return reply.send({ success: true });
   });

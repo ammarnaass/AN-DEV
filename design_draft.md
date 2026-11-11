@@ -351,6 +351,15 @@ Empowers administrators to manage all showcase attributes directly within `Proje
 *   `apps/web/src/features/admin/components/ProjectGalleryManager.tsx` (Create): Admin editor component for uploading and managing multi-screenshot gallery with device frame selectors.
 *   `apps/web/src/features/admin/components/ProjectEditModal.tsx` (Modify): Integrate specifications and gallery management tabs into the administrative workflow.
 
+#### 6. Interactive Inquiries, Technical Consultations & Client-Admin Lifecycle Engine
+*   `packages/shared/src/schemas/inquiry.ts` (Enhanced): Full Zod schemas for dual streams (`project` vs `consultation`), consultation domains, meeting modes, tracking codes, lifecycle actions (`ApproveProjectSchema`, `ScheduleConsultationSchema`, `RejectInquirySchema`, `ClientCancelSchema`, `ClientMessageSchema`).
+*   `apps/api/src/db/schema.ts` (Enhanced): Postgres table `inquiries` extended with `tracking_code`, `request_type`, `phone`, `company`, `consultation_domain`, `preferred_date`, `preferred_time_slot`, `meeting_mode`, `meeting_link`, `confirmed_datetime`, `quote_amount`, `estimated_timeline`, `cancellation_reason`, and `activity_log_json`.
+*   `apps/api/src/routes/inquiries.ts` (Enhanced): Public endpoints `POST /inquiries` (generates human-readable tracking code `AND-YYYY-XXXX`), `GET /inquiries/track/:trackingCode`, `POST /inquiries/track/:trackingCode/cancel`, and `POST /inquiries/track/:trackingCode/message`.
+*   `apps/api/src/routes/admin.ts` (Enhanced): Admin endpoints for filtering, searching, approving projects with quotes, scheduling consultations with Google Meet links, rejecting with reasons, and permanent hard deletion (`DELETE /inquiries/:id`).
+*   `apps/web/src/features/inquiries/components/InquiryForm.tsx` (Enhanced): Dual stream selector, phone with WhatsApp support, company, consultation domain/time picker, and interactive success card with one-click copy and tracking link.
+*   `apps/web/src/pages/InquiryTrackingPage.tsx` (Create): Public real-time client tracking portal with visual progress stepper, approved quotation box, Google Meet join link, request cancellation with reason, and follow-up messaging.
+*   `apps/web/src/features/admin/pages/AdminInquiriesPage.tsx` (Enhanced): Advanced CRM management with aggregate KPI cards, multi-stream filtering, instant search, quick actions, and hard deletion confirmation.
+
 --------------------------------------------------------------------------------
 
 ## Verification Plan

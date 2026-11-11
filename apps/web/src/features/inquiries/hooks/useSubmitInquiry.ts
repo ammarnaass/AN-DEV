@@ -5,8 +5,15 @@ import { inquiriesService } from "../services/inquiries.service";
 const initialFormState: InquiryInput = {
   name: "",
   email: "",
+  phone: "",
+  company: "",
+  request_type: "project",
   project_type: "web",
   budget_range: "",
+  consultation_domain: "general",
+  preferred_date: "",
+  preferred_time_slot: "morning",
+  meeting_mode: "google_meet",
   message: "",
   honeypot: ""
 };
@@ -16,9 +23,10 @@ export function useSubmitInquiry() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [trackingCode, setTrackingCode] = useState<string | null>(null);
   const [serverError, setServerError] = useState<string | null>(null);
 
-  const updateField = (name: keyof InquiryInput, value: string) => {
+  const updateField = (name: keyof InquiryInput, value: any) => {
     setFormData(prev => ({ ...prev, [name]: value }));
     if (errors[name]) {
       setErrors(prev => {
@@ -31,6 +39,7 @@ export function useSubmitInquiry() {
 
   const resetForm = () => {
     setIsSubmitted(false);
+    setTrackingCode(null);
     setFormData(initialFormState);
     setErrors({});
     setServerError(null);
@@ -54,7 +63,8 @@ export function useSubmitInquiry() {
 
     setIsSubmitting(true);
     try {
-      await inquiriesService.submitInquiry(formData);
+      const res = await inquiriesService.submitInquiry(formData);
+      setTrackingCode(res.tracking_code);
       setIsSubmitted(true);
       return true;
     } catch (err: any) {
@@ -70,10 +80,10 @@ export function useSubmitInquiry() {
     errors,
     isSubmitting,
     isSubmitted,
+    trackingCode,
     serverError,
     updateField,
     resetForm,
     submit
   };
 }
-

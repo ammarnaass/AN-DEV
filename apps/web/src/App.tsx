@@ -6,6 +6,7 @@ import { Navbar } from "./components/layout/Navbar";
 import { Footer } from "./components/layout/Footer";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { BioLinksPage } from "./pages/BioLinksPage";
+import { InquiryTrackingPage } from "./pages/InquiryTrackingPage";
 
 // Feature modules public API imports
 import { HomePage } from "./features/home";
@@ -72,6 +73,8 @@ export function App() {
               <Route path="/blog" element={<BlogPage />} />
               <Route path="/blog/:slug" element={<PostDetailPage />} />
               <Route path="/contact" element={<ContactPage />} />
+              <Route path="/track" element={<InquiryTrackingPage />} />
+              <Route path="/track/:trackingCode" element={<InquiryTrackingPage />} />
 
               {/* Bio Links Standalone Route */}
               <Route path="/links" element={<BioLinksPage />} />

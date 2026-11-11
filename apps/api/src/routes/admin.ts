@@ -2,9 +2,18 @@ import { FastifyInstance } from "fastify";
 import { requireAdmin } from "../plugins/auth";
 import { getDb } from "../db";
 import { inquiries, projects, settings, page_views, posts } from "../db/schema";
-import { eq, desc, sql } from "drizzle-orm";
-import { ProjectSchema, UpdateInquirySchema, SettingsSchema } from "@andev/shared";
+import { eq, desc, sql, and, or, like } from "drizzle-orm";
+import {
+  ProjectSchema,
+  UpdateInquirySchema,
+  ApproveProjectSchema,
+  ScheduleConsultationSchema,
+  RejectInquirySchema,
+  SettingsSchema,
+  InquiryActivityEvent
+} from "@andev/shared";
 import { processAndSaveImage } from "../services/upload";
+import crypto from "crypto";
 
 function safeJsonParse<T>(value: string | null | undefined, fallback: T): T {
   if (!value) return fallback;
@@ -26,7 +35,7 @@ export async function adminRoutes(app: FastifyInstance) {
     const [inquiriesCount] = await db.select({ count: sql<number>`count(*)` }).from(inquiries);
     const [newInquiriesCount] = await db.select({ count: sql<number>`count(*)` })
       .from(inquiries)
-      .where(eq(inquiries.status, "new"));
+      .where(or(eq(inquiries.status, "new"), eq(inquiries.status, "pending")));
 
     const [projectsCount] = await db.select({ count: sql<number>`count(*)` })
       .from(projects)
@@ -44,27 +53,64 @@ export async function adminRoutes(app: FastifyInstance) {
     });
   });
 
-  // 2. Inquiries
+  // 2. Inquiries Management
   app.get("/inquiries", async (request, reply) => {
-    const { status } = request.query as { status?: string };
+    const { status, type, search } = request.query as {
+      status?: string;
+      type?: string;
+      search?: string;
+    };
     const db = getDb();
 
     let query = db.select().from(inquiries);
-    if (status && ["new", "in_progress", "closed"].includes(status)) {
-      query = query.where(eq(inquiries.status, status)) as any;
+    const conditions = [];
+
+    if (status && status !== "all") {
+      if (status === "pending" || status === "new") {
+        conditions.push(or(eq(inquiries.status, "pending"), eq(inquiries.status, "new")));
+      } else {
+        conditions.push(eq(inquiries.status, status));
+      }
+    }
+
+    if (type && ["project", "consultation"].includes(type)) {
+      conditions.push(eq(inquiries.request_type, type));
+    }
+
+    if (search && search.trim().length > 0) {
+      const term = `%${search.trim().toLowerCase()}%`;
+      conditions.push(
+        or(
+          sql`lower(${inquiries.name}) LIKE ${term}`,
+          sql`lower(${inquiries.email}) LIKE ${term}`,
+          sql`lower(coalesce(${inquiries.tracking_code}, '')) LIKE ${term}`,
+          sql`lower(coalesce(${inquiries.phone}, '')) LIKE ${term}`,
+          sql`lower(coalesce(${inquiries.company}, '')) LIKE ${term}`
+        )
+      );
+    }
+
+    if (conditions.length > 0) {
+      query = query.where(and(...conditions)) as any;
     }
 
     const rows = await query.orderBy(desc(inquiries.created_at));
-    return reply.send(rows);
+    return reply.send(
+      rows.map(r => ({
+        ...r,
+        activity_log: safeJsonParse<InquiryActivityEvent[]>(r.activity_log_json, [])
+      }))
+    );
   });
 
+  // Update Status / Internal Note
   app.patch("/inquiries/:id", async (request, reply) => {
     const { id } = request.params as { id: string };
     const parseResult = UpdateInquirySchema.safeParse(request.body);
 
     if (!parseResult.success) {
       return reply.status(400).send({
-        error: "Validation failed",
+        error: "بيانات غير صالحة",
         details: parseResult.error.format()
       });
     }
@@ -72,19 +118,208 @@ export async function adminRoutes(app: FastifyInstance) {
     const db = getDb();
     const [existing] = await db.select().from(inquiries).where(eq(inquiries.id, Number(id)));
     if (!existing) {
-      return reply.status(404).send({ error: "Inquiry not found" });
+      return reply.status(404).send({ error: "الطلب غير موجود" });
     }
 
-    const { status, admin_note } = parseResult.data;
+    const { status, admin_note, quote_amount, estimated_timeline, confirmed_datetime, meeting_link } = parseResult.data;
+    const now = new Date().toISOString();
+    const existingLog = safeJsonParse<InquiryActivityEvent[]>(existing.activity_log_json, []);
 
-    await db.update(inquiries)
+    const updatedLog: InquiryActivityEvent[] = [...existingLog];
+    if (status && status !== existing.status) {
+      updatedLog.push({
+        id: crypto.randomUUID(),
+        author: "admin",
+        action: "status_changed",
+        title: `تحديث الحالة إلى (${status})`,
+        body: admin_note || undefined,
+        created_at: now
+      });
+    } else if (admin_note && admin_note !== existing.admin_note) {
+      updatedLog.push({
+        id: crypto.randomUUID(),
+        author: "admin",
+        action: "admin_note",
+        title: "إضافة ملاحظة إدارية",
+        body: admin_note,
+        created_at: now
+      });
+    }
+
+    await db
+      .update(inquiries)
       .set({
         status,
-        ...(admin_note !== undefined ? { admin_note } : {})
+        ...(admin_note !== undefined ? { admin_note } : {}),
+        ...(quote_amount !== undefined ? { quote_amount } : {}),
+        ...(estimated_timeline !== undefined ? { estimated_timeline } : {}),
+        ...(confirmed_datetime !== undefined ? { confirmed_datetime } : {}),
+        ...(meeting_link !== undefined ? { meeting_link } : {}),
+        activity_log_json: JSON.stringify(updatedLog),
+        updated_at: now
       })
       .where(eq(inquiries.id, Number(id)));
 
-    return reply.send({ success: true, message: "Inquiry updated successfully" });
+    return reply.send({ success: true, message: "تم تحديث الطلب بنجاح" });
+  });
+
+  // Approve Project (Provide Quote & Timeline)
+  app.post("/inquiries/:id/approve", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const parseResult = ApproveProjectSchema.safeParse(request.body);
+
+    if (!parseResult.success) {
+      return reply.status(400).send({
+        error: "بيانات الاعتماد غير صالحة",
+        details: parseResult.error.format()
+      });
+    }
+
+    const db = getDb();
+    const [existing] = await db.select().from(inquiries).where(eq(inquiries.id, Number(id)));
+    if (!existing) {
+      return reply.status(404).send({ error: "الطلب غير موجود" });
+    }
+
+    const now = new Date().toISOString();
+    const existingLog = safeJsonParse<InquiryActivityEvent[]>(existing.activity_log_json, []);
+    const { quote_amount, estimated_timeline, admin_note } = parseResult.data;
+
+    const updatedLog: InquiryActivityEvent[] = [
+      ...existingLog,
+      {
+        id: crypto.randomUUID(),
+        author: "admin",
+        action: "quote_provided",
+        title: "تمت الموافقة على المشروع وتقديم عرض السعر",
+        body: `عرض السعر: ${quote_amount} | المدة التقديرية: ${estimated_timeline}${admin_note ? `\nملاحظة: ${admin_note}` : ""}`,
+        created_at: now
+      }
+    ];
+
+    await db
+      .update(inquiries)
+      .set({
+        status: "approved",
+        quote_amount,
+        estimated_timeline,
+        admin_note: admin_note || existing.admin_note,
+        activity_log_json: JSON.stringify(updatedLog),
+        updated_at: now
+      })
+      .where(eq(inquiries.id, Number(id)));
+
+    return reply.send({ success: true, message: "تمت الموافقة على المشروع وإرسال العرض للعميل" });
+  });
+
+  // Schedule Consultation (Confirm Meeting Date & Link)
+  app.post("/inquiries/:id/schedule", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const parseResult = ScheduleConsultationSchema.safeParse(request.body);
+
+    if (!parseResult.success) {
+      return reply.status(400).send({
+        error: "بيانات جدولة الاستشارة غير مكتملة",
+        details: parseResult.error.format()
+      });
+    }
+
+    const db = getDb();
+    const [existing] = await db.select().from(inquiries).where(eq(inquiries.id, Number(id)));
+    if (!existing) {
+      return reply.status(404).send({ error: "طلب الاستشارة غير موجود" });
+    }
+
+    const now = new Date().toISOString();
+    const existingLog = safeJsonParse<InquiryActivityEvent[]>(existing.activity_log_json, []);
+    const { confirmed_datetime, meeting_mode, meeting_link, admin_note } = parseResult.data;
+
+    const updatedLog: InquiryActivityEvent[] = [
+      ...existingLog,
+      {
+        id: crypto.randomUUID(),
+        author: "admin",
+        action: "consultation_scheduled",
+        title: "تم تأكيد موعد الاستشارة التقنية",
+        body: `الموعد: ${confirmed_datetime} | وسيلة الاجتماع: ${meeting_mode}${meeting_link ? `\nالرابط: ${meeting_link}` : ""}${admin_note ? `\nملاحظة: ${admin_note}` : ""}`,
+        created_at: now
+      }
+    ];
+
+    await db
+      .update(inquiries)
+      .set({
+        status: "approved",
+        confirmed_datetime,
+        meeting_mode,
+        meeting_link: meeting_link || null,
+        admin_note: admin_note || existing.admin_note,
+        activity_log_json: JSON.stringify(updatedLog),
+        updated_at: now
+      })
+      .where(eq(inquiries.id, Number(id)));
+
+    return reply.send({ success: true, message: "تم تأكيد موعد الاستشارة وتحديث رابط الاجتماع" });
+  });
+
+  // Reject / Decline Inquiry with Reason
+  app.post("/inquiries/:id/reject", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const parseResult = RejectInquirySchema.safeParse(request.body);
+
+    if (!parseResult.success) {
+      return reply.status(400).send({
+        error: "يرجى كتابة سبب الاعتذار",
+        details: parseResult.error.format()
+      });
+    }
+
+    const db = getDb();
+    const [existing] = await db.select().from(inquiries).where(eq(inquiries.id, Number(id)));
+    if (!existing) {
+      return reply.status(404).send({ error: "الطلب غير موجود" });
+    }
+
+    const now = new Date().toISOString();
+    const existingLog = safeJsonParse<InquiryActivityEvent[]>(existing.activity_log_json, []);
+    const { reason } = parseResult.data;
+
+    const updatedLog: InquiryActivityEvent[] = [
+      ...existingLog,
+      {
+        id: crypto.randomUUID(),
+        author: "admin",
+        action: "rejected",
+        title: "تم الاعتذار عن قبول الطلب",
+        body: reason,
+        created_at: now
+      }
+    ];
+
+    await db
+      .update(inquiries)
+      .set({
+        status: "rejected",
+        cancellation_reason: reason,
+        activity_log_json: JSON.stringify(updatedLog),
+        updated_at: now
+      })
+      .where(eq(inquiries.id, Number(id)));
+
+    return reply.send({ success: true, message: "تم تسجيل الاعتذار وتحديث حالة الطلب" });
+  });
+
+  // REAL HARD DELETION
+  app.delete("/inquiries/:id", async (request, reply) => {
+    const { id } = request.params as { id: string };
+    const db = getDb();
+    const [existing] = await db.select().from(inquiries).where(eq(inquiries.id, Number(id)));
+    if (!existing) {
+      return reply.status(404).send({ error: "الطلب غير موجود أو تم حذفه مسبقاً" });
+    }
+
+    await db.delete(inquiries).where(eq(inquiries.id, Number(id)));
+    return reply.send({ success: true, message: "تم حذف الطلب نهائياً من قاعدة البيانات" });
   });
 
   // 3. Projects CRUD
