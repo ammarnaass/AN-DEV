@@ -4,6 +4,7 @@ import {
   LayoutDashboard,
   MessageSquare,
   FolderKanban,
+  BookOpen,
   Settings,
   LogOut,
   ExternalLink,
@@ -57,6 +58,12 @@ export const AdminLayout: React.FC = () => {
       href: "/admin/projects",
       label: "إدارة المشاريع والأعمال",
       icon: <FolderKanban className="w-4 h-4" />
+    },
+    {
+      href: "/admin/posts",
+      label: "إدارة المقالات والمدونة",
+      icon: <BookOpen className="w-4 h-4" />,
+      badge: stats?.total_posts || 0
     },
     {
       href: "/admin/links",

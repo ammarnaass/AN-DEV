@@ -19,6 +19,7 @@ import {
   AdminDashboardPage,
   AdminInquiriesPage,
   AdminProjectsPage,
+  AdminPostsPage,
   AdminBioLinksPage,
   AdminSettingsPage,
 } from "./features/admin";
@@ -86,6 +87,7 @@ export function App() {
                 <Route index element={<AdminDashboardPage />} />
                 <Route path="inquiries" element={<AdminInquiriesPage />} />
                 <Route path="projects" element={<AdminProjectsPage />} />
+                <Route path="posts" element={<AdminPostsPage />} />
                 <Route path="links" element={<AdminBioLinksPage />} />
                 <Route path="settings" element={<AdminSettingsPage />} />
               </Route>

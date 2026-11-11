@@ -123,4 +123,47 @@ describe("Admin Management API", () => {
     const [deleted] = await db.select().from(inquiries).where(eq(inquiries.id, temp.id));
     expect(deleted).toBeUndefined();
   });
+
+  it("handles full lifecycle of Blog Posts via Admin API (Create, Publish Toggle, Delete)", async () => {
+    // 1. Create a Post
+    const createRes = await app.inject({
+      method: "POST",
+      url: "/api/admin/posts",
+      headers: { cookie: sessionCookie },
+      payload: {
+        slug: "test-admin-blog-post",
+        title_ar: "مقال تجريبي من لوحة التحكم",
+        title_en: "Admin Test Blog Post",
+        summary_ar: "ملخص تجريبي للمقال",
+        summary_en: "Test summary for admin blog post",
+        body_md_ar: "## المحتوى التجريبي\n\nتفاصيل المقال المعماري...",
+        body_md_en: "## Test Content\n\nArchitectural details...",
+        category: "architecture",
+        tags: ["Fastify", "PostgreSQL", "Vitest"],
+        featured: true,
+        published: true
+      }
+    });
+    expect(createRes.statusCode).toBe(201);
+    const postBody = JSON.parse(createRes.body);
+    expect(postBody.id).toBeDefined();
+    expect(postBody.slug).toBe("test-admin-blog-post");
+
+    // 2. Toggle Publish
+    const toggleRes = await app.inject({
+      method: "PATCH",
+      url: `/api/admin/posts/${postBody.id}/publish`,
+      headers: { cookie: sessionCookie }
+    });
+    expect(toggleRes.statusCode).toBe(200);
+    expect(JSON.parse(toggleRes.body).published).toBe(false);
+
+    // 3. Delete Post
+    const deletePostRes = await app.inject({
+      method: "DELETE",
+      url: `/api/admin/posts/${postBody.id}`,
+      headers: { cookie: sessionCookie }
+    });
+    expect(deletePostRes.statusCode).toBe(200);
+  });
 });

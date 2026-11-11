@@ -1,5 +1,5 @@
 import { apiFetch } from "../../../lib/api";
-import { AdminStats, Inquiry, Project } from "@andev/shared";
+import { AdminStats, Inquiry, Project, Post } from "@andev/shared";
 
 export const adminService = {
   login: (credentials: { email: string; password: string }) =>
@@ -76,6 +76,43 @@ export const adminService = {
   deleteProject: (id: number) =>
     apiFetch(`/api/admin/projects/${id}`, {
       method: "DELETE",
+    }),
+
+  getPosts: (filters?: { status?: string; category?: string; search?: string }) => {
+    const params = new URLSearchParams();
+    if (filters?.status && filters.status !== "all") params.append("status", filters.status);
+    if (filters?.category && filters.category !== "all") params.append("category", filters.category);
+    if (filters?.search && filters.search.trim()) params.append("search", filters.search.trim());
+    const query = params.toString() ? `?${params.toString()}` : "";
+    return apiFetch<Post[]>(`/api/admin/posts${query}`);
+  },
+
+  savePost: (post: Partial<Post>) => {
+    if (post.id) {
+      return apiFetch<Post>(`/api/admin/posts/${post.id}`, {
+        method: "PUT",
+        body: JSON.stringify(post),
+      });
+    }
+    return apiFetch<Post>("/api/admin/posts", {
+      method: "POST",
+      body: JSON.stringify(post),
+    });
+  },
+
+  deletePost: (id: number) =>
+    apiFetch<{ success: boolean; message: string }>(`/api/admin/posts/${id}`, {
+      method: "DELETE",
+    }),
+
+  togglePublishPost: (id: number) =>
+    apiFetch<{ success: boolean; published: boolean }>(`/api/admin/posts/${id}/publish`, {
+      method: "PATCH",
+    }),
+
+  toggleFeaturedPost: (id: number) =>
+    apiFetch<{ success: boolean; featured: boolean }>(`/api/admin/posts/${id}/featured`, {
+      method: "PATCH",
     }),
 
   getSettings: () =>

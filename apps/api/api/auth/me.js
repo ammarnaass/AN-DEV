@@ -11799,10 +11799,27 @@ var posts = (0, import_pg_core.pgTable)("posts", {
   slug: (0, import_pg_core.text)("slug").notNull().unique(),
   title_ar: (0, import_pg_core.text)("title_ar").notNull(),
   title_en: (0, import_pg_core.text)("title_en").notNull(),
+  summary_ar: (0, import_pg_core.text)("summary_ar").notNull().default(""),
+  summary_en: (0, import_pg_core.text)("summary_en").notNull().default(""),
   body_md_ar: (0, import_pg_core.text)("body_md_ar").notNull(),
   body_md_en: (0, import_pg_core.text)("body_md_en").notNull(),
+  cover_image: (0, import_pg_core.text)("cover_image").notNull().default("/uploads/blog/default.webp"),
+  category: (0, import_pg_core.text)("category").notNull().default("architecture"),
+  tags_json: (0, import_pg_core.text)("tags_json").notNull().default("[]"),
+  author_name: (0, import_pg_core.text)("author_name").notNull().default("\u0639\u0645\u0627\u0631 \u0646\u0627\u0639\u0633"),
+  author_role: (0, import_pg_core.text)("author_role").notNull().default("Senior Systems Architect"),
+  author_avatar: (0, import_pg_core.text)("author_avatar").notNull().default("/uploads/author.webp"),
+  reading_time_minutes: (0, import_pg_core.integer)("reading_time_minutes").notNull().default(5),
+  featured: (0, import_pg_core.boolean)("featured").notNull().default(false),
   published: (0, import_pg_core.boolean)("published").notNull().default(true),
-  published_at: (0, import_pg_core.text)("published_at").notNull()
+  published_at: (0, import_pg_core.text)("published_at").notNull(),
+  views_count: (0, import_pg_core.integer)("views_count").notNull().default(0),
+  seo_title_ar: (0, import_pg_core.text)("seo_title_ar"),
+  seo_title_en: (0, import_pg_core.text)("seo_title_en"),
+  seo_desc_ar: (0, import_pg_core.text)("seo_desc_ar"),
+  seo_desc_en: (0, import_pg_core.text)("seo_desc_en"),
+  created_at: (0, import_pg_core.text)("created_at").notNull(),
+  updated_at: (0, import_pg_core.text)("updated_at")
 });
 var settings = (0, import_pg_core.pgTable)("settings", {
   key: (0, import_pg_core.text)("key").primaryKey(),
@@ -16172,14 +16189,42 @@ var ProjectSchema = external_exports.object({
 });
 
 // packages/shared/src/schemas/post.ts
+var PostCategoryEnum = external_exports.enum([
+  "architecture",
+  "performance",
+  "security",
+  "pos_erp",
+  "ai_llm",
+  "frontend",
+  "general"
+]);
 var PostSchema = external_exports.object({
-  slug: external_exports.string().min(2).regex(/^[a-z0-9-]+$/),
-  title_ar: external_exports.string().min(2),
-  title_en: external_exports.string().min(2),
-  body_md_ar: external_exports.string().min(10),
-  body_md_en: external_exports.string().min(10),
+  id: external_exports.number().optional(),
+  slug: external_exports.string().min(2, "\u0627\u0644\u0645\u0639\u0631\u0651\u0641 \u0645\u0637\u0644\u0648\u0628 \u0648\u064A\u062C\u0628 \u0623\u0644\u0627 \u064A\u0642\u0644 \u0639\u0646 \u062D\u0631\u0641\u064A\u0646").regex(/^[a-z0-9-]+$/, "\u0627\u0644\u0645\u0639\u0631\u0651\u0641 \u064A\u062C\u0628 \u0623\u0646 \u064A\u062D\u062A\u0648\u064A \u0639\u0644\u0649 \u0623\u062D\u0631\u0641 \u0635\u063A\u064A\u0631\u0629 \u0648\u0623\u0631\u0642\u0627\u0645 \u0648\u0634\u0631\u0637\u0627\u062A \u0641\u0642\u0637"),
+  title_ar: external_exports.string().min(2, "\u0627\u0644\u0639\u0646\u0648\u0627\u0646 \u0628\u0627\u0644\u0639\u0631\u0628\u064A\u0629 \u0645\u0637\u0644\u0648\u0628"),
+  title_en: external_exports.string().min(2, "English title is required"),
+  summary_ar: external_exports.string().default(""),
+  summary_en: external_exports.string().default(""),
+  body_md_ar: external_exports.string().min(10, "\u0645\u062D\u062A\u0648\u0649 \u0627\u0644\u0645\u0642\u0627\u0644 \u0628\u0627\u0644\u0639\u0631\u0628\u064A\u0629 \u064A\u062C\u0628 \u0623\u0644\u0627 \u064A\u0642\u0644 \u0639\u0646 10 \u0623\u062D\u0631\u0641"),
+  body_md_en: external_exports.string().min(10, "English article body must be at least 10 characters"),
+  cover_image: external_exports.string().default("/uploads/blog/default.webp"),
+  category: PostCategoryEnum.default("architecture"),
+  tags: external_exports.array(external_exports.string()).default([]),
+  tags_json: external_exports.string().optional(),
+  author_name: external_exports.string().default("\u0639\u0645\u0627\u0631 \u0646\u0627\u0639\u0633"),
+  author_role: external_exports.string().default("Senior Systems Architect"),
+  author_avatar: external_exports.string().default("/uploads/author.webp"),
+  reading_time_minutes: external_exports.number().int().min(1).default(5),
+  featured: external_exports.boolean().default(false),
   published: external_exports.boolean().default(true),
-  published_at: external_exports.string().optional()
+  published_at: external_exports.string().optional(),
+  views_count: external_exports.number().int().default(0),
+  seo_title_ar: external_exports.string().optional(),
+  seo_title_en: external_exports.string().optional(),
+  seo_desc_ar: external_exports.string().optional(),
+  seo_desc_en: external_exports.string().optional(),
+  created_at: external_exports.string().optional(),
+  updated_at: external_exports.string().optional()
 });
 
 // packages/shared/src/schemas/auth.ts
@@ -16679,14 +16724,13 @@ async function publicRoutes(app) {
   });
   app.get("/posts", async (request, reply) => {
     const db = getDb();
-    const rows = await db.select({
-      id: posts.id,
-      slug: posts.slug,
-      title_ar: posts.title_ar,
-      title_en: posts.title_en,
-      published_at: posts.published_at
-    }).from(posts).where((0, import_drizzle_orm4.eq)(posts.published, true));
-    return reply.send(rows);
+    const rows = await db.select().from(posts).where((0, import_drizzle_orm4.eq)(posts.published, true)).orderBy(import_drizzle_orm4.sql`${posts.featured} DESC`, import_drizzle_orm4.sql`${posts.published_at} DESC`);
+    return reply.send(
+      rows.map((r) => ({
+        ...r,
+        tags: safeJsonParse(r.tags_json, [])
+      }))
+    );
   });
   app.get("/posts/:slug", async (request, reply) => {
     const { slug } = request.params;
@@ -16695,7 +16739,12 @@ async function publicRoutes(app) {
     if (!post) {
       return reply.status(404).send({ error: "\u0627\u0644\u0645\u0642\u0627\u0644 \u063A\u064A\u0631 \u0645\u0648\u062C\u0648\u062F" });
     }
-    return reply.send(post);
+    db.update(posts).set({ views_count: import_drizzle_orm4.sql`${posts.views_count} + 1` }).where((0, import_drizzle_orm4.eq)(posts.id, post.id)).catch(() => {
+    });
+    return reply.send({
+      ...post,
+      tags: safeJsonParse(post.tags_json, [])
+    });
   });
   app.get("/settings/public", async (request, reply) => {
     const db = getDb();
@@ -17161,6 +17210,159 @@ async function adminRoutes(app) {
     const db = getDb();
     await db.delete(projects).where((0, import_drizzle_orm5.eq)(projects.id, Number(id)));
     return reply.send({ success: true });
+  });
+  app.get("/posts", async (request, reply) => {
+    const { status, category, search } = request.query;
+    const db = getDb();
+    let query = db.select().from(posts);
+    const conditions = [];
+    if (status === "published") {
+      conditions.push((0, import_drizzle_orm5.eq)(posts.published, true));
+    } else if (status === "draft") {
+      conditions.push((0, import_drizzle_orm5.eq)(posts.published, false));
+    } else if (status === "featured") {
+      conditions.push((0, import_drizzle_orm5.eq)(posts.featured, true));
+    }
+    if (category && category !== "all") {
+      conditions.push((0, import_drizzle_orm5.eq)(posts.category, category));
+    }
+    if (search && search.trim().length > 0) {
+      const term = `%${search.trim().toLowerCase()}%`;
+      conditions.push(
+        (0, import_drizzle_orm5.or)(
+          import_drizzle_orm5.sql`lower(${posts.title_ar}) LIKE ${term}`,
+          import_drizzle_orm5.sql`lower(${posts.title_en}) LIKE ${term}`,
+          import_drizzle_orm5.sql`lower(${posts.slug}) LIKE ${term}`,
+          import_drizzle_orm5.sql`lower(${posts.tags_json}) LIKE ${term}`
+        )
+      );
+    }
+    if (conditions.length > 0) {
+      query = query.where((0, import_drizzle_orm5.and)(...conditions));
+    }
+    const rows = await query.orderBy((0, import_drizzle_orm5.desc)(posts.featured), (0, import_drizzle_orm5.desc)(posts.created_at));
+    return reply.send(
+      rows.map((r) => ({
+        ...r,
+        tags: safeJsonParse2(r.tags_json, [])
+      }))
+    );
+  });
+  app.post("/posts", async (request, reply) => {
+    const parseResult = PostSchema.safeParse(request.body);
+    if (!parseResult.success) {
+      const firstIssue = parseResult.error.issues[0]?.message;
+      return reply.status(400).send({
+        error: firstIssue || "Validation failed",
+        details: parseResult.error.format()
+      });
+    }
+    const data = parseResult.data;
+    const db = getDb();
+    const now = (/* @__PURE__ */ new Date()).toISOString();
+    const [created] = await db.insert(posts).values({
+      slug: data.slug,
+      title_ar: data.title_ar,
+      title_en: data.title_en,
+      summary_ar: data.summary_ar || "",
+      summary_en: data.summary_en || "",
+      body_md_ar: data.body_md_ar,
+      body_md_en: data.body_md_en,
+      cover_image: data.cover_image || "/uploads/blog/default.webp",
+      category: data.category || "architecture",
+      tags_json: JSON.stringify(data.tags || []),
+      author_name: data.author_name || "\u0639\u0645\u0627\u0631 \u0646\u0627\u0639\u0633",
+      author_role: data.author_role || "Senior Systems Architect",
+      author_avatar: data.author_avatar || "/uploads/author.webp",
+      reading_time_minutes: data.reading_time_minutes || 5,
+      featured: data.featured || false,
+      published: data.published !== void 0 ? data.published : true,
+      published_at: data.published_at || now,
+      views_count: data.views_count || 0,
+      seo_title_ar: data.seo_title_ar || null,
+      seo_title_en: data.seo_title_en || null,
+      seo_desc_ar: data.seo_desc_ar || null,
+      seo_desc_en: data.seo_desc_en || null,
+      created_at: now,
+      updated_at: now
+    }).returning();
+    return reply.status(201).send({
+      ...created,
+      tags: safeJsonParse2(created.tags_json, [])
+    });
+  });
+  app.put("/posts/:id", async (request, reply) => {
+    const { id } = request.params;
+    const parseResult = PostSchema.safeParse(request.body);
+    if (!parseResult.success) {
+      const firstIssue = parseResult.error.issues[0]?.message;
+      return reply.status(400).send({
+        error: firstIssue || "Validation failed",
+        details: parseResult.error.format()
+      });
+    }
+    const data = parseResult.data;
+    const db = getDb();
+    const now = (/* @__PURE__ */ new Date()).toISOString();
+    await db.update(posts).set({
+      slug: data.slug,
+      title_ar: data.title_ar,
+      title_en: data.title_en,
+      summary_ar: data.summary_ar || "",
+      summary_en: data.summary_en || "",
+      body_md_ar: data.body_md_ar,
+      body_md_en: data.body_md_en,
+      cover_image: data.cover_image,
+      category: data.category,
+      tags_json: JSON.stringify(data.tags || []),
+      author_name: data.author_name,
+      author_role: data.author_role,
+      author_avatar: data.author_avatar,
+      reading_time_minutes: data.reading_time_minutes,
+      featured: data.featured,
+      published: data.published,
+      published_at: data.published_at || now,
+      seo_title_ar: data.seo_title_ar || null,
+      seo_title_en: data.seo_title_en || null,
+      seo_desc_ar: data.seo_desc_ar || null,
+      seo_desc_en: data.seo_desc_en || null,
+      updated_at: now
+    }).where((0, import_drizzle_orm5.eq)(posts.id, Number(id)));
+    return reply.send({ success: true, message: "\u062A\u0645 \u062A\u062D\u062F\u064A\u062B \u0627\u0644\u0645\u0642\u0627\u0644 \u0628\u0646\u062C\u0627\u062D" });
+  });
+  app.delete("/posts/:id", async (request, reply) => {
+    const { id } = request.params;
+    const db = getDb();
+    await db.delete(posts).where((0, import_drizzle_orm5.eq)(posts.id, Number(id)));
+    return reply.send({ success: true, message: "\u062A\u0645 \u062D\u0630\u0641 \u0627\u0644\u0645\u0642\u0627\u0644 \u0628\u0646\u062C\u0627\u062D" });
+  });
+  app.patch("/posts/:id/publish", async (request, reply) => {
+    const { id } = request.params;
+    const db = getDb();
+    const [existing] = await db.select().from(posts).where((0, import_drizzle_orm5.eq)(posts.id, Number(id)));
+    if (!existing) {
+      return reply.status(404).send({ error: "\u0627\u0644\u0645\u0642\u0627\u0644 \u063A\u064A\u0631 \u0645\u0648\u062C\u0648\u062F" });
+    }
+    const nextPublished = !existing.published;
+    await db.update(posts).set({
+      published: nextPublished,
+      updated_at: (/* @__PURE__ */ new Date()).toISOString()
+    }).where((0, import_drizzle_orm5.eq)(posts.id, Number(id)));
+    return reply.send({ success: true, published: nextPublished });
+  });
+  app.patch("/posts/:id/featured", async (request, reply) => {
+    const { id } = request.params;
+    const db = getDb();
+    const [existing] = await db.select().from(posts).where((0, import_drizzle_orm5.eq)(posts.id, Number(id)));
+    if (!existing) {
+      return reply.status(404).send({ error: "\u0627\u0644\u0645\u0642\u0627\u0644 \u063A\u064A\u0631 \u0645\u0648\u062C\u0648\u062F" });
+    }
+    const nextFeatured = !existing.featured;
+    await db.update(posts).set({
+      featured: nextFeatured,
+      updated_at: (/* @__PURE__ */ new Date()).toISOString()
+    }).where((0, import_drizzle_orm5.eq)(posts.id, Number(id)));
+    return reply.send({ success: true, featured: nextFeatured });
   });
   app.post("/uploads", async (request, reply) => {
     const data = await request.file();

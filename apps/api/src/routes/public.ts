@@ -1,7 +1,7 @@
 import { FastifyInstance } from "fastify";
 import { getDb } from "../db";
 import { projects, project_images, posts, settings, page_views } from "../db/schema";
-import { eq, and } from "drizzle-orm";
+import { eq, and, sql } from "drizzle-orm";
 
 function safeJsonParse<T>(value: string | null | undefined, fallback: T): T {
   if (!value) return fallback;
@@ -92,24 +92,26 @@ export async function publicRoutes(app: FastifyInstance) {
   // 3. Blog posts
   app.get("/posts", async (request, reply) => {
     const db = getDb();
-    const rows = await db.select({
-      id: posts.id,
-      slug: posts.slug,
-      title_ar: posts.title_ar,
-      title_en: posts.title_en,
-      published_at: posts.published_at
-    })
-    .from(posts)
-    .where(eq(posts.published, true));
+    const rows = await db
+      .select()
+      .from(posts)
+      .where(eq(posts.published, true))
+      .orderBy(sql`${posts.featured} DESC`, sql`${posts.published_at} DESC`);
 
-    return reply.send(rows);
+    return reply.send(
+      rows.map(r => ({
+        ...r,
+        tags: safeJsonParse(r.tags_json, [])
+      }))
+    );
   });
 
   app.get("/posts/:slug", async (request, reply) => {
     const { slug } = request.params as { slug: string };
     const db = getDb();
 
-    const [post] = await db.select()
+    const [post] = await db
+      .select()
       .from(posts)
       .where(and(eq(posts.slug, slug), eq(posts.published, true)));
 
@@ -117,7 +119,16 @@ export async function publicRoutes(app: FastifyInstance) {
       return reply.status(404).send({ error: "المقال غير موجود" });
     }
 
-    return reply.send(post);
+    // Increment views asynchronously
+    db.update(posts)
+      .set({ views_count: sql`${posts.views_count} + 1` })
+      .where(eq(posts.id, post.id))
+      .catch(() => {});
+
+    return reply.send({
+      ...post,
+      tags: safeJsonParse(post.tags_json, [])
+    });
   });
 
   // 4. Public settings

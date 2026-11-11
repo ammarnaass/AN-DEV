@@ -83,10 +83,27 @@ export const posts = pgTable("posts", {
   slug: text("slug").notNull().unique(),
   title_ar: text("title_ar").notNull(),
   title_en: text("title_en").notNull(),
+  summary_ar: text("summary_ar").notNull().default(""),
+  summary_en: text("summary_en").notNull().default(""),
   body_md_ar: text("body_md_ar").notNull(),
   body_md_en: text("body_md_en").notNull(),
+  cover_image: text("cover_image").notNull().default("/uploads/blog/default.webp"),
+  category: text("category").notNull().default("architecture"),
+  tags_json: text("tags_json").notNull().default("[]"),
+  author_name: text("author_name").notNull().default("عمار ناعس"),
+  author_role: text("author_role").notNull().default("Senior Systems Architect"),
+  author_avatar: text("author_avatar").notNull().default("/uploads/author.webp"),
+  reading_time_minutes: integer("reading_time_minutes").notNull().default(5),
+  featured: boolean("featured").notNull().default(false),
   published: boolean("published").notNull().default(true),
-  published_at: text("published_at").notNull()
+  published_at: text("published_at").notNull(),
+  views_count: integer("views_count").notNull().default(0),
+  seo_title_ar: text("seo_title_ar"),
+  seo_title_en: text("seo_title_en"),
+  seo_desc_ar: text("seo_desc_ar"),
+  seo_desc_en: text("seo_desc_en"),
+  created_at: text("created_at").notNull(),
+  updated_at: text("updated_at")
 });
 
 export const settings = pgTable("settings", {

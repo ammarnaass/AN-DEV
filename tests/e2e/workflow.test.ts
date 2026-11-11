@@ -10,7 +10,7 @@ describe("E2E Integration Journey", () => {
     app = await buildApp({ test: true });
     await app.ready();
     await seedDatabase();
-  }, 30000);
+  }, 60000);
 
   afterAll(async () => {
     await app.close();

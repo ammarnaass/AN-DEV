@@ -81,6 +81,19 @@ The existing site is an unmanaged static webpage. It cannot collect structured p
     *   **ERP**: Enterprise modules selector (Inventory, Accounting, HR, CRM, Invoicing), deployment model, multi-branch, audit trail.
     On the public page `/projects/:slug`, the presentation renders specialized interactive components matching the domain (Live sandbox emulator for web, QR code installer for mobile, hardware peripherals strip for POS, and interactive modules matrix for ERP).
 
+### CUJ 9: End-to-End Client Inquiries & Technical Consultation Lifecycle
+*   **Given**: A client submits a project inquiry or consultation request via `/contact` or `/track`.
+*   **When**: An inquiry is submitted, an 8-character unique alphanumeric tracking code (e.g., `AN-9A4B2C8E`) is assigned.
+*   **Then**: The administrator can review the inquiry in `/admin/inquiries`, filter by status or type, approve project proposals with fixed quotes and timelines, schedule consultations with calendar dates and meeting links, or reject requests with explanatory reasons. The client can track real-time status and view the admin's proposal or scheduled consultation at `/track/:trackingCode`.
+
+### CUJ 10: Technical Blog & Architectural Case Studies Management (CMS & Public Journal)
+*   **Given**: Ammar navigates to `/admin/posts` or a technical evaluator visits `/blog` / `/blog/:slug`.
+*   **When**: Ammar creates or edits a technical post with bilingual titles, executive summaries, Markdown GFM technical bodies, WebP cover images, engineering categories, tags, reading times, author profiles, and custom SEO metadata.
+*   **Then**:
+    *   The Admin CMS provides tabbed authoring (Arabic RTL, English LTR with Markdown formatting bar and live preview, Media & Categories with auto-reading time calculation, and SEO with Google SERP preview).
+    *   The Public Blog (`/blog`) displays responsive grid cards with category badges, reading times, author avatars, and search/category filtering.
+    *   The Public Post Page (`/blog/:slug`) delivers a high-performance reading experience with cover image hero, dynamic Table of Contents (TOC) with smooth scrolling, copyable code blocks with language headers, callout boxes for architecture alerts, author profile card, and social sharing.
+
 
 --------------------------------------------------------------------------------
 

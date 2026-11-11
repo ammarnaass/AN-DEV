@@ -8,6 +8,7 @@ import { ProjectSchema, ProjectTypeSpecs } from "./schemas/project";
 import { PostSchema } from "./schemas/post";
 
 export * from "./schemas/inquiry";
+export * from "./schemas/post";
 
 export type Inquiry = z.infer<typeof InquirySchema> & {
   id: number;

@@ -2,6 +2,7 @@ export { AdminLayout } from "./components/AdminLayout";
 export { AdminLoginPage } from "./pages/AdminLoginPage";
 export { AdminDashboardPage } from "./pages/AdminDashboardPage";
 export { AdminProjectsPage } from "./pages/AdminProjectsPage";
+export { AdminPostsPage } from "./pages/AdminPostsPage";
 export { AdminInquiriesPage } from "./pages/AdminInquiriesPage";
 export { AdminBioLinksPage } from "./pages/AdminBioLinksPage";
 export { AdminSettingsPage } from "./pages/AdminSettingsPage";
@@ -10,5 +11,6 @@ export { useAdminAuth } from "./hooks/useAdminAuth";
 export { useAdminStats } from "./hooks/useAdminStats";
 export { useAdminInquiries } from "./hooks/useAdminInquiries";
 export { useAdminProjects } from "./hooks/useAdminProjects";
+export { useAdminPosts } from "./hooks/useAdminPosts";
 export { useAdminSettings } from "./hooks/useAdminSettings";
 
