@@ -4967,7 +4967,7 @@ var require_le_unix = __commonJS({
 var require_mime_node = __commonJS({
   "node_modules/nodemailer/lib/mime-node/index.js"(exports2, module2) {
     "use strict";
-    var crypto6 = require("crypto");
+    var crypto8 = require("crypto");
     var fs2 = require("fs");
     var punycode = require_punycode();
     var PassThrough = require("stream").PassThrough;
@@ -4984,7 +4984,7 @@ var require_mime_node = __commonJS({
       constructor(contentType, options) {
         this.nodeCounter = 0;
         options = options || {};
-        this.baseBoundary = options.baseBoundary || crypto6.randomBytes(8).toString("hex");
+        this.baseBoundary = options.baseBoundary || crypto8.randomBytes(8).toString("hex");
         this.boundaryPrefix = options.boundaryPrefix || "--_NmP";
         this.disableFileAccess = !!options.disableFileAccess;
         this.disableUrlAccess = !!options.disableUrlAccess;
@@ -5927,8 +5927,8 @@ var require_mime_node = __commonJS({
       _generateMessageId() {
         return "<" + [2, 2, 2, 6].reduce(
           // crux to generate UUID-like random strings
-          (prev, len) => prev + "-" + crypto6.randomBytes(len).toString("hex"),
-          crypto6.randomBytes(4).toString("hex")
+          (prev, len) => prev + "-" + crypto8.randomBytes(len).toString("hex"),
+          crypto8.randomBytes(4).toString("hex")
         ) + "@" + // try to use the domain of the FROM address or fallback to server hostname
         (this.getEnvelope().from || this.hostname || "localhost").split("@").pop() + ">";
       }
@@ -6519,14 +6519,14 @@ var require_relaxed_body = __commonJS({
   "node_modules/nodemailer/lib/dkim/relaxed-body.js"(exports2, module2) {
     "use strict";
     var Transform = require("stream").Transform;
-    var crypto6 = require("crypto");
+    var crypto8 = require("crypto");
     var RelaxedBody = class extends Transform {
       constructor(options) {
         super();
         options = options || {};
         this.chunkBuffer = [];
         this.chunkBufferLen = 0;
-        this.bodyHash = crypto6.createHash(options.hashAlgo || "sha1");
+        this.bodyHash = crypto8.createHash(options.hashAlgo || "sha1");
         this.remainder = "";
         this.byteLength = 0;
         this.debug = options.debug;
@@ -6629,7 +6629,7 @@ var require_sign = __commonJS({
     "use strict";
     var punycode = require_punycode();
     var mimeFuncs = require_mime_funcs();
-    var crypto6 = require("crypto");
+    var crypto8 = require("crypto");
     module2.exports = (headers, hashAlgo, bodyHash, options) => {
       options = options || {};
       let defaultFieldNames = "From:Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive";
@@ -6638,7 +6638,7 @@ var require_sign = __commonJS({
       let dkimHeader = generateDKIMHeader(options.domainName, options.keySelector, canonicalizedHeaderData.fieldNames, hashAlgo, bodyHash);
       let signer, signature;
       canonicalizedHeaderData.headers += "dkim-signature:" + relaxedHeaderLine(dkimHeader);
-      signer = crypto6.createSign(("rsa-" + hashAlgo).toUpperCase());
+      signer = crypto8.createSign(("rsa-" + hashAlgo).toUpperCase());
       signer.update(canonicalizedHeaderData.headers);
       try {
         signature = signer.sign(options.privateKey, "base64");
@@ -6706,7 +6706,7 @@ var require_dkim = __commonJS({
     var PassThrough = require("stream").PassThrough;
     var fs2 = require("fs");
     var path2 = require("path");
-    var crypto6 = require("crypto");
+    var crypto8 = require("crypto");
     var DKIM_ALGO = "sha256";
     var MAX_MESSAGE_SIZE = 128 * 1024;
     var DKIMSigner = class {
@@ -6719,7 +6719,7 @@ var require_dkim = __commonJS({
         this.chunks = [];
         this.chunklen = 0;
         this.readPos = 0;
-        this.cachePath = this.cacheDir ? path2.join(this.cacheDir, "message." + Date.now() + "-" + crypto6.randomBytes(14).toString("hex")) : false;
+        this.cachePath = this.cacheDir ? path2.join(this.cacheDir, "message." + Date.now() + "-" + crypto8.randomBytes(14).toString("hex")) : false;
         this.cache = false;
         this.headers = false;
         this.bodyHash = false;
@@ -7275,7 +7275,7 @@ var require_mailer = __commonJS({
     var MailMessage = require_mail_message();
     var net = require("net");
     var dns = require("dns");
-    var crypto6 = require("crypto");
+    var crypto8 = require("crypto");
     var Mail = class extends EventEmitter {
       constructor(transporter, options, defaults) {
         super();
@@ -7599,7 +7599,7 @@ var require_mailer = __commonJS({
           }
           let cidCounter = 0;
           html = (html || "").toString().replace(/(<img\b[^<>]{0,1024} src\s{0,20}=[\s"']{0,20})(data:([^;]+);[^"'>\s]+)/gi, (match, prefix, dataUri, mimeType) => {
-            let cid = crypto6.randomBytes(10).toString("hex") + "@localhost";
+            let cid = crypto8.randomBytes(10).toString("hex") + "@localhost";
             if (!mail.data.attachments) {
               mail.data.attachments = [];
             }
@@ -7726,7 +7726,7 @@ var require_smtp_connection = __commonJS({
     var net = require("net");
     var tls = require("tls");
     var os = require("os");
-    var crypto6 = require("crypto");
+    var crypto8 = require("crypto");
     var DataStream = require_data_stream();
     var PassThrough = require("stream").PassThrough;
     var shared = require_shared();
@@ -7737,7 +7737,7 @@ var require_smtp_connection = __commonJS({
     var SMTPConnection = class extends EventEmitter {
       constructor(options) {
         super(options);
-        this.id = crypto6.randomBytes(8).toString("base64").replace(/\W/g, "");
+        this.id = crypto8.randomBytes(8).toString("base64").replace(/\W/g, "");
         this.stage = "init";
         this.options = options || {};
         this.secureConnection = !!this.options.secure;
@@ -8830,7 +8830,7 @@ var require_smtp_connection = __commonJS({
         } else {
           challengeString = challengeMatch[1];
         }
-        let base64decoded = Buffer.from(challengeString, "base64").toString("ascii"), hmacMD5 = crypto6.createHmac("md5", this._auth.credentials.pass);
+        let base64decoded = Buffer.from(challengeString, "base64").toString("ascii"), hmacMD5 = crypto8.createHmac("md5", this._auth.credentials.pass);
         hmacMD5.update(base64decoded);
         let prepended = this._auth.credentials.user + " " + hmacMD5.digest("hex");
         this._responseActions.push((str2) => {
@@ -9141,7 +9141,7 @@ var require_xoauth2 = __commonJS({
     "use strict";
     var Stream = require("stream").Stream;
     var nmfetch = require_fetch();
-    var crypto6 = require("crypto");
+    var crypto8 = require("crypto");
     var shared = require_shared();
     var XOAuth2 = class extends Stream {
       constructor(options, logger) {
@@ -9432,7 +9432,7 @@ var require_xoauth2 = __commonJS({
        */
       jwtSignRS256(payload) {
         payload = ['{"alg":"RS256","typ":"JWT"}', JSON.stringify(payload)].map((val) => this.toBase64URL(val)).join(".");
-        let signature = crypto6.createSign("RSA-SHA256").update(payload).sign(this.options.privateKey);
+        let signature = crypto8.createSign("RSA-SHA256").update(payload).sign(this.options.privateKey);
         return payload + "." + this.toBase64URL(signature);
       }
     };
@@ -16395,9 +16395,8 @@ async function authRoutes(app) {
   });
 }
 
-// apps/api/src/routes/inquiries.ts
-var import_drizzle_orm3 = require("drizzle-orm");
-var import_crypto2 = __toESM(require("crypto"));
+// apps/api/src/routes/inquiries/inquirySubmit.routes.ts
+var import_crypto3 = __toESM(require("crypto"));
 
 // apps/api/src/services/email.ts
 var import_nodemailer = __toESM(require_nodemailer());
@@ -16439,10 +16438,25 @@ ${inquiry.message}
   }
 }
 
-// apps/api/src/routes/inquiries.ts
+// apps/api/src/routes/inquiries/inquiryUtils.ts
+var import_crypto2 = __toESM(require("crypto"));
 var rateLimitMap = /* @__PURE__ */ new Map();
 var RATE_LIMIT_WINDOW_MS = 15 * 60 * 1e3;
 var MAX_REQUESTS = 5;
+function checkRateLimit(ip) {
+  const ipHash = import_crypto2.default.createHash("sha256").update(ip + (process.env.IP_SALT || "andev-salt")).digest("hex");
+  const now = Date.now();
+  const timestamps = (rateLimitMap.get(ipHash) || []).filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
+  if (timestamps.length >= MAX_REQUESTS) {
+    return false;
+  }
+  timestamps.push(now);
+  rateLimitMap.set(ipHash, timestamps);
+  return true;
+}
+function hashIp(rawIp) {
+  return import_crypto2.default.createHash("sha256").update(rawIp + (process.env.IP_SALT || "andev-salt")).digest("hex");
+}
 function safeParseJson(raw, fallback) {
   if (!raw) return fallback;
   try {
@@ -16457,17 +16471,17 @@ function maskEmail(email) {
   if (user.length <= 2) return `${user[0]}***@${domain}`;
   return `${user[0]}***${user[user.length - 1]}@${domain}`;
 }
-async function inquiryRoutes(app) {
+
+// apps/api/src/routes/inquiries/inquirySubmit.routes.ts
+async function inquirySubmitRoutes(app) {
   app.post("/inquiries", async (request, reply) => {
     const rawIp = request.ip || "127.0.0.1";
-    const ipHash = import_crypto2.default.createHash("sha256").update(rawIp + (process.env.IP_SALT || "andev-salt")).digest("hex");
-    const now = Date.now();
-    const timestamps = (rateLimitMap.get(ipHash) || []).filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
-    if (timestamps.length >= MAX_REQUESTS) {
+    if (!checkRateLimit(rawIp)) {
       return reply.status(429).send({
         error: "\u062A\u062C\u0627\u0648\u0632\u062A \u0627\u0644\u062D\u062F \u0627\u0644\u0645\u0633\u0645\u0648\u062D \u0628\u0647 \u0645\u0646 \u0627\u0644\u0637\u0644\u0628\u0627\u062A\u060C \u064A\u0631\u062C\u0649 \u0627\u0644\u0645\u062D\u0627\u0648\u0644\u0629 \u0644\u0627\u062D\u0642\u0627\u064B"
       });
     }
+    const ipHash = hashIp(rawIp);
     const parseResult = InquirySchema.safeParse(request.body);
     if (!parseResult.success) {
       const isHoneypot = parseResult.error.issues.some((i) => i.path.includes("honeypot"));
@@ -16479,10 +16493,10 @@ async function inquiryRoutes(app) {
     const data = parseResult.data;
     const db = getDb();
     const createdAt = (/* @__PURE__ */ new Date()).toISOString();
-    const trackingCode = `AND-${(/* @__PURE__ */ new Date()).getFullYear()}-${import_crypto2.default.randomBytes(3).toString("hex").toUpperCase()}`;
+    const trackingCode = `AND-${(/* @__PURE__ */ new Date()).getFullYear()}-${import_crypto3.default.randomBytes(3).toString("hex").toUpperCase()}`;
     const initialActivity = [
       {
-        id: import_crypto2.default.randomUUID(),
+        id: import_crypto3.default.randomUUID(),
         author: "client",
         action: "submitted",
         title: data.request_type === "consultation" ? "\u062A\u0642\u062F\u064A\u0645 \u0637\u0644\u0628 \u0627\u0633\u062A\u0634\u0627\u0631\u0629 \u0645\u0639\u0645\u0627\u0631\u064A\u0629" : "\u062A\u0642\u062F\u064A\u0645 \u0637\u0644\u0628 \u0645\u0634\u0631\u0648\u0639 \u0628\u0631\u0645\u062C\u064A\u0627\u062A",
@@ -16510,8 +16524,6 @@ async function inquiryRoutes(app) {
       created_at: createdAt,
       updated_at: createdAt
     }).returning();
-    timestamps.push(now);
-    rateLimitMap.set(ipHash, timestamps);
     sendInquiryNotification({
       name: data.name,
       email: data.email,
@@ -16531,6 +16543,12 @@ async function inquiryRoutes(app) {
       message: data.request_type === "consultation" ? "\u062A\u0645 \u0627\u0633\u062A\u0644\u0627\u0645 \u0637\u0644\u0628 \u0627\u0644\u0627\u0633\u062A\u0634\u0627\u0631\u0629 \u0628\u0646\u062C\u0627\u062D\u060C \u0633\u0646\u0631\u0627\u062C\u0639 \u0627\u0644\u0645\u0648\u0639\u062F \u0648\u0646\u062A\u0648\u0627\u0635\u0644 \u0645\u0639\u0643 \u0644\u062A\u0623\u0643\u064A\u062F \u0627\u0644\u062C\u0644\u0633\u0629" : "\u062A\u0645 \u0627\u0633\u062A\u0644\u0627\u0645 \u0637\u0644\u0628 \u0627\u0644\u0645\u0634\u0631\u0648\u0639 \u0628\u0646\u062C\u0627\u062D\u060C \u0633\u0646\u0642\u0648\u0645 \u0628\u062F\u0631\u0627\u0633\u062A\u0647 \u0648\u0627\u0644\u0631\u062F \u0639\u0644\u064A\u0643 \u062E\u0644\u0627\u0644 \u064A\u0648\u0645\u064A \u0639\u0645\u0644"
     });
   });
+}
+
+// apps/api/src/routes/inquiries/inquiryTrack.routes.ts
+var import_drizzle_orm3 = require("drizzle-orm");
+var import_crypto4 = __toESM(require("crypto"));
+async function inquiryTrackRoutes(app) {
   app.get("/inquiries/track/:trackingCode", async (request, reply) => {
     const { trackingCode } = request.params;
     if (!trackingCode || trackingCode.trim().length < 5) {
@@ -16595,7 +16613,7 @@ async function inquiryRoutes(app) {
     const updatedLog = [
       ...existingLog,
       {
-        id: import_crypto2.default.randomUUID(),
+        id: import_crypto4.default.randomUUID(),
         author: "client",
         action: "cancelled",
         title: "\u0625\u0644\u063A\u0627\u0621 \u0627\u0644\u0637\u0644\u0628 \u0645\u0646 \u0642\u0650\u0628\u0644 \u0627\u0644\u0639\u0645\u064A\u0644",
@@ -16634,7 +16652,7 @@ async function inquiryRoutes(app) {
     const updatedLog = [
       ...existingLog,
       {
-        id: import_crypto2.default.randomUUID(),
+        id: import_crypto4.default.randomUUID(),
         author: "client",
         action: "client_note",
         title: "\u0631\u0633\u0627\u0644\u0629 / \u0627\u0633\u062A\u0641\u0633\u0627\u0631 \u0625\u0636\u0627\u0641\u064A \u0645\u0646 \u0627\u0644\u0639\u0645\u064A\u0644",
@@ -16651,6 +16669,12 @@ async function inquiryRoutes(app) {
       message: "\u062A\u0645 \u0625\u0631\u0633\u0627\u0644 \u0631\u0633\u0627\u0644\u062A\u0643 \u0625\u0644\u0649 \u0627\u0644\u0641\u0631\u064A\u0642 \u0627\u0644\u0647\u0646\u062F\u0633\u064A \u0628\u0646\u062C\u0627\u062D"
     });
   });
+}
+
+// apps/api/src/routes/inquiries.ts
+async function inquiryRoutes(app) {
+  await app.register(inquirySubmitRoutes);
+  await app.register(inquiryTrackRoutes);
 }
 
 // apps/api/src/routes/public.ts
@@ -17153,7 +17177,7 @@ async function adminSettingsRoutes(app) {
 // apps/api/src/services/upload.ts
 var import_path = __toESM(require("path"));
 var import_fs = __toESM(require("fs"));
-var import_crypto3 = __toESM(require("crypto"));
+var import_crypto5 = __toESM(require("crypto"));
 async function processAndSaveImage(fileBuffer, subDir = "projects") {
   const sharpModule = await import("sharp");
   const sharp = sharpModule.default || sharpModule;
@@ -17168,7 +17192,7 @@ async function processAndSaveImage(fileBuffer, subDir = "projects") {
     if (!import_fs.default.existsSync(uploadsDir)) {
       import_fs.default.mkdirSync(uploadsDir, { recursive: true });
     }
-    const filename = `${Date.now()}-${import_crypto3.default.randomBytes(6).toString("hex")}.webp`;
+    const filename = `${Date.now()}-${import_crypto5.default.randomBytes(6).toString("hex")}.webp`;
     const targetPath = import_path.default.join(uploadsDir, filename);
     await resized.toFile(targetPath);
     return {
@@ -17202,7 +17226,7 @@ async function adminUploadsRoutes(app) {
 
 // apps/api/src/routes/admin/adminInquiries.routes.ts
 var import_drizzle_orm8 = require("drizzle-orm");
-var import_crypto4 = __toESM(require("crypto"));
+var import_crypto6 = __toESM(require("crypto"));
 async function adminInquiriesRoutes(app) {
   app.get("/inquiries", async (request, reply) => {
     const { status, type, search } = request.query;
@@ -17262,7 +17286,7 @@ async function adminInquiriesRoutes(app) {
     const updatedLog = [...existingLog];
     if (status && status !== existing.status) {
       updatedLog.push({
-        id: import_crypto4.default.randomUUID(),
+        id: import_crypto6.default.randomUUID(),
         author: "admin",
         action: "status_changed",
         title: `\u062A\u062D\u062F\u064A\u062B \u0627\u0644\u062D\u0627\u0644\u0629 \u0625\u0644\u0649 (${status})`,
@@ -17271,7 +17295,7 @@ async function adminInquiriesRoutes(app) {
       });
     } else if (admin_note && admin_note !== existing.admin_note) {
       updatedLog.push({
-        id: import_crypto4.default.randomUUID(),
+        id: import_crypto6.default.randomUUID(),
         author: "admin",
         action: "admin_note",
         title: "\u0625\u0636\u0627\u0641\u0629 \u0645\u0644\u0627\u062D\u0638\u0629 \u0625\u062F\u0627\u0631\u064A\u0629",
@@ -17305,7 +17329,7 @@ async function adminInquiriesRoutes(app) {
 
 // apps/api/src/routes/admin/adminInquiriesActions.routes.ts
 var import_drizzle_orm9 = require("drizzle-orm");
-var import_crypto5 = __toESM(require("crypto"));
+var import_crypto7 = __toESM(require("crypto"));
 async function adminInquiriesActionsRoutes(app) {
   app.post("/inquiries/:id/approve", async (request, reply) => {
     const { id } = request.params;
@@ -17327,7 +17351,7 @@ async function adminInquiriesActionsRoutes(app) {
     const updatedLog = [
       ...existingLog,
       {
-        id: import_crypto5.default.randomUUID(),
+        id: import_crypto7.default.randomUUID(),
         author: "admin",
         action: "quote_provided",
         title: "\u062A\u0645\u062A \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629 \u0639\u0644\u0649 \u0627\u0644\u0645\u0634\u0631\u0648\u0639 \u0648\u062A\u0642\u062F\u064A\u0645 \u0639\u0631\u0636 \u0627\u0644\u0633\u0639\u0631",
@@ -17366,7 +17390,7 @@ async function adminInquiriesActionsRoutes(app) {
     const updatedLog = [
       ...existingLog,
       {
-        id: import_crypto5.default.randomUUID(),
+        id: import_crypto7.default.randomUUID(),
         author: "admin",
         action: "consultation_scheduled",
         title: "\u062A\u0645 \u062A\u0623\u0643\u064A\u062F \u0645\u0648\u0639\u062F \u0627\u0644\u0627\u0633\u062A\u0634\u0627\u0631\u0629 \u0627\u0644\u062A\u0642\u0646\u064A\u0629",
@@ -17407,7 +17431,7 @@ async function adminInquiriesActionsRoutes(app) {
     const updatedLog = [
       ...existingLog,
       {
-        id: import_crypto5.default.randomUUID(),
+        id: import_crypto7.default.randomUUID(),
         author: "admin",
         action: "rejected",
         title: "\u062A\u0645 \u0627\u0644\u0627\u0639\u062A\u0630\u0627\u0631 \u0639\u0646 \u0642\u0628\u0648\u0644 \u0627\u0644\u0637\u0644\u0628",
