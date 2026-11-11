@@ -6,23 +6,16 @@ import { ProjectKpis } from "../components/ProjectKpis";
 import { ProjectSpecsStrip } from "../components/ProjectSpecsStrip";
 import { ProjectLiveGateway } from "../components/ProjectLiveGateway";
 import { ProjectScreenshotGallery } from "../components/ProjectScreenshotGallery";
-import { PosHardwareCompatibility } from "../components/PosHardwareCompatibility";
-import { ErpModulesMatrix } from "../components/ErpModulesMatrix";
-import { MobileAppShowcase } from "../components/MobileAppShowcase";
 import { Button } from "../../../components/ui/Button";
-import {
-  ArrowLeft,
-  ArrowRight,
-  ExternalLink,
-  Github,
-  CheckCircle2,
-  ShieldCheck
-} from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 import { MetaTags } from "../../../components/seo/MetaTags";
+import { ProjectDetailHeader } from "./detail/ProjectDetailHeader";
+import { ProjectDetailSpecializedDomain } from "./detail/ProjectDetailSpecializedDomain";
+import { ProjectDetailNavigation } from "./detail/ProjectDetailNavigation";
 
 export const ProjectDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
-  const { locale, isRtl } = useI18n();
+  const { locale } = useI18n();
 
   const { data: project, isLoading, error } = useProjectDetail(slug);
   const { data: allProjects = [] } = useProjects();
@@ -63,6 +56,12 @@ export const ProjectDetailPage: React.FC = () => {
   const prevProject = currentIndex > 0 ? allProjects[currentIndex - 1] : null;
   const nextProject = currentIndex >= 0 && currentIndex < allProjects.length - 1 ? allProjects[currentIndex + 1] : null;
 
+  const galleryItems = Array.isArray(project.gallery_json)
+    ? project.gallery_json
+    : typeof project.gallery_json === "string"
+    ? JSON.parse(project.gallery_json || "[]")
+    : (project as any).gallery || [];
+
   return (
     <article className="pt-24 sm:pt-28 pb-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 text-start">
       <MetaTags
@@ -72,69 +71,8 @@ export const ProjectDetailPage: React.FC = () => {
         url={`/projects/${project.slug}`}
         type="article"
       />
-      {/* Top Breadcrumbs & Badges Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-line">
-        <div className="flex items-center gap-2 font-mono text-xs sm:text-sm text-text-muted">
-          <Link
-            to="/projects"
-            className="inline-flex items-center gap-1.5 text-secondary hover:text-text-primary transition-colors font-semibold"
-          >
-            {isRtl ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
-            <span>{locale === "ar" ? "معرض الأعمال" : "Portfolio"}</span>
-          </Link>
-          <span>/</span>
-          <span className="text-text-primary font-medium truncate max-w-[200px] sm:max-w-none">
-            {title}
-          </span>
-        </div>
 
-        {/* System Badges */}
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-surface-container border border-line text-secondary font-mono text-xs font-semibold">
-            <span className="w-2 h-2 rounded-full bg-status-ok animate-pulse" />
-            <span>{locale === "ar" ? "منشور في بيئة الإنتاج" : "Production Active"}</span>
-          </span>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-surface-elevated border border-line text-text-primary font-mono text-xs">
-            <ShieldCheck className="w-3.5 h-3.5 text-secondary" />
-            <span>{locale === "ar" ? "معتمد CIB / Algérie Poste" : "CIB / Edahabia Certified"}</span>
-          </span>
-        </div>
-      </div>
-
-      {/* Header Info & Title */}
-      <div className="space-y-4">
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-text-primary tracking-tight">
-          {title}
-        </h1>
-        <p className="text-text-muted text-base sm:text-lg leading-relaxed max-w-3xl">
-          {summary}
-        </p>
-
-        {/* Action Buttons */}
-        <div className="pt-2 flex flex-wrap items-center gap-3">
-          {project.live_url && (
-            <a href={project.live_url} target="_blank" rel="noreferrer">
-              <button className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary-container text-white text-sm font-semibold hover:bg-primary/90 transition-all shadow-[0_0_16px_rgba(13,110,253,0.35)] active:scale-[0.98]">
-                <span>{locale === "ar" ? "معاينة النظام الحي" : "Launch Live Platform"}</span>
-                <ExternalLink className="w-4 h-4" />
-              </button>
-            </a>
-          )}
-          {project.repo_url && (
-            <a href={project.repo_url} target="_blank" rel="noreferrer">
-              <button className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-surface-container border border-line text-text-primary text-sm font-semibold hover:border-secondary/40 hover:text-secondary transition-all active:scale-[0.98]">
-                <Github className="w-4 h-4 text-secondary" />
-                <span>{locale === "ar" ? "مستودع الكود" : "Source Code"}</span>
-              </button>
-            </a>
-          )}
-          <Link to="/contact">
-            <button className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-surface-elevated border border-line text-secondary text-sm font-semibold hover:bg-surface-container transition-all active:scale-[0.98]">
-              <span>{locale === "ar" ? "طلب مشروع مماثل" : "Request Similar System"}</span>
-            </button>
-          </Link>
-        </div>
-      </div>
+      <ProjectDetailHeader project={project} title={title} summary={summary} />
 
       {/* Executive Technical Specifications Strip */}
       <ProjectSpecsStrip project={project} />
@@ -156,41 +94,16 @@ export const ProjectDetailPage: React.FC = () => {
         </div>
       ) : null}
 
-      {/* Type-Specialized Domain Showcase (POS hardware, ERP modules, Mobile QR/APK) */}
-      {(() => {
-        const typeSpecs =
-          (project as any).type_specs ||
-          (typeof (project as any).type_specs_json === "string"
-            ? JSON.parse((project as any).type_specs_json || "{}")
-            : (project as any).type_specs_json) ||
-          {};
-
-        if (project.project_type === "pos") {
-          return <PosHardwareCompatibility specs={typeSpecs} />;
-        }
-        if (project.project_type === "system") {
-          return <ErpModulesMatrix specs={typeSpecs} />;
-        }
-        if (project.project_type === "mobile") {
-          return <MobileAppShowcase specs={typeSpecs} downloadUrl={project.download_url || ""} title={title} />;
-        }
-        return null;
-      })()}
+      {/* Type-Specialized Domain Showcase */}
+      <ProjectDetailSpecializedDomain project={project} title={title} />
 
       {/* Engineering Impact KPI Grid Component */}
       <ProjectKpis />
 
       {/* Multi-Screenshot Device Frame Mockups Gallery */}
-      {(() => {
-        const galleryItems = Array.isArray(project.gallery_json)
-          ? project.gallery_json
-          : typeof project.gallery_json === "string"
-          ? JSON.parse(project.gallery_json || "[]")
-          : (project as any).gallery || [];
-        return galleryItems.length > 0 ? (
-          <ProjectScreenshotGallery items={galleryItems} title={title} />
-        ) : null;
-      })()}
+      {galleryItems.length > 0 && (
+        <ProjectScreenshotGallery items={galleryItems} title={title} />
+      )}
 
       {/* Tech Arsenal Tags */}
       <div className="space-y-3 pt-2">
@@ -225,32 +138,7 @@ export const ProjectDetailPage: React.FC = () => {
       </div>
 
       {/* Previous & Next Navigation */}
-      <div className="pt-8 border-t border-line flex items-center justify-between gap-4">
-        {prevProject ? (
-          <Link
-            to={`/projects/${prevProject.slug}`}
-            className="flex items-center gap-2 p-3 rounded-lg bg-surface border border-line hover:border-secondary/40 text-xs sm:text-sm font-semibold text-text-muted hover:text-text-primary transition-all"
-          >
-            {isRtl ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
-            <span className="truncate max-w-[150px] sm:max-w-[200px]">
-              {locale === "ar" ? prevProject.title_ar : prevProject.title_en}
-            </span>
-          </Link>
-        ) : <div />}
-
-        {nextProject ? (
-          <Link
-            to={`/projects/${nextProject.slug}`}
-            className="flex items-center gap-2 p-3 rounded-lg bg-surface border border-line hover:border-secondary/40 text-xs sm:text-sm font-semibold text-text-muted hover:text-text-primary transition-all"
-          >
-            <span className="truncate max-w-[150px] sm:max-w-[200px]">
-              {locale === "ar" ? nextProject.title_ar : nextProject.title_en}
-            </span>
-            {isRtl ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
-          </Link>
-        ) : <div />}
-      </div>
+      <ProjectDetailNavigation prevProject={prevProject} nextProject={nextProject} />
     </article>
   );
 };
-
