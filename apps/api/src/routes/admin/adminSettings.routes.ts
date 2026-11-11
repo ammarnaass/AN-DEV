@@ -32,3 +32,4 @@ export async function adminSettingsRoutes(app: FastifyInstance) {
     return reply.send({ success: true });
   });
 }
+

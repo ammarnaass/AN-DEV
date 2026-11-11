@@ -45,3 +45,4 @@ export function maskEmail(email: string): string {
   if (user.length <= 2) return `${user[0]}***@${domain}`;
   return `${user[0]}***${user[user.length - 1]}@${domain}`;
 }
+

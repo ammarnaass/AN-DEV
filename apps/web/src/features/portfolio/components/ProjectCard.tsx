@@ -4,7 +4,7 @@ import { Project } from "@andev/shared";
 import { useI18n } from "../../../lib/i18n";
 import { TechChip } from "../../../components/ui/TechChip";
 import { PlatformIcon } from "./PlatformIcon";
-import { ArrowLeft, ArrowRight, ExternalLink } from "lucide-react";
+import { ArrowLeft, ArrowRight, ExternalLink, Github } from "lucide-react";
 
 export const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
   const { locale, isRtl } = useI18n();
@@ -128,18 +128,32 @@ export const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
               <span>{locale === "ar" ? "دراسة الحالة والمواصفات" : "Specs & Case Study"}</span>
               {isRtl ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
             </span>
-            {project.live_url && (
-              <a
-                href={project.live_url}
-                target="_blank"
-                rel="noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="text-text-muted hover:text-secondary p-1"
-                title="Live URL"
-              >
-                <ExternalLink className="w-3.5 h-3.5" />
-              </a>
-            )}
+            <div className="flex items-center gap-1.5">
+              {project.repo_url && (
+                <a
+                  href={project.repo_url}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-text-muted hover:text-secondary p-1 transition-colors"
+                  title={locale === "ar" ? "مستودع GitHub" : "GitHub Repository"}
+                >
+                  <Github className="w-3.5 h-3.5" />
+                </a>
+              )}
+              {project.live_url && (
+                <a
+                  href={project.live_url}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-text-muted hover:text-secondary p-1 transition-colors"
+                  title={locale === "ar" ? "معاينة حية" : "Live Demo"}
+                >
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              )}
+            </div>
           </div>
         </div>
       </div>

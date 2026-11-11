@@ -764,7 +764,7 @@ var require_fetch = __commonJS({
     var PassThrough = require("stream").PassThrough;
     var Cookies = require_cookies();
     var packageData = require_package();
-    var net = require("net");
+    var net2 = require("net");
     var MAX_REDIRECTS = 5;
     module2.exports = function(url, options) {
       return nmfetch(url, options);
@@ -865,7 +865,7 @@ var require_fetch = __commonJS({
           reqOptions[key] = options.tls[key];
         });
       }
-      if (parsed.protocol === "https:" && parsed.hostname && parsed.hostname !== reqOptions.host && !net.isIP(parsed.hostname) && !reqOptions.servername) {
+      if (parsed.protocol === "https:" && parsed.hostname && parsed.hostname !== reqOptions.host && !net2.isIP(parsed.hostname) && !reqOptions.servername) {
         reqOptions.servername = parsed.hostname;
       }
       try {
@@ -1000,8 +1000,8 @@ var require_shared = __commonJS({
     var util2 = require("util");
     var fs2 = require("fs");
     var nmfetch = require_fetch();
-    var dns = require("dns");
-    var net = require("net");
+    var dns2 = require("dns");
+    var net2 = require("net");
     var os = require("os");
     var DNS_TTL = 5 * 60 * 1e3;
     var networkInterfaces;
@@ -1027,16 +1027,16 @@ var require_shared = __commonJS({
       if (!familySupported) {
         return callback(null, []);
       }
-      const resolver2 = dns.Resolver ? new dns.Resolver(options) : dns;
+      const resolver2 = dns2.Resolver ? new dns2.Resolver(options) : dns2;
       resolver2["resolve" + family](hostname, (err, addresses) => {
         if (err) {
           switch (err.code) {
-            case dns.NODATA:
-            case dns.NOTFOUND:
-            case dns.NOTIMP:
-            case dns.SERVFAIL:
-            case dns.CONNREFUSED:
-            case dns.REFUSED:
+            case dns2.NODATA:
+            case dns2.NOTFOUND:
+            case dns2.NOTIMP:
+            case dns2.SERVFAIL:
+            case dns2.CONNREFUSED:
+            case dns2.REFUSED:
             case "EAI_AGAIN":
               return callback(null, []);
           }
@@ -1063,7 +1063,7 @@ var require_shared = __commonJS({
       if (!options.host && options.servername) {
         options.host = options.servername;
       }
-      if (!options.host || net.isIP(options.host)) {
+      if (!options.host || net2.isIP(options.host)) {
         let value = {
           addresses: [options.host],
           servername: options.servername || false
@@ -1146,7 +1146,7 @@ var require_shared = __commonJS({
             );
           }
           try {
-            dns.lookup(options.host, { all: true }, (err3, addresses3) => {
+            dns2.lookup(options.host, { all: true }, (err3, addresses3) => {
               if (err3) {
                 if (cached) {
                   return callback(
@@ -6903,7 +6903,7 @@ var require_dkim = __commonJS({
 var require_http_proxy_client = __commonJS({
   "node_modules/nodemailer/lib/smtp-connection/http-proxy-client.js"(exports2, module2) {
     "use strict";
-    var net = require("net");
+    var net2 = require("net");
     var tls = require("tls");
     var urllib = require("url");
     function httpProxyClient(proxyUrl, destinationPort, destinationHost, callback) {
@@ -6919,7 +6919,7 @@ var require_http_proxy_client = __commonJS({
         options.rejectUnauthorized = false;
         connect = tls.connect.bind(tls);
       } else {
-        connect = net.connect.bind(net);
+        connect = net2.connect.bind(net2);
       }
       let finished = false;
       let tempSocketErr = (err) => {
@@ -7273,8 +7273,8 @@ var require_mailer = __commonJS({
     var urllib = require("url");
     var packageData = require_package();
     var MailMessage = require_mail_message();
-    var net = require("net");
-    var dns = require("dns");
+    var net2 = require("net");
+    var dns2 = require("dns");
     var crypto8 = require("crypto");
     var Mail = class extends EventEmitter {
       constructor(transporter, options, defaults) {
@@ -7575,10 +7575,10 @@ var require_mailer = __commonJS({
                   });
                 });
               };
-              if (net.isIP(proxy.hostname)) {
+              if (net2.isIP(proxy.hostname)) {
                 return connect(proxy.hostname);
               }
-              return dns.resolve(proxy.hostname, (err, address) => {
+              return dns2.resolve(proxy.hostname, (err, address) => {
                 if (err) {
                   return callback(err);
                 }
@@ -7723,7 +7723,7 @@ var require_smtp_connection = __commonJS({
     "use strict";
     var packageInfo = require_package();
     var EventEmitter = require("events").EventEmitter;
-    var net = require("net");
+    var net2 = require("net");
     var tls = require("tls");
     var os = require("os");
     var crypto8 = require("crypto");
@@ -7744,7 +7744,7 @@ var require_smtp_connection = __commonJS({
         this.alreadySecured = !!this.options.secured;
         this.port = Number(this.options.port) || (this.secureConnection ? 465 : 587);
         this.host = this.options.host || "localhost";
-        this.servername = this.options.servername ? this.options.servername : !net.isIP(this.host) ? this.host : false;
+        this.servername = this.options.servername ? this.options.servername : !net2.isIP(this.host) ? this.host : false;
         this.allowInternalNetworkInterfaces = this.options.allowInternalNetworkInterfaces || false;
         if (typeof this.options.secure === "undefined" && this.port === 465) {
           this.secureConnection = true;
@@ -7935,7 +7935,7 @@ var require_smtp_connection = __commonJS({
               }
             });
             try {
-              this._socket = net.connect(opts, () => {
+              this._socket = net2.connect(opts, () => {
                 this._socket.setKeepAlive(true);
                 this._onConnect();
               });
@@ -11701,6 +11701,8 @@ var import_cors = __toESM(require("@fastify/cors"));
 var import_multipart = __toESM(require("@fastify/multipart"));
 
 // apps/api/src/db/index.ts
+var import_net = __toESM(require("net"));
+var import_dns = __toESM(require("dns"));
 var import_serverless = require("@neondatabase/serverless");
 var import_neon_http = require("drizzle-orm/neon-http");
 
@@ -11858,13 +11860,19 @@ var bio_links = (0, import_pg_core.pgTable)("bio_links", {
 });
 
 // apps/api/src/db/index.ts
+if (import_net.default.setDefaultAutoSelectFamily) {
+  import_net.default.setDefaultAutoSelectFamily(false);
+}
+if (import_dns.default.setDefaultResultOrder) {
+  import_dns.default.setDefaultResultOrder("ipv4first");
+}
 var DEFAULT_CONNECTION = "postgresql://neondb_owner:npg_s2hjOkANc3tF@ep-damp-bird-zajgsfr3.c-2.eu-west-2.aws.neon.tech/neondb?sslmode=require";
 var dbInstance = null;
 var rawSql = null;
 var isInitialized = false;
 async function initDb(connStr, runMigrations = true) {
   if (!dbInstance) {
-    const connectionString = connStr || process.env.DATABASE_URL || DEFAULT_CONNECTION;
+    const connectionString = connStr || process.env.DATABASE_URL_UNPOOLED || process.env.DATABASE_URL || DEFAULT_CONNECTION;
     rawSql = (0, import_serverless.neon)(connectionString);
     dbInstance = (0, import_neon_http.drizzle)(rawSql, { schema: schema_exports });
   }

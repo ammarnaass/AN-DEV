@@ -28,3 +28,4 @@ export async function adminStatsRoutes(app: FastifyInstance) {
     });
   });
 }
+

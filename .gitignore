@@ -2,10 +2,10 @@ node_modules/
 dist/
 build/
 .superpowers/
-data/
-uploads/
+/data/
+/uploads/
+!apps/web/public/uploads/
 *.log
 .env
 .env.*
 !.env.example
-

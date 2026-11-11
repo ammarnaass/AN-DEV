@@ -1,3 +1,13 @@
+import net from "net";
+import dns from "dns";
+
+if (net.setDefaultAutoSelectFamily) {
+  net.setDefaultAutoSelectFamily(false);
+}
+if (dns.setDefaultResultOrder) {
+  dns.setDefaultResultOrder("ipv4first");
+}
+
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 import * as schema from "./schema";
@@ -10,7 +20,7 @@ let isInitialized = false;
 
 export async function initDb(connStr?: string, runMigrations = true) {
   if (!dbInstance) {
-    const connectionString = connStr || process.env.DATABASE_URL || DEFAULT_CONNECTION;
+    const connectionString = connStr || process.env.DATABASE_URL_UNPOOLED || process.env.DATABASE_URL || DEFAULT_CONNECTION;
     rawSql = neon(connectionString);
     dbInstance = drizzle(rawSql, { schema });
   }

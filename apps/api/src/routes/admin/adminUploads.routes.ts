@@ -13,3 +13,4 @@ export async function adminUploadsRoutes(app: FastifyInstance) {
     return reply.send(result);
   });
 }
+

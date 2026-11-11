@@ -124,3 +124,4 @@ export async function adminProjectsRoutes(app: FastifyInstance) {
     return reply.send({ success: true });
   });
 }
+

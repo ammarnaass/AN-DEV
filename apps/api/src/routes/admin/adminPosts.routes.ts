@@ -194,3 +194,4 @@ export async function adminPostsRoutes(app: FastifyInstance) {
     return reply.send({ success: true, featured: nextFeatured });
   });
 }
+
