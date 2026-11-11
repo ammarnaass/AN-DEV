@@ -325,7 +325,9 @@ At AN DEV, web performance is a core competitive requirement rather than an afte
 3. **Immutable Caching Headers**: Serving static assets directly from edge reverse proxies.
 `,
     published: true,
-    published_at: now
+    published_at: now,
+    created_at: now,
+    updated_at: now
   };
 
   const [existingPost] = await db.select().from(posts).where(eq(posts.slug, samplePost.slug));

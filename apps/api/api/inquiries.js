@@ -16,11 +16,11 @@ var __export = (target, all) => {
   for (var name in all)
     __defProp(target, name, { get: all[name], enumerable: true });
 };
-var __copyProps = (to, from, except, desc3) => {
+var __copyProps = (to, from, except, desc4) => {
   if (from && typeof from === "object" || typeof from === "function") {
     for (let key of __getOwnPropNames(from))
       if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc3 = __getOwnPropDesc(from, key)) || desc3.enumerable });
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc4 = __getOwnPropDesc(from, key)) || desc4.enumerable });
   }
   return to;
 };
@@ -4967,7 +4967,7 @@ var require_le_unix = __commonJS({
 var require_mime_node = __commonJS({
   "node_modules/nodemailer/lib/mime-node/index.js"(exports2, module2) {
     "use strict";
-    var crypto5 = require("crypto");
+    var crypto6 = require("crypto");
     var fs2 = require("fs");
     var punycode = require_punycode();
     var PassThrough = require("stream").PassThrough;
@@ -4984,7 +4984,7 @@ var require_mime_node = __commonJS({
       constructor(contentType, options) {
         this.nodeCounter = 0;
         options = options || {};
-        this.baseBoundary = options.baseBoundary || crypto5.randomBytes(8).toString("hex");
+        this.baseBoundary = options.baseBoundary || crypto6.randomBytes(8).toString("hex");
         this.boundaryPrefix = options.boundaryPrefix || "--_NmP";
         this.disableFileAccess = !!options.disableFileAccess;
         this.disableUrlAccess = !!options.disableUrlAccess;
@@ -5927,8 +5927,8 @@ var require_mime_node = __commonJS({
       _generateMessageId() {
         return "<" + [2, 2, 2, 6].reduce(
           // crux to generate UUID-like random strings
-          (prev, len) => prev + "-" + crypto5.randomBytes(len).toString("hex"),
-          crypto5.randomBytes(4).toString("hex")
+          (prev, len) => prev + "-" + crypto6.randomBytes(len).toString("hex"),
+          crypto6.randomBytes(4).toString("hex")
         ) + "@" + // try to use the domain of the FROM address or fallback to server hostname
         (this.getEnvelope().from || this.hostname || "localhost").split("@").pop() + ">";
       }
@@ -6519,14 +6519,14 @@ var require_relaxed_body = __commonJS({
   "node_modules/nodemailer/lib/dkim/relaxed-body.js"(exports2, module2) {
     "use strict";
     var Transform = require("stream").Transform;
-    var crypto5 = require("crypto");
+    var crypto6 = require("crypto");
     var RelaxedBody = class extends Transform {
       constructor(options) {
         super();
         options = options || {};
         this.chunkBuffer = [];
         this.chunkBufferLen = 0;
-        this.bodyHash = crypto5.createHash(options.hashAlgo || "sha1");
+        this.bodyHash = crypto6.createHash(options.hashAlgo || "sha1");
         this.remainder = "";
         this.byteLength = 0;
         this.debug = options.debug;
@@ -6629,7 +6629,7 @@ var require_sign = __commonJS({
     "use strict";
     var punycode = require_punycode();
     var mimeFuncs = require_mime_funcs();
-    var crypto5 = require("crypto");
+    var crypto6 = require("crypto");
     module2.exports = (headers, hashAlgo, bodyHash, options) => {
       options = options || {};
       let defaultFieldNames = "From:Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive";
@@ -6638,7 +6638,7 @@ var require_sign = __commonJS({
       let dkimHeader = generateDKIMHeader(options.domainName, options.keySelector, canonicalizedHeaderData.fieldNames, hashAlgo, bodyHash);
       let signer, signature;
       canonicalizedHeaderData.headers += "dkim-signature:" + relaxedHeaderLine(dkimHeader);
-      signer = crypto5.createSign(("rsa-" + hashAlgo).toUpperCase());
+      signer = crypto6.createSign(("rsa-" + hashAlgo).toUpperCase());
       signer.update(canonicalizedHeaderData.headers);
       try {
         signature = signer.sign(options.privateKey, "base64");
@@ -6706,7 +6706,7 @@ var require_dkim = __commonJS({
     var PassThrough = require("stream").PassThrough;
     var fs2 = require("fs");
     var path2 = require("path");
-    var crypto5 = require("crypto");
+    var crypto6 = require("crypto");
     var DKIM_ALGO = "sha256";
     var MAX_MESSAGE_SIZE = 128 * 1024;
     var DKIMSigner = class {
@@ -6719,7 +6719,7 @@ var require_dkim = __commonJS({
         this.chunks = [];
         this.chunklen = 0;
         this.readPos = 0;
-        this.cachePath = this.cacheDir ? path2.join(this.cacheDir, "message." + Date.now() + "-" + crypto5.randomBytes(14).toString("hex")) : false;
+        this.cachePath = this.cacheDir ? path2.join(this.cacheDir, "message." + Date.now() + "-" + crypto6.randomBytes(14).toString("hex")) : false;
         this.cache = false;
         this.headers = false;
         this.bodyHash = false;
@@ -7275,7 +7275,7 @@ var require_mailer = __commonJS({
     var MailMessage = require_mail_message();
     var net = require("net");
     var dns = require("dns");
-    var crypto5 = require("crypto");
+    var crypto6 = require("crypto");
     var Mail = class extends EventEmitter {
       constructor(transporter, options, defaults) {
         super();
@@ -7599,7 +7599,7 @@ var require_mailer = __commonJS({
           }
           let cidCounter = 0;
           html = (html || "").toString().replace(/(<img\b[^<>]{0,1024} src\s{0,20}=[\s"']{0,20})(data:([^;]+);[^"'>\s]+)/gi, (match, prefix, dataUri, mimeType) => {
-            let cid = crypto5.randomBytes(10).toString("hex") + "@localhost";
+            let cid = crypto6.randomBytes(10).toString("hex") + "@localhost";
             if (!mail.data.attachments) {
               mail.data.attachments = [];
             }
@@ -7726,7 +7726,7 @@ var require_smtp_connection = __commonJS({
     var net = require("net");
     var tls = require("tls");
     var os = require("os");
-    var crypto5 = require("crypto");
+    var crypto6 = require("crypto");
     var DataStream = require_data_stream();
     var PassThrough = require("stream").PassThrough;
     var shared = require_shared();
@@ -7737,7 +7737,7 @@ var require_smtp_connection = __commonJS({
     var SMTPConnection = class extends EventEmitter {
       constructor(options) {
         super(options);
-        this.id = crypto5.randomBytes(8).toString("base64").replace(/\W/g, "");
+        this.id = crypto6.randomBytes(8).toString("base64").replace(/\W/g, "");
         this.stage = "init";
         this.options = options || {};
         this.secureConnection = !!this.options.secure;
@@ -8830,7 +8830,7 @@ var require_smtp_connection = __commonJS({
         } else {
           challengeString = challengeMatch[1];
         }
-        let base64decoded = Buffer.from(challengeString, "base64").toString("ascii"), hmacMD5 = crypto5.createHmac("md5", this._auth.credentials.pass);
+        let base64decoded = Buffer.from(challengeString, "base64").toString("ascii"), hmacMD5 = crypto6.createHmac("md5", this._auth.credentials.pass);
         hmacMD5.update(base64decoded);
         let prepended = this._auth.credentials.user + " " + hmacMD5.digest("hex");
         this._responseActions.push((str2) => {
@@ -9141,7 +9141,7 @@ var require_xoauth2 = __commonJS({
     "use strict";
     var Stream = require("stream").Stream;
     var nmfetch = require_fetch();
-    var crypto5 = require("crypto");
+    var crypto6 = require("crypto");
     var shared = require_shared();
     var XOAuth2 = class extends Stream {
       constructor(options, logger) {
@@ -9432,7 +9432,7 @@ var require_xoauth2 = __commonJS({
        */
       jwtSignRS256(payload) {
         payload = ['{"alg":"RS256","typ":"JWT"}', JSON.stringify(payload)].map((val) => this.toBase64URL(val)).join(".");
-        let signature = crypto5.createSign("RSA-SHA256").update(payload).sign(this.options.privateKey);
+        let signature = crypto6.createSign("RSA-SHA256").update(payload).sign(this.options.privateKey);
         return payload + "." + this.toBase64URL(signature);
       }
     };
@@ -16830,58 +16830,9 @@ ${urls.map((u) => `  <url>
   });
 }
 
-// apps/api/src/routes/admin.ts
+// apps/api/src/routes/admin/adminStats.routes.ts
 var import_drizzle_orm5 = require("drizzle-orm");
-
-// apps/api/src/services/upload.ts
-var import_path = __toESM(require("path"));
-var import_fs = __toESM(require("fs"));
-var import_crypto3 = __toESM(require("crypto"));
-async function processAndSaveImage(fileBuffer, subDir = "projects") {
-  const sharpModule = await import("sharp");
-  const sharp = sharpModule.default || sharpModule;
-  const image = sharp(fileBuffer);
-  const metadata = await image.metadata();
-  const resized = image.resize({
-    width: Math.min(metadata.width || 1920, 1920),
-    withoutEnlargement: true
-  }).webp({ quality: 85 });
-  try {
-    const uploadsDir = import_path.default.resolve(process.cwd(), "uploads", subDir);
-    if (!import_fs.default.existsSync(uploadsDir)) {
-      import_fs.default.mkdirSync(uploadsDir, { recursive: true });
-    }
-    const filename = `${Date.now()}-${import_crypto3.default.randomBytes(6).toString("hex")}.webp`;
-    const targetPath = import_path.default.join(uploadsDir, filename);
-    await resized.toFile(targetPath);
-    return {
-      path: `/uploads/${subDir}/${filename}`,
-      width: metadata.width || 0,
-      height: metadata.height || 0
-    };
-  } catch {
-    const webpBuffer = await resized.toBuffer();
-    const base64 = webpBuffer.toString("base64");
-    return {
-      path: `data:image/webp;base64,${base64}`,
-      width: metadata.width || 0,
-      height: metadata.height || 0
-    };
-  }
-}
-
-// apps/api/src/routes/admin.ts
-var import_crypto4 = __toESM(require("crypto"));
-function safeJsonParse2(value, fallback) {
-  if (!value) return fallback;
-  try {
-    return JSON.parse(value);
-  } catch {
-    return fallback;
-  }
-}
-async function adminRoutes(app) {
-  app.addHook("preHandler", requireAdmin);
+async function adminStatsRoutes(app) {
   app.get("/stats", async (request, reply) => {
     const db = getDb();
     const [inquiriesCount] = await db.select({ count: import_drizzle_orm5.sql`count(*)` }).from(inquiries);
@@ -16897,219 +16848,23 @@ async function adminRoutes(app) {
       views_last_30_days: Number(viewsCount?.sum || 0)
     });
   });
-  app.get("/inquiries", async (request, reply) => {
-    const { status, type, search } = request.query;
-    const db = getDb();
-    let query = db.select().from(inquiries);
-    const conditions = [];
-    if (status && status !== "all") {
-      if (status === "pending" || status === "new") {
-        conditions.push((0, import_drizzle_orm5.or)((0, import_drizzle_orm5.eq)(inquiries.status, "pending"), (0, import_drizzle_orm5.eq)(inquiries.status, "new")));
-      } else {
-        conditions.push((0, import_drizzle_orm5.eq)(inquiries.status, status));
-      }
-    }
-    if (type && ["project", "consultation"].includes(type)) {
-      conditions.push((0, import_drizzle_orm5.eq)(inquiries.request_type, type));
-    }
-    if (search && search.trim().length > 0) {
-      const term = `%${search.trim().toLowerCase()}%`;
-      conditions.push(
-        (0, import_drizzle_orm5.or)(
-          import_drizzle_orm5.sql`lower(${inquiries.name}) LIKE ${term}`,
-          import_drizzle_orm5.sql`lower(${inquiries.email}) LIKE ${term}`,
-          import_drizzle_orm5.sql`lower(coalesce(${inquiries.tracking_code}, '')) LIKE ${term}`,
-          import_drizzle_orm5.sql`lower(coalesce(${inquiries.phone}, '')) LIKE ${term}`,
-          import_drizzle_orm5.sql`lower(coalesce(${inquiries.company}, '')) LIKE ${term}`
-        )
-      );
-    }
-    if (conditions.length > 0) {
-      query = query.where((0, import_drizzle_orm5.and)(...conditions));
-    }
-    const rows = await query.orderBy((0, import_drizzle_orm5.desc)(inquiries.created_at));
-    return reply.send(
-      rows.map((r) => ({
-        ...r,
-        activity_log: safeJsonParse2(r.activity_log_json, [])
-      }))
-    );
-  });
-  app.patch("/inquiries/:id", async (request, reply) => {
-    const { id } = request.params;
-    const parseResult = UpdateInquirySchema.safeParse(request.body);
-    if (!parseResult.success) {
-      return reply.status(400).send({
-        error: "\u0628\u064A\u0627\u0646\u0627\u062A \u063A\u064A\u0631 \u0635\u0627\u0644\u062D\u0629",
-        details: parseResult.error.format()
-      });
-    }
-    const db = getDb();
-    const [existing] = await db.select().from(inquiries).where((0, import_drizzle_orm5.eq)(inquiries.id, Number(id)));
-    if (!existing) {
-      return reply.status(404).send({ error: "\u0627\u0644\u0637\u0644\u0628 \u063A\u064A\u0631 \u0645\u0648\u062C\u0648\u062F" });
-    }
-    const { status, admin_note, quote_amount, estimated_timeline, confirmed_datetime, meeting_link } = parseResult.data;
-    const now = (/* @__PURE__ */ new Date()).toISOString();
-    const existingLog = safeJsonParse2(existing.activity_log_json, []);
-    const updatedLog = [...existingLog];
-    if (status && status !== existing.status) {
-      updatedLog.push({
-        id: import_crypto4.default.randomUUID(),
-        author: "admin",
-        action: "status_changed",
-        title: `\u062A\u062D\u062F\u064A\u062B \u0627\u0644\u062D\u0627\u0644\u0629 \u0625\u0644\u0649 (${status})`,
-        body: admin_note || void 0,
-        created_at: now
-      });
-    } else if (admin_note && admin_note !== existing.admin_note) {
-      updatedLog.push({
-        id: import_crypto4.default.randomUUID(),
-        author: "admin",
-        action: "admin_note",
-        title: "\u0625\u0636\u0627\u0641\u0629 \u0645\u0644\u0627\u062D\u0638\u0629 \u0625\u062F\u0627\u0631\u064A\u0629",
-        body: admin_note,
-        created_at: now
-      });
-    }
-    await db.update(inquiries).set({
-      status,
-      ...admin_note !== void 0 ? { admin_note } : {},
-      ...quote_amount !== void 0 ? { quote_amount } : {},
-      ...estimated_timeline !== void 0 ? { estimated_timeline } : {},
-      ...confirmed_datetime !== void 0 ? { confirmed_datetime } : {},
-      ...meeting_link !== void 0 ? { meeting_link } : {},
-      activity_log_json: JSON.stringify(updatedLog),
-      updated_at: now
-    }).where((0, import_drizzle_orm5.eq)(inquiries.id, Number(id)));
-    return reply.send({ success: true, message: "\u062A\u0645 \u062A\u062D\u062F\u064A\u062B \u0627\u0644\u0637\u0644\u0628 \u0628\u0646\u062C\u0627\u062D" });
-  });
-  app.post("/inquiries/:id/approve", async (request, reply) => {
-    const { id } = request.params;
-    const parseResult = ApproveProjectSchema.safeParse(request.body);
-    if (!parseResult.success) {
-      return reply.status(400).send({
-        error: "\u0628\u064A\u0627\u0646\u0627\u062A \u0627\u0644\u0627\u0639\u062A\u0645\u0627\u062F \u063A\u064A\u0631 \u0635\u0627\u0644\u062D\u0629",
-        details: parseResult.error.format()
-      });
-    }
-    const db = getDb();
-    const [existing] = await db.select().from(inquiries).where((0, import_drizzle_orm5.eq)(inquiries.id, Number(id)));
-    if (!existing) {
-      return reply.status(404).send({ error: "\u0627\u0644\u0637\u0644\u0628 \u063A\u064A\u0631 \u0645\u0648\u062C\u0648\u062F" });
-    }
-    const now = (/* @__PURE__ */ new Date()).toISOString();
-    const existingLog = safeJsonParse2(existing.activity_log_json, []);
-    const { quote_amount, estimated_timeline, admin_note } = parseResult.data;
-    const updatedLog = [
-      ...existingLog,
-      {
-        id: import_crypto4.default.randomUUID(),
-        author: "admin",
-        action: "quote_provided",
-        title: "\u062A\u0645\u062A \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629 \u0639\u0644\u0649 \u0627\u0644\u0645\u0634\u0631\u0648\u0639 \u0648\u062A\u0642\u062F\u064A\u0645 \u0639\u0631\u0636 \u0627\u0644\u0633\u0639\u0631",
-        body: `\u0639\u0631\u0636 \u0627\u0644\u0633\u0639\u0631: ${quote_amount} | \u0627\u0644\u0645\u062F\u0629 \u0627\u0644\u062A\u0642\u062F\u064A\u0631\u064A\u0629: ${estimated_timeline}${admin_note ? `
-\u0645\u0644\u0627\u062D\u0638\u0629: ${admin_note}` : ""}`,
-        created_at: now
-      }
-    ];
-    await db.update(inquiries).set({
-      status: "approved",
-      quote_amount,
-      estimated_timeline,
-      admin_note: admin_note || existing.admin_note,
-      activity_log_json: JSON.stringify(updatedLog),
-      updated_at: now
-    }).where((0, import_drizzle_orm5.eq)(inquiries.id, Number(id)));
-    return reply.send({ success: true, message: "\u062A\u0645\u062A \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629 \u0639\u0644\u0649 \u0627\u0644\u0645\u0634\u0631\u0648\u0639 \u0648\u0625\u0631\u0633\u0627\u0644 \u0627\u0644\u0639\u0631\u0636 \u0644\u0644\u0639\u0645\u064A\u0644" });
-  });
-  app.post("/inquiries/:id/schedule", async (request, reply) => {
-    const { id } = request.params;
-    const parseResult = ScheduleConsultationSchema.safeParse(request.body);
-    if (!parseResult.success) {
-      return reply.status(400).send({
-        error: "\u0628\u064A\u0627\u0646\u0627\u062A \u062C\u062F\u0648\u0644\u0629 \u0627\u0644\u0627\u0633\u062A\u0634\u0627\u0631\u0629 \u063A\u064A\u0631 \u0645\u0643\u062A\u0645\u0644\u0629",
-        details: parseResult.error.format()
-      });
-    }
-    const db = getDb();
-    const [existing] = await db.select().from(inquiries).where((0, import_drizzle_orm5.eq)(inquiries.id, Number(id)));
-    if (!existing) {
-      return reply.status(404).send({ error: "\u0637\u0644\u0628 \u0627\u0644\u0627\u0633\u062A\u0634\u0627\u0631\u0629 \u063A\u064A\u0631 \u0645\u0648\u062C\u0648\u062F" });
-    }
-    const now = (/* @__PURE__ */ new Date()).toISOString();
-    const existingLog = safeJsonParse2(existing.activity_log_json, []);
-    const { confirmed_datetime, meeting_mode, meeting_link, admin_note } = parseResult.data;
-    const updatedLog = [
-      ...existingLog,
-      {
-        id: import_crypto4.default.randomUUID(),
-        author: "admin",
-        action: "consultation_scheduled",
-        title: "\u062A\u0645 \u062A\u0623\u0643\u064A\u062F \u0645\u0648\u0639\u062F \u0627\u0644\u0627\u0633\u062A\u0634\u0627\u0631\u0629 \u0627\u0644\u062A\u0642\u0646\u064A\u0629",
-        body: `\u0627\u0644\u0645\u0648\u0639\u062F: ${confirmed_datetime} | \u0648\u0633\u064A\u0644\u0629 \u0627\u0644\u0627\u062C\u062A\u0645\u0627\u0639: ${meeting_mode}${meeting_link ? `
-\u0627\u0644\u0631\u0627\u0628\u0637: ${meeting_link}` : ""}${admin_note ? `
-\u0645\u0644\u0627\u062D\u0638\u0629: ${admin_note}` : ""}`,
-        created_at: now
-      }
-    ];
-    await db.update(inquiries).set({
-      status: "approved",
-      confirmed_datetime,
-      meeting_mode,
-      meeting_link: meeting_link || null,
-      admin_note: admin_note || existing.admin_note,
-      activity_log_json: JSON.stringify(updatedLog),
-      updated_at: now
-    }).where((0, import_drizzle_orm5.eq)(inquiries.id, Number(id)));
-    return reply.send({ success: true, message: "\u062A\u0645 \u062A\u0623\u0643\u064A\u062F \u0645\u0648\u0639\u062F \u0627\u0644\u0627\u0633\u062A\u0634\u0627\u0631\u0629 \u0648\u062A\u062D\u062F\u064A\u062B \u0631\u0627\u0628\u0637 \u0627\u0644\u0627\u062C\u062A\u0645\u0627\u0639" });
-  });
-  app.post("/inquiries/:id/reject", async (request, reply) => {
-    const { id } = request.params;
-    const parseResult = RejectInquirySchema.safeParse(request.body);
-    if (!parseResult.success) {
-      return reply.status(400).send({
-        error: "\u064A\u0631\u062C\u0649 \u0643\u062A\u0627\u0628\u0629 \u0633\u0628\u0628 \u0627\u0644\u0627\u0639\u062A\u0630\u0627\u0631",
-        details: parseResult.error.format()
-      });
-    }
-    const db = getDb();
-    const [existing] = await db.select().from(inquiries).where((0, import_drizzle_orm5.eq)(inquiries.id, Number(id)));
-    if (!existing) {
-      return reply.status(404).send({ error: "\u0627\u0644\u0637\u0644\u0628 \u063A\u064A\u0631 \u0645\u0648\u062C\u0648\u062F" });
-    }
-    const now = (/* @__PURE__ */ new Date()).toISOString();
-    const existingLog = safeJsonParse2(existing.activity_log_json, []);
-    const { reason } = parseResult.data;
-    const updatedLog = [
-      ...existingLog,
-      {
-        id: import_crypto4.default.randomUUID(),
-        author: "admin",
-        action: "rejected",
-        title: "\u062A\u0645 \u0627\u0644\u0627\u0639\u062A\u0630\u0627\u0631 \u0639\u0646 \u0642\u0628\u0648\u0644 \u0627\u0644\u0637\u0644\u0628",
-        body: reason,
-        created_at: now
-      }
-    ];
-    await db.update(inquiries).set({
-      status: "rejected",
-      cancellation_reason: reason,
-      activity_log_json: JSON.stringify(updatedLog),
-      updated_at: now
-    }).where((0, import_drizzle_orm5.eq)(inquiries.id, Number(id)));
-    return reply.send({ success: true, message: "\u062A\u0645 \u062A\u0633\u062C\u064A\u0644 \u0627\u0644\u0627\u0639\u062A\u0630\u0627\u0631 \u0648\u062A\u062D\u062F\u064A\u062B \u062D\u0627\u0644\u0629 \u0627\u0644\u0637\u0644\u0628" });
-  });
-  app.delete("/inquiries/:id", async (request, reply) => {
-    const { id } = request.params;
-    const db = getDb();
-    const [existing] = await db.select().from(inquiries).where((0, import_drizzle_orm5.eq)(inquiries.id, Number(id)));
-    if (!existing) {
-      return reply.status(404).send({ error: "\u0627\u0644\u0637\u0644\u0628 \u063A\u064A\u0631 \u0645\u0648\u062C\u0648\u062F \u0623\u0648 \u062A\u0645 \u062D\u0630\u0641\u0647 \u0645\u0633\u0628\u0642\u0627\u064B" });
-    }
-    await db.delete(inquiries).where((0, import_drizzle_orm5.eq)(inquiries.id, Number(id)));
-    return reply.send({ success: true, message: "\u062A\u0645 \u062D\u0630\u0641 \u0627\u0644\u0637\u0644\u0628 \u0646\u0647\u0627\u0626\u064A\u0627\u064B \u0645\u0646 \u0642\u0627\u0639\u062F\u0629 \u0627\u0644\u0628\u064A\u0627\u0646\u0627\u062A" });
-  });
+}
+
+// apps/api/src/routes/admin/adminProjects.routes.ts
+var import_drizzle_orm6 = require("drizzle-orm");
+
+// apps/api/src/routes/admin/adminUtils.ts
+function safeJsonParse2(value, fallback) {
+  if (!value) return fallback;
+  try {
+    return JSON.parse(value);
+  } catch {
+    return fallback;
+  }
+}
+
+// apps/api/src/routes/admin/adminProjects.routes.ts
+async function adminProjectsRoutes(app) {
   app.get("/projects", async (request, reply) => {
     const db = getDb();
     const rows = await db.select().from(projects).orderBy(projects.sort_order);
@@ -17202,45 +16957,50 @@ async function adminRoutes(app) {
       published: data.published,
       sort_order: data.sort_order,
       updated_at: now
-    }).where((0, import_drizzle_orm5.eq)(projects.id, Number(id)));
+    }).where((0, import_drizzle_orm6.eq)(projects.id, Number(id)));
     return reply.send({ success: true, message: "Project updated" });
   });
   app.delete("/projects/:id", async (request, reply) => {
     const { id } = request.params;
     const db = getDb();
-    await db.delete(projects).where((0, import_drizzle_orm5.eq)(projects.id, Number(id)));
+    await db.delete(projects).where((0, import_drizzle_orm6.eq)(projects.id, Number(id)));
     return reply.send({ success: true });
   });
+}
+
+// apps/api/src/routes/admin/adminPosts.routes.ts
+var import_drizzle_orm7 = require("drizzle-orm");
+async function adminPostsRoutes(app) {
   app.get("/posts", async (request, reply) => {
     const { status, category, search } = request.query;
     const db = getDb();
     let query = db.select().from(posts);
     const conditions = [];
     if (status === "published") {
-      conditions.push((0, import_drizzle_orm5.eq)(posts.published, true));
+      conditions.push((0, import_drizzle_orm7.eq)(posts.published, true));
     } else if (status === "draft") {
-      conditions.push((0, import_drizzle_orm5.eq)(posts.published, false));
+      conditions.push((0, import_drizzle_orm7.eq)(posts.published, false));
     } else if (status === "featured") {
-      conditions.push((0, import_drizzle_orm5.eq)(posts.featured, true));
+      conditions.push((0, import_drizzle_orm7.eq)(posts.featured, true));
     }
     if (category && category !== "all") {
-      conditions.push((0, import_drizzle_orm5.eq)(posts.category, category));
+      conditions.push((0, import_drizzle_orm7.eq)(posts.category, category));
     }
     if (search && search.trim().length > 0) {
       const term = `%${search.trim().toLowerCase()}%`;
       conditions.push(
-        (0, import_drizzle_orm5.or)(
-          import_drizzle_orm5.sql`lower(${posts.title_ar}) LIKE ${term}`,
-          import_drizzle_orm5.sql`lower(${posts.title_en}) LIKE ${term}`,
-          import_drizzle_orm5.sql`lower(${posts.slug}) LIKE ${term}`,
-          import_drizzle_orm5.sql`lower(${posts.tags_json}) LIKE ${term}`
+        (0, import_drizzle_orm7.or)(
+          import_drizzle_orm7.sql`lower(${posts.title_ar}) LIKE ${term}`,
+          import_drizzle_orm7.sql`lower(${posts.title_en}) LIKE ${term}`,
+          import_drizzle_orm7.sql`lower(${posts.slug}) LIKE ${term}`,
+          import_drizzle_orm7.sql`lower(${posts.tags_json}) LIKE ${term}`
         )
       );
     }
     if (conditions.length > 0) {
-      query = query.where((0, import_drizzle_orm5.and)(...conditions));
+      query = query.where((0, import_drizzle_orm7.and)(...conditions));
     }
-    const rows = await query.orderBy((0, import_drizzle_orm5.desc)(posts.featured), (0, import_drizzle_orm5.desc)(posts.created_at));
+    const rows = await query.orderBy((0, import_drizzle_orm7.desc)(posts.featured), (0, import_drizzle_orm7.desc)(posts.created_at));
     return reply.send(
       rows.map((r) => ({
         ...r,
@@ -17327,19 +17087,19 @@ async function adminRoutes(app) {
       seo_desc_ar: data.seo_desc_ar || null,
       seo_desc_en: data.seo_desc_en || null,
       updated_at: now
-    }).where((0, import_drizzle_orm5.eq)(posts.id, Number(id)));
+    }).where((0, import_drizzle_orm7.eq)(posts.id, Number(id)));
     return reply.send({ success: true, message: "\u062A\u0645 \u062A\u062D\u062F\u064A\u062B \u0627\u0644\u0645\u0642\u0627\u0644 \u0628\u0646\u062C\u0627\u062D" });
   });
   app.delete("/posts/:id", async (request, reply) => {
     const { id } = request.params;
     const db = getDb();
-    await db.delete(posts).where((0, import_drizzle_orm5.eq)(posts.id, Number(id)));
+    await db.delete(posts).where((0, import_drizzle_orm7.eq)(posts.id, Number(id)));
     return reply.send({ success: true, message: "\u062A\u0645 \u062D\u0630\u0641 \u0627\u0644\u0645\u0642\u0627\u0644 \u0628\u0646\u062C\u0627\u062D" });
   });
   app.patch("/posts/:id/publish", async (request, reply) => {
     const { id } = request.params;
     const db = getDb();
-    const [existing] = await db.select().from(posts).where((0, import_drizzle_orm5.eq)(posts.id, Number(id)));
+    const [existing] = await db.select().from(posts).where((0, import_drizzle_orm7.eq)(posts.id, Number(id)));
     if (!existing) {
       return reply.status(404).send({ error: "\u0627\u0644\u0645\u0642\u0627\u0644 \u063A\u064A\u0631 \u0645\u0648\u062C\u0648\u062F" });
     }
@@ -17347,13 +17107,13 @@ async function adminRoutes(app) {
     await db.update(posts).set({
       published: nextPublished,
       updated_at: (/* @__PURE__ */ new Date()).toISOString()
-    }).where((0, import_drizzle_orm5.eq)(posts.id, Number(id)));
+    }).where((0, import_drizzle_orm7.eq)(posts.id, Number(id)));
     return reply.send({ success: true, published: nextPublished });
   });
   app.patch("/posts/:id/featured", async (request, reply) => {
     const { id } = request.params;
     const db = getDb();
-    const [existing] = await db.select().from(posts).where((0, import_drizzle_orm5.eq)(posts.id, Number(id)));
+    const [existing] = await db.select().from(posts).where((0, import_drizzle_orm7.eq)(posts.id, Number(id)));
     if (!existing) {
       return reply.status(404).send({ error: "\u0627\u0644\u0645\u0642\u0627\u0644 \u063A\u064A\u0631 \u0645\u0648\u062C\u0648\u062F" });
     }
@@ -17361,18 +17121,13 @@ async function adminRoutes(app) {
     await db.update(posts).set({
       featured: nextFeatured,
       updated_at: (/* @__PURE__ */ new Date()).toISOString()
-    }).where((0, import_drizzle_orm5.eq)(posts.id, Number(id)));
+    }).where((0, import_drizzle_orm7.eq)(posts.id, Number(id)));
     return reply.send({ success: true, featured: nextFeatured });
   });
-  app.post("/uploads", async (request, reply) => {
-    const data = await request.file();
-    if (!data) {
-      return reply.status(400).send({ error: "No file uploaded" });
-    }
-    const buffer = await data.toBuffer();
-    const result = await processAndSaveImage(buffer, "projects");
-    return reply.send(result);
-  });
+}
+
+// apps/api/src/routes/admin/adminSettings.routes.ts
+async function adminSettingsRoutes(app) {
   app.get("/settings", async (request, reply) => {
     const db = getDb();
     const rows = await db.select().from(settings);
@@ -17395,8 +17150,295 @@ async function adminRoutes(app) {
   });
 }
 
+// apps/api/src/services/upload.ts
+var import_path = __toESM(require("path"));
+var import_fs = __toESM(require("fs"));
+var import_crypto3 = __toESM(require("crypto"));
+async function processAndSaveImage(fileBuffer, subDir = "projects") {
+  const sharpModule = await import("sharp");
+  const sharp = sharpModule.default || sharpModule;
+  const image = sharp(fileBuffer);
+  const metadata = await image.metadata();
+  const resized = image.resize({
+    width: Math.min(metadata.width || 1920, 1920),
+    withoutEnlargement: true
+  }).webp({ quality: 85 });
+  try {
+    const uploadsDir = import_path.default.resolve(process.cwd(), "uploads", subDir);
+    if (!import_fs.default.existsSync(uploadsDir)) {
+      import_fs.default.mkdirSync(uploadsDir, { recursive: true });
+    }
+    const filename = `${Date.now()}-${import_crypto3.default.randomBytes(6).toString("hex")}.webp`;
+    const targetPath = import_path.default.join(uploadsDir, filename);
+    await resized.toFile(targetPath);
+    return {
+      path: `/uploads/${subDir}/${filename}`,
+      width: metadata.width || 0,
+      height: metadata.height || 0
+    };
+  } catch {
+    const webpBuffer = await resized.toBuffer();
+    const base64 = webpBuffer.toString("base64");
+    return {
+      path: `data:image/webp;base64,${base64}`,
+      width: metadata.width || 0,
+      height: metadata.height || 0
+    };
+  }
+}
+
+// apps/api/src/routes/admin/adminUploads.routes.ts
+async function adminUploadsRoutes(app) {
+  app.post("/uploads", async (request, reply) => {
+    const data = await request.file();
+    if (!data) {
+      return reply.status(400).send({ error: "No file uploaded" });
+    }
+    const buffer = await data.toBuffer();
+    const result = await processAndSaveImage(buffer, "projects");
+    return reply.send(result);
+  });
+}
+
+// apps/api/src/routes/admin/adminInquiries.routes.ts
+var import_drizzle_orm8 = require("drizzle-orm");
+var import_crypto4 = __toESM(require("crypto"));
+async function adminInquiriesRoutes(app) {
+  app.get("/inquiries", async (request, reply) => {
+    const { status, type, search } = request.query;
+    const db = getDb();
+    let query = db.select().from(inquiries);
+    const conditions = [];
+    if (status && status !== "all") {
+      if (status === "pending" || status === "new") {
+        conditions.push((0, import_drizzle_orm8.or)((0, import_drizzle_orm8.eq)(inquiries.status, "pending"), (0, import_drizzle_orm8.eq)(inquiries.status, "new")));
+      } else {
+        conditions.push((0, import_drizzle_orm8.eq)(inquiries.status, status));
+      }
+    }
+    if (type && ["project", "consultation"].includes(type)) {
+      conditions.push((0, import_drizzle_orm8.eq)(inquiries.request_type, type));
+    }
+    if (search && search.trim().length > 0) {
+      const term = `%${search.trim().toLowerCase()}%`;
+      conditions.push(
+        (0, import_drizzle_orm8.or)(
+          import_drizzle_orm8.sql`lower(${inquiries.name}) LIKE ${term}`,
+          import_drizzle_orm8.sql`lower(${inquiries.email}) LIKE ${term}`,
+          import_drizzle_orm8.sql`lower(coalesce(${inquiries.tracking_code}, '')) LIKE ${term}`,
+          import_drizzle_orm8.sql`lower(coalesce(${inquiries.phone}, '')) LIKE ${term}`,
+          import_drizzle_orm8.sql`lower(coalesce(${inquiries.company}, '')) LIKE ${term}`
+        )
+      );
+    }
+    if (conditions.length > 0) {
+      query = query.where((0, import_drizzle_orm8.and)(...conditions));
+    }
+    const rows = await query.orderBy((0, import_drizzle_orm8.desc)(inquiries.created_at));
+    return reply.send(
+      rows.map((r) => ({
+        ...r,
+        activity_log: safeJsonParse2(r.activity_log_json, [])
+      }))
+    );
+  });
+  app.patch("/inquiries/:id", async (request, reply) => {
+    const { id } = request.params;
+    const parseResult = UpdateInquirySchema.safeParse(request.body);
+    if (!parseResult.success) {
+      return reply.status(400).send({
+        error: "\u0628\u064A\u0627\u0646\u0627\u062A \u063A\u064A\u0631 \u0635\u0627\u0644\u062D\u0629",
+        details: parseResult.error.format()
+      });
+    }
+    const db = getDb();
+    const [existing] = await db.select().from(inquiries).where((0, import_drizzle_orm8.eq)(inquiries.id, Number(id)));
+    if (!existing) {
+      return reply.status(404).send({ error: "\u0627\u0644\u0637\u0644\u0628 \u063A\u064A\u0631 \u0645\u0648\u062C\u0648\u062F" });
+    }
+    const { status, admin_note, quote_amount, estimated_timeline, confirmed_datetime, meeting_link } = parseResult.data;
+    const now = (/* @__PURE__ */ new Date()).toISOString();
+    const existingLog = safeJsonParse2(existing.activity_log_json, []);
+    const updatedLog = [...existingLog];
+    if (status && status !== existing.status) {
+      updatedLog.push({
+        id: import_crypto4.default.randomUUID(),
+        author: "admin",
+        action: "status_changed",
+        title: `\u062A\u062D\u062F\u064A\u062B \u0627\u0644\u062D\u0627\u0644\u0629 \u0625\u0644\u0649 (${status})`,
+        body: admin_note || void 0,
+        created_at: now
+      });
+    } else if (admin_note && admin_note !== existing.admin_note) {
+      updatedLog.push({
+        id: import_crypto4.default.randomUUID(),
+        author: "admin",
+        action: "admin_note",
+        title: "\u0625\u0636\u0627\u0641\u0629 \u0645\u0644\u0627\u062D\u0638\u0629 \u0625\u062F\u0627\u0631\u064A\u0629",
+        body: admin_note,
+        created_at: now
+      });
+    }
+    await db.update(inquiries).set({
+      status,
+      ...admin_note !== void 0 ? { admin_note } : {},
+      ...quote_amount !== void 0 ? { quote_amount } : {},
+      ...estimated_timeline !== void 0 ? { estimated_timeline } : {},
+      ...confirmed_datetime !== void 0 ? { confirmed_datetime } : {},
+      ...meeting_link !== void 0 ? { meeting_link } : {},
+      activity_log_json: JSON.stringify(updatedLog),
+      updated_at: now
+    }).where((0, import_drizzle_orm8.eq)(inquiries.id, Number(id)));
+    return reply.send({ success: true, message: "\u062A\u0645 \u062A\u062D\u062F\u064A\u062B \u0627\u0644\u0637\u0644\u0628 \u0628\u0646\u062C\u0627\u062D" });
+  });
+  app.delete("/inquiries/:id", async (request, reply) => {
+    const { id } = request.params;
+    const db = getDb();
+    const [existing] = await db.select().from(inquiries).where((0, import_drizzle_orm8.eq)(inquiries.id, Number(id)));
+    if (!existing) {
+      return reply.status(404).send({ error: "\u0627\u0644\u0637\u0644\u0628 \u063A\u064A\u0631 \u0645\u0648\u062C\u0648\u062F \u0623\u0648 \u062A\u0645 \u062D\u0630\u0641\u0647 \u0645\u0633\u0628\u0642\u0627\u064B" });
+    }
+    await db.delete(inquiries).where((0, import_drizzle_orm8.eq)(inquiries.id, Number(id)));
+    return reply.send({ success: true, message: "\u062A\u0645 \u062D\u0630\u0641 \u0627\u0644\u0637\u0644\u0628 \u0646\u0647\u0627\u0626\u064A\u0627\u064B \u0645\u0646 \u0642\u0627\u0639\u062F\u0629 \u0627\u0644\u0628\u064A\u0627\u0646\u0627\u062A" });
+  });
+}
+
+// apps/api/src/routes/admin/adminInquiriesActions.routes.ts
+var import_drizzle_orm9 = require("drizzle-orm");
+var import_crypto5 = __toESM(require("crypto"));
+async function adminInquiriesActionsRoutes(app) {
+  app.post("/inquiries/:id/approve", async (request, reply) => {
+    const { id } = request.params;
+    const parseResult = ApproveProjectSchema.safeParse(request.body);
+    if (!parseResult.success) {
+      return reply.status(400).send({
+        error: "\u0628\u064A\u0627\u0646\u0627\u062A \u0627\u0644\u0627\u0639\u062A\u0645\u0627\u062F \u063A\u064A\u0631 \u0635\u0627\u0644\u062D\u0629",
+        details: parseResult.error.format()
+      });
+    }
+    const db = getDb();
+    const [existing] = await db.select().from(inquiries).where((0, import_drizzle_orm9.eq)(inquiries.id, Number(id)));
+    if (!existing) {
+      return reply.status(404).send({ error: "\u0627\u0644\u0637\u0644\u0628 \u063A\u064A\u0631 \u0645\u0648\u062C\u0648\u062F" });
+    }
+    const now = (/* @__PURE__ */ new Date()).toISOString();
+    const existingLog = safeJsonParse2(existing.activity_log_json, []);
+    const { quote_amount, estimated_timeline, admin_note } = parseResult.data;
+    const updatedLog = [
+      ...existingLog,
+      {
+        id: import_crypto5.default.randomUUID(),
+        author: "admin",
+        action: "quote_provided",
+        title: "\u062A\u0645\u062A \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629 \u0639\u0644\u0649 \u0627\u0644\u0645\u0634\u0631\u0648\u0639 \u0648\u062A\u0642\u062F\u064A\u0645 \u0639\u0631\u0636 \u0627\u0644\u0633\u0639\u0631",
+        body: `\u0639\u0631\u0636 \u0627\u0644\u0633\u0639\u0631: ${quote_amount} | \u0627\u0644\u0645\u062F\u0629 \u0627\u0644\u062A\u0642\u062F\u064A\u0631\u064A\u0629: ${estimated_timeline}${admin_note ? `
+\u0645\u0644\u0627\u062D\u0638\u0629: ${admin_note}` : ""}`,
+        created_at: now
+      }
+    ];
+    await db.update(inquiries).set({
+      status: "approved",
+      quote_amount,
+      estimated_timeline,
+      admin_note: admin_note || existing.admin_note,
+      activity_log_json: JSON.stringify(updatedLog),
+      updated_at: now
+    }).where((0, import_drizzle_orm9.eq)(inquiries.id, Number(id)));
+    return reply.send({ success: true, message: "\u062A\u0645\u062A \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629 \u0639\u0644\u0649 \u0627\u0644\u0645\u0634\u0631\u0648\u0639 \u0648\u0625\u0631\u0633\u0627\u0644 \u0627\u0644\u0639\u0631\u0636 \u0644\u0644\u0639\u0645\u064A\u0644" });
+  });
+  app.post("/inquiries/:id/schedule", async (request, reply) => {
+    const { id } = request.params;
+    const parseResult = ScheduleConsultationSchema.safeParse(request.body);
+    if (!parseResult.success) {
+      return reply.status(400).send({
+        error: "\u0628\u064A\u0627\u0646\u0627\u062A \u062C\u062F\u0648\u0644\u0629 \u0627\u0644\u0627\u0633\u062A\u0634\u0627\u0631\u0629 \u063A\u064A\u0631 \u0645\u0643\u062A\u0645\u0644\u0629",
+        details: parseResult.error.format()
+      });
+    }
+    const db = getDb();
+    const [existing] = await db.select().from(inquiries).where((0, import_drizzle_orm9.eq)(inquiries.id, Number(id)));
+    if (!existing) {
+      return reply.status(404).send({ error: "\u0637\u0644\u0628 \u0627\u0644\u0627\u0633\u062A\u0634\u0627\u0631\u0629 \u063A\u064A\u0631 \u0645\u0648\u062C\u0648\u062F" });
+    }
+    const now = (/* @__PURE__ */ new Date()).toISOString();
+    const existingLog = safeJsonParse2(existing.activity_log_json, []);
+    const { confirmed_datetime, meeting_mode, meeting_link, admin_note } = parseResult.data;
+    const updatedLog = [
+      ...existingLog,
+      {
+        id: import_crypto5.default.randomUUID(),
+        author: "admin",
+        action: "consultation_scheduled",
+        title: "\u062A\u0645 \u062A\u0623\u0643\u064A\u062F \u0645\u0648\u0639\u062F \u0627\u0644\u0627\u0633\u062A\u0634\u0627\u0631\u0629 \u0627\u0644\u062A\u0642\u0646\u064A\u0629",
+        body: `\u0627\u0644\u0645\u0648\u0639\u062F: ${confirmed_datetime} | \u0648\u0633\u064A\u0644\u0629 \u0627\u0644\u0627\u062C\u062A\u0645\u0627\u0639: ${meeting_mode}${meeting_link ? `
+\u0627\u0644\u0631\u0627\u0628\u0637: ${meeting_link}` : ""}${admin_note ? `
+\u0645\u0644\u0627\u062D\u0638\u0629: ${admin_note}` : ""}`,
+        created_at: now
+      }
+    ];
+    await db.update(inquiries).set({
+      status: "approved",
+      confirmed_datetime,
+      meeting_mode,
+      meeting_link: meeting_link || null,
+      admin_note: admin_note || existing.admin_note,
+      activity_log_json: JSON.stringify(updatedLog),
+      updated_at: now
+    }).where((0, import_drizzle_orm9.eq)(inquiries.id, Number(id)));
+    return reply.send({ success: true, message: "\u062A\u0645 \u062A\u0623\u0643\u064A\u062F \u0645\u0648\u0639\u062F \u0627\u0644\u0627\u0633\u062A\u0634\u0627\u0631\u0629 \u0648\u062A\u062D\u062F\u064A\u062B \u0631\u0627\u0628\u0637 \u0627\u0644\u0627\u062C\u062A\u0645\u0627\u0639" });
+  });
+  app.post("/inquiries/:id/reject", async (request, reply) => {
+    const { id } = request.params;
+    const parseResult = RejectInquirySchema.safeParse(request.body);
+    if (!parseResult.success) {
+      return reply.status(400).send({
+        error: "\u064A\u0631\u062C\u0649 \u0643\u062A\u0627\u0628\u0629 \u0633\u0628\u0628 \u0627\u0644\u0627\u0639\u062A\u0630\u0627\u0631",
+        details: parseResult.error.format()
+      });
+    }
+    const db = getDb();
+    const [existing] = await db.select().from(inquiries).where((0, import_drizzle_orm9.eq)(inquiries.id, Number(id)));
+    if (!existing) {
+      return reply.status(404).send({ error: "\u0627\u0644\u0637\u0644\u0628 \u063A\u064A\u0631 \u0645\u0648\u062C\u0648\u062F" });
+    }
+    const now = (/* @__PURE__ */ new Date()).toISOString();
+    const existingLog = safeJsonParse2(existing.activity_log_json, []);
+    const { reason } = parseResult.data;
+    const updatedLog = [
+      ...existingLog,
+      {
+        id: import_crypto5.default.randomUUID(),
+        author: "admin",
+        action: "rejected",
+        title: "\u062A\u0645 \u0627\u0644\u0627\u0639\u062A\u0630\u0627\u0631 \u0639\u0646 \u0642\u0628\u0648\u0644 \u0627\u0644\u0637\u0644\u0628",
+        body: reason,
+        created_at: now
+      }
+    ];
+    await db.update(inquiries).set({
+      status: "rejected",
+      cancellation_reason: reason,
+      activity_log_json: JSON.stringify(updatedLog),
+      updated_at: now
+    }).where((0, import_drizzle_orm9.eq)(inquiries.id, Number(id)));
+    return reply.send({ success: true, message: "\u062A\u0645 \u062A\u0633\u062C\u064A\u0644 \u0627\u0644\u0627\u0639\u062A\u0630\u0627\u0631 \u0648\u062A\u062D\u062F\u064A\u062B \u062D\u0627\u0644\u0629 \u0627\u0644\u0637\u0644\u0628" });
+  });
+}
+
+// apps/api/src/routes/admin.ts
+async function adminRoutes(app) {
+  app.addHook("preHandler", requireAdmin);
+  await app.register(adminStatsRoutes);
+  await app.register(adminProjectsRoutes);
+  await app.register(adminPostsRoutes);
+  await app.register(adminSettingsRoutes);
+  await app.register(adminUploadsRoutes);
+  await app.register(adminInquiriesRoutes);
+  await app.register(adminInquiriesActionsRoutes);
+}
+
 // apps/api/src/routes/bioLinks.ts
-var import_drizzle_orm6 = require("drizzle-orm");
+var import_drizzle_orm10 = require("drizzle-orm");
 async function bioLinksRoutes(app) {
   app.get("/bio-links/public", async (request, reply) => {
     const db = getDb();
@@ -17407,7 +17449,7 @@ async function bioLinksRoutes(app) {
     }
     settingsMap.bio_page_bg_type = settingsMap.bio_page_bg_type || "mesh";
     settingsMap.bio_page_bg_value = settingsMap.bio_page_bg_value || "#090d16";
-    const links = await db.select().from(bio_links).where((0, import_drizzle_orm6.eq)(bio_links.is_active, true)).orderBy((0, import_drizzle_orm6.asc)(bio_links.sort_order), (0, import_drizzle_orm6.asc)(bio_links.id));
+    const links = await db.select().from(bio_links).where((0, import_drizzle_orm10.eq)(bio_links.is_active, true)).orderBy((0, import_drizzle_orm10.asc)(bio_links.sort_order), (0, import_drizzle_orm10.asc)(bio_links.id));
     return reply.send({
       settings: settingsMap,
       links
@@ -17421,14 +17463,14 @@ async function bioLinksRoutes(app) {
     }
     const db = getDb();
     await db.update(bio_links).set({
-      click_count: import_drizzle_orm6.sql`${bio_links.click_count} + 1`,
+      click_count: import_drizzle_orm10.sql`${bio_links.click_count} + 1`,
       updated_at: (/* @__PURE__ */ new Date()).toISOString()
-    }).where((0, import_drizzle_orm6.eq)(bio_links.id, linkId));
+    }).where((0, import_drizzle_orm10.eq)(bio_links.id, linkId));
     return reply.send({ success: true });
   });
   app.get("/admin/bio-links", { preHandler: [requireAdmin] }, async (request, reply) => {
     const db = getDb();
-    const links = await db.select().from(bio_links).orderBy((0, import_drizzle_orm6.asc)(bio_links.sort_order), (0, import_drizzle_orm6.asc)(bio_links.id));
+    const links = await db.select().from(bio_links).orderBy((0, import_drizzle_orm10.asc)(bio_links.sort_order), (0, import_drizzle_orm10.asc)(bio_links.id));
     const settingsRows = await db.select().from(settings);
     const settingsMap = {};
     for (const row of settingsRows) {
@@ -17483,7 +17525,7 @@ async function bioLinksRoutes(app) {
     const [updated] = await db.update(bio_links).set({
       ...parseResult.data,
       updated_at: now
-    }).where((0, import_drizzle_orm6.eq)(bio_links.id, linkId)).returning();
+    }).where((0, import_drizzle_orm10.eq)(bio_links.id, linkId)).returning();
     if (!updated) {
       return reply.status(404).send({ error: "\u0627\u0644\u0631\u0627\u0628\u0637 \u063A\u064A\u0631 \u0645\u0648\u062C\u0648\u062F" });
     }
@@ -17496,7 +17538,7 @@ async function bioLinksRoutes(app) {
       return reply.status(400).send({ error: "Invalid link ID" });
     }
     const db = getDb();
-    await db.delete(bio_links).where((0, import_drizzle_orm6.eq)(bio_links.id, linkId));
+    await db.delete(bio_links).where((0, import_drizzle_orm10.eq)(bio_links.id, linkId));
     return reply.send({ success: true });
   });
   app.put("/admin/bio-links/reorder", { preHandler: [requireAdmin] }, async (request, reply) => {
@@ -17513,7 +17555,7 @@ async function bioLinksRoutes(app) {
       await db.update(bio_links).set({
         sort_order: item.sort_order,
         updated_at: now
-      }).where((0, import_drizzle_orm6.eq)(bio_links.id, item.id));
+      }).where((0, import_drizzle_orm10.eq)(bio_links.id, item.id));
     }
     return reply.send({ success: true });
   });
