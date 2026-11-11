@@ -1,6 +1,11 @@
 import React from "react";
 import { PlatformIcon } from "../../portfolio/components/PlatformIcon";
-import { Layers, Tag, HardDrive, Download, Globe, Smartphone, Laptop, Store, Check } from "lucide-react";
+import { Layers, Tag, HardDrive, Globe, Smartphone, Laptop, Store, Check } from "lucide-react";
+import { WebSpecsEditor } from "./specs/WebSpecsEditor";
+import { MobileSpecsEditor } from "./specs/MobileSpecsEditor";
+import { DesktopSpecsEditor } from "./specs/DesktopSpecsEditor";
+import { PosSpecsEditor } from "./specs/PosSpecsEditor";
+import { ErpSpecsEditor } from "./specs/ErpSpecsEditor";
 
 export interface ProjectSpecsFieldsProps {
   projectType: "web" | "mobile" | "desktop" | "pos" | "system";
@@ -15,6 +20,10 @@ export interface ProjectSpecsFieldsProps {
   onDownloadUrlChange: (val: string) => void;
   enableLivePreview: boolean;
   onEnableLivePreviewChange: (val: boolean) => void;
+  typeSpecs?: Record<string, any>;
+  onTypeSpecsChange?: (specs: Record<string, any>) => void;
+  liveUrl?: string;
+  onLiveUrlChange?: (val: string) => void;
 }
 
 const PROJECT_TYPE_OPTIONS: Array<{
@@ -27,8 +36,16 @@ const PROJECT_TYPE_OPTIONS: Array<{
   { id: "mobile", label_ar: "تطبيق هواتف", label_en: "Mobile App", icon: Smartphone },
   { id: "desktop", label_ar: "برنامج مكتبي", label_en: "Desktop App", icon: Laptop },
   { id: "pos", label_ar: "نظام كاشير POS", label_en: "POS System", icon: Store },
-  { id: "system", label_ar: "نظام مؤسسي سحابي", label_en: "Enterprise System", icon: Layers }
+  { id: "system", label_ar: "نظام مؤسسي ERP", label_en: "Enterprise System", icon: Layers }
 ];
+
+const DEFAULT_TYPE_PLATFORMS: Record<string, string[]> = {
+  web: ["web"],
+  mobile: ["android", "ios"],
+  desktop: ["windows", "macos", "linux"],
+  pos: ["windows", "android", "pos_terminals"],
+  system: ["web", "windows", "linux"]
+};
 
 const AVAILABLE_PLATFORMS = [
   { id: "web", label_ar: "ويب / متصفحات", label_en: "Web / PWA" },
@@ -64,9 +81,20 @@ export const ProjectSpecsFields: React.FC<ProjectSpecsFieldsProps> = ({
   downloadUrl,
   onDownloadUrlChange,
   enableLivePreview,
-  onEnableLivePreviewChange
+  onEnableLivePreviewChange,
+  typeSpecs = {},
+  onTypeSpecsChange = () => {},
+  liveUrl = "",
+  onLiveUrlChange = () => {}
 }) => {
   const currentPlatforms = parsePlatforms(platforms);
+
+  const handleTypeSelect = (newType: "web" | "mobile" | "desktop" | "pos" | "system") => {
+    onTypeChange(newType);
+    // Auto-preselect logical platforms for this type if none or only default web was set
+    const suggested = DEFAULT_TYPE_PLATFORMS[newType] || ["web"];
+    onPlatformsChange(suggested);
+  };
 
   const togglePlatform = (platformId: string) => {
     const list = parsePlatforms(platforms);
@@ -87,7 +115,7 @@ export const ProjectSpecsFields: React.FC<ProjectSpecsFieldsProps> = ({
 
   return (
     <div className="space-y-6 animate-fadeIn text-start">
-      {/* 1. Project Type Selector - Visual Cards + Select */}
+      {/* 1. Project Type Selector - Visual Cards */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <label
@@ -97,7 +125,7 @@ export const ProjectSpecsFields: React.FC<ProjectSpecsFieldsProps> = ({
             <Layers className="w-3.5 h-3.5 text-secondary" />
             <span>نوع التطبيق (Project Type) *</span>
           </label>
-          <span className="text-[11px] font-mono text-secondary">
+          <span className="text-[11px] font-mono text-secondary font-bold">
             {PROJECT_TYPE_OPTIONS.find(o => o.id === projectType)?.label_ar}
           </span>
         </div>
@@ -111,7 +139,7 @@ export const ProjectSpecsFields: React.FC<ProjectSpecsFieldsProps> = ({
               <button
                 key={opt.id}
                 type="button"
-                onClick={() => onTypeChange(opt.id)}
+                onClick={() => handleTypeSelect(opt.id)}
                 className={`flex flex-col items-center justify-center gap-1.5 p-2.5 rounded-xl border text-center transition-all cursor-pointer ${
                   isSelected
                     ? "bg-secondary/15 border-secondary text-text-primary shadow-sm ring-1 ring-secondary/30 font-bold"
@@ -125,11 +153,11 @@ export const ProjectSpecsFields: React.FC<ProjectSpecsFieldsProps> = ({
           })}
         </div>
 
-        {/* Hidden / accessible fallback select keeping label bindings */}
+        {/* Hidden select for standard form accessibility and testing */}
         <select
           id="specs-project-type"
           value={projectType}
-          onChange={e => onTypeChange(e.target.value as any)}
+          onChange={e => handleTypeSelect(e.target.value as any)}
           className="sr-only"
         >
           {PROJECT_TYPE_OPTIONS.map(opt => (
@@ -140,8 +168,58 @@ export const ProjectSpecsFields: React.FC<ProjectSpecsFieldsProps> = ({
         </select>
       </div>
 
-      {/* 2. Version and Size in a 2-column grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {/* 2. Dynamic Domain-Specific Editor */}
+      <div className="pt-1">
+        {projectType === "web" && (
+          <WebSpecsEditor
+            specs={typeSpecs}
+            onChange={onTypeSpecsChange}
+            liveUrl={liveUrl}
+            onLiveUrlChange={onLiveUrlChange}
+            enableLivePreview={enableLivePreview}
+            onEnableLivePreviewChange={onEnableLivePreviewChange}
+          />
+        )}
+
+        {projectType === "mobile" && (
+          <MobileSpecsEditor
+            specs={typeSpecs}
+            onChange={onTypeSpecsChange}
+            packageSize={packageSize}
+            onPackageSizeChange={onPackageSizeChange}
+            downloadUrl={downloadUrl}
+            onDownloadUrlChange={onDownloadUrlChange}
+          />
+        )}
+
+        {projectType === "desktop" && (
+          <DesktopSpecsEditor
+            specs={typeSpecs}
+            onChange={onTypeSpecsChange}
+            packageSize={packageSize}
+            onPackageSizeChange={onPackageSizeChange}
+            downloadUrl={downloadUrl}
+            onDownloadUrlChange={onDownloadUrlChange}
+          />
+        )}
+
+        {projectType === "pos" && (
+          <PosSpecsEditor
+            specs={typeSpecs}
+            onChange={onTypeSpecsChange}
+          />
+        )}
+
+        {projectType === "system" && (
+          <ErpSpecsEditor
+            specs={typeSpecs}
+            onChange={onTypeSpecsChange}
+          />
+        )}
+      </div>
+
+      {/* 3. Common Release Info (Version & Package Size) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-line">
         {/* Version */}
         <div className="space-y-1">
           <label
@@ -168,7 +246,7 @@ export const ProjectSpecsFields: React.FC<ProjectSpecsFieldsProps> = ({
             className="flex items-center gap-1.5 text-xs font-mono text-text-muted font-semibold"
           >
             <HardDrive className="w-3.5 h-3.5 text-secondary" />
-            <span>حجم الحزمة (Package Size)</span>
+            <span>حجم الحزمة / التثبيت (Package Size)</span>
           </label>
           <input
             id="specs-package-size"
@@ -181,7 +259,7 @@ export const ProjectSpecsFields: React.FC<ProjectSpecsFieldsProps> = ({
         </div>
       </div>
 
-      {/* 3. Supported Platforms Multi-Select Buttons */}
+      {/* 4. Supported Platforms Multi-Select Buttons */}
       <div className="space-y-2 pt-2 border-t border-line">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <label className="block text-xs font-mono text-text-muted font-semibold">
@@ -247,54 +325,6 @@ export const ProjectSpecsFields: React.FC<ProjectSpecsFieldsProps> = ({
           })}
         </div>
       </div>
-
-      {/* 4. Download URL & Live Preview Toggle */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-line">
-        <div className="space-y-1">
-          <label
-            htmlFor="specs-download-url"
-            className="flex items-center gap-1.5 text-xs font-mono text-text-muted font-semibold"
-          >
-            <Download className="w-3.5 h-3.5 text-secondary" />
-            <span>رابط التنزيل المباشر (Download URL)</span>
-          </label>
-          <input
-            id="specs-download-url"
-            type="text"
-            value={downloadUrl}
-            onChange={e => onDownloadUrlChange(e.target.value)}
-            placeholder="https://.../setup.exe أو ملف apk"
-            className="w-full h-10 px-3 rounded-lg border border-line bg-surface-container text-text-primary text-xs font-mono focus:outline-none focus:border-secondary"
-          />
-        </div>
-
-        <div className="flex items-end pb-1">
-          <button
-            type="button"
-            onClick={() => onEnableLivePreviewChange(!enableLivePreview)}
-            className={`w-full flex items-center justify-between gap-3 p-2.5 rounded-lg border text-xs font-semibold cursor-pointer select-none transition-all ${
-              enableLivePreview
-                ? "bg-secondary/15 border-secondary text-text-primary shadow-sm ring-1 ring-secondary/30"
-                : "bg-surface-container border-line text-text-muted hover:border-secondary/40"
-            }`}
-          >
-            <div className="flex items-center gap-2">
-              <Globe className="w-4 h-4 text-secondary shrink-0" />
-              <span>تفعيل بوابة المعاينة الحية (Live Iframe Gateway)</span>
-            </div>
-            <div
-              className={`w-4 h-4 rounded flex items-center justify-center shrink-0 border transition-colors ${
-                enableLivePreview
-                  ? "bg-secondary text-white border-secondary"
-                  : "border-line bg-surface text-transparent"
-              }`}
-            >
-              <Check className="w-3 h-3" />
-            </div>
-          </button>
-        </div>
-      </div>
     </div>
   );
 };
-

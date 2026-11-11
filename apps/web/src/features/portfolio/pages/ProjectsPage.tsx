@@ -12,11 +12,11 @@ export const ProjectsPage: React.FC = () => {
 
   const filters = [
     { id: "all", label_ar: `الكل (${projects.length})`, label_en: `All (${projects.length})` },
-    { id: "web", label_ar: "تطبيقات ويب", label_en: "Web Apps" },
+    { id: "web", label_ar: "منصات ويب SaaS", label_en: "Web Apps" },
     { id: "mobile", label_ar: "تطبيقات موبايل", label_en: "Mobile Apps" },
-    { id: "pos", label_ar: "أنظمة كاشير ونقاط بيع", label_en: "POS Systems" },
+    { id: "pos", label_ar: "نقاط بيع وكاشير POS", label_en: "POS Systems" },
     { id: "desktop", label_ar: "برامج مكتبية", label_en: "Desktop Apps" },
-    { id: "system", label_ar: "أنظمة مؤسسية", label_en: "Enterprise Systems" }
+    { id: "system", label_ar: "أنظمة مؤسسية ERP", label_en: "Enterprise ERP" }
   ];
 
   const filteredProjects = projects.filter(p => {

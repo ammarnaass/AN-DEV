@@ -53,6 +53,32 @@ describe("Extended ProjectSchema", () => {
       expect(parsed.data.download_url).toBe("");
       expect(parsed.data.enable_live_preview).toBe(true);
       expect(parsed.data.gallery_json).toEqual([]);
+      expect(parsed.data.type_specs_json).toEqual({});
+    }
+  });
+
+  it("validates specialized type specifications for POS and ERP", () => {
+    const posInput = {
+      slug: "anpos-retail",
+      title_ar: "نظام كاشير",
+      summary_ar: "نقاط بيع ومحاسبة",
+      body_ar: "تفاصيل النظام المحاسبي المتكامل والتوافق الجبائي الجزائري",
+      project_type: "pos",
+      type_specs_json: {
+        printer_sizes: ["80mm", "58mm"],
+        peripherals: ["barcode_scanner", "cash_drawer"],
+        fiscal_compliant: true,
+        offline_engine: "SQLite Local Engine",
+        cloud_sync: true
+      },
+      cover_image: "/uploads/cover.webp"
+    };
+
+    const parsedPos = ProjectSchema.safeParse(posInput);
+    expect(parsedPos.success).toBe(true);
+    if (parsedPos.success) {
+      expect((parsedPos.data.type_specs_json as any).fiscal_compliant).toBe(true);
+      expect((parsedPos.data.type_specs_json as any).printer_sizes).toContain("80mm");
     }
   });
 });

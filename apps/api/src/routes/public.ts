@@ -30,6 +30,7 @@ export async function publicRoutes(app: FastifyInstance) {
       download_url: projects.download_url,
       enable_live_preview: projects.enable_live_preview,
       gallery_json: projects.gallery_json,
+      type_specs_json: projects.type_specs_json,
       tech_json: projects.tech_json,
       cover_image: projects.cover_image,
       live_url: projects.live_url,
@@ -48,7 +49,9 @@ export async function publicRoutes(app: FastifyInstance) {
       platforms: safeJsonParse(r.platforms_json, ["web"]),
       platforms_json: safeJsonParse(r.platforms_json, ["web"]),
       gallery: safeJsonParse(r.gallery_json, []),
-      gallery_json: safeJsonParse(r.gallery_json, [])
+      gallery_json: safeJsonParse(r.gallery_json, []),
+      type_specs: safeJsonParse(r.type_specs_json, {}),
+      type_specs_json: safeJsonParse(r.type_specs_json, {})
     }));
 
     return reply.send(formatted);
@@ -80,6 +83,8 @@ export async function publicRoutes(app: FastifyInstance) {
       platforms_json: safeJsonParse(project.platforms_json, ["web"]),
       gallery: safeJsonParse(project.gallery_json, []),
       gallery_json: safeJsonParse(project.gallery_json, []),
+      type_specs: safeJsonParse(project.type_specs_json, {}),
+      type_specs_json: safeJsonParse(project.type_specs_json, {}),
       images
     });
   });

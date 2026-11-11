@@ -70,6 +70,17 @@ The existing site is an unmanaged static webpage. It cannot collect structured p
 *   **When**: Ammar selects the project type, enters release version and installer size, ticks supported target platforms, configures live preview iframe URL, and uploads application screenshots into the gallery.
 *   **Then**: The data is validated through `ProjectSchema` via Zod, persisted into Neon PostgreSQL, and immediately reflected across `/projects` filters and the `/projects/:slug` case study view.
 
+### CUJ 8: Administrator and Evaluator Experience Type-Specialized Project Attributes (Web, Mobile, Desktop, POS, ERP)
+*   **Given**: Ammar creates or edits a project in `/admin/projects`, or a visitor visits a project on `/projects/:slug`.
+*   **When**: Ammar selects the Project Type (`web`, `mobile`, `desktop`, `pos`, `system_erp`).
+*   **Then**: The admin form dynamically swaps the technical specifications tab to display only the relevant fields:
+    *   **Web**: Live sandbox URL, viewport switcher toggle, hosting environment, PWA support.
+    *   **Mobile**: APK direct download, store links, minimum OS versions, offline capabilities.
+    *   **Desktop**: Installer downloads, OS architectures, embedded DB engine.
+    *   **POS**: Thermal printer compatibility (58mm/80mm), hardware peripherals (scanner, drawer, scale), Algerian fiscal/tax compliance.
+    *   **ERP**: Enterprise modules selector (Inventory, Accounting, HR, CRM, Invoicing), deployment model, multi-branch, audit trail.
+    On the public page `/projects/:slug`, the presentation renders specialized interactive components matching the domain (Live sandbox emulator for web, QR code installer for mobile, hardware peripherals strip for POS, and interactive modules matrix for ERP).
+
 
 --------------------------------------------------------------------------------
 

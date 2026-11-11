@@ -29,6 +29,7 @@ export const projects = pgTable("projects", {
   download_url: text("download_url"),
   enable_live_preview: boolean("enable_live_preview").notNull().default(true),
   gallery_json: text("gallery_json").notNull().default("[]"),
+  type_specs_json: text("type_specs_json").notNull().default("{}"),
   tech_json: text("tech_json").notNull().default("[]"),
   cover_image: text("cover_image").notNull(),
   live_url: text("live_url"),

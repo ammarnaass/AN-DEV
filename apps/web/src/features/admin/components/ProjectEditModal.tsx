@@ -51,6 +51,18 @@ export const ProjectEditModal: React.FC<ProjectEditModalProps> = ({
     []
   );
 
+  const initialTypeSpecs = React.useMemo(() => {
+    const raw = (project as any)?.type_specs ?? project?.type_specs_json;
+    if (typeof raw === "object" && raw !== null) return raw;
+    if (typeof raw === "string") {
+      try {
+        const parsed = JSON.parse(raw);
+        if (typeof parsed === "object" && parsed !== null) return parsed;
+      } catch {}
+    }
+    return {};
+  }, [project]);
+
   const [form, setForm] = useState<ProjectInput>({
     slug: project?.slug || "",
     title_ar: project?.title_ar || "",
@@ -66,6 +78,7 @@ export const ProjectEditModal: React.FC<ProjectEditModalProps> = ({
     download_url: project?.download_url || "",
     enable_live_preview: project?.enable_live_preview ?? true,
     gallery_json: initialGallery,
+    type_specs_json: initialTypeSpecs,
     tech_json: project?.tech_json ? (typeof project.tech_json === "string" ? JSON.parse(project.tech_json) : project.tech_json) : [],
     cover_image: project?.cover_image || "/uploads/projects/default.webp",
     live_url: project?.live_url || "",
@@ -314,6 +327,10 @@ export const ProjectEditModal: React.FC<ProjectEditModalProps> = ({
               onDownloadUrlChange={val => setForm(prev => ({ ...prev, download_url: val }))}
               enableLivePreview={form.enable_live_preview}
               onEnableLivePreviewChange={val => setForm(prev => ({ ...prev, enable_live_preview: val }))}
+              typeSpecs={typeof form.type_specs_json === "object" ? form.type_specs_json : {}}
+              onTypeSpecsChange={specs => setForm(prev => ({ ...prev, type_specs_json: specs }))}
+              liveUrl={form.live_url || ""}
+              onLiveUrlChange={val => setForm(prev => ({ ...prev, live_url: val }))}
             />
           )}
 

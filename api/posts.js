@@ -11746,6 +11746,7 @@ var projects = (0, import_pg_core.pgTable)("projects", {
   download_url: (0, import_pg_core.text)("download_url"),
   enable_live_preview: (0, import_pg_core.boolean)("enable_live_preview").notNull().default(true),
   gallery_json: (0, import_pg_core.text)("gallery_json").notNull().default("[]"),
+  type_specs_json: (0, import_pg_core.text)("type_specs_json").notNull().default("{}"),
   tech_json: (0, import_pg_core.text)("tech_json").notNull().default("[]"),
   cover_image: (0, import_pg_core.text)("cover_image").notNull(),
   live_url: (0, import_pg_core.text)("live_url"),
@@ -16023,6 +16024,43 @@ var ProjectGalleryItemSchema = external_exports.object({
   caption_en: external_exports.string().optional().default(""),
   device_frame: external_exports.enum(["mobile", "browser", "desktop"]).default("browser")
 });
+var WebSpecsSchema = external_exports.object({
+  live_url: external_exports.string().optional().default(""),
+  enable_live_preview: external_exports.boolean().default(true),
+  pwa_ready: external_exports.boolean().default(false),
+  hosting_env: external_exports.string().optional().default(""),
+  architecture: external_exports.string().optional().default("")
+});
+var MobileSpecsSchema = external_exports.object({
+  apk_url: external_exports.string().optional().default(""),
+  play_store_url: external_exports.string().optional().default(""),
+  app_store_url: external_exports.string().optional().default(""),
+  min_os: external_exports.string().optional().default("Android 8.0+ / iOS 15+"),
+  package_size: external_exports.string().optional().default(""),
+  offline_first: external_exports.boolean().default(true),
+  hardware_features: external_exports.array(external_exports.string()).default(["Camera", "Barcode"])
+});
+var DesktopSpecsSchema = external_exports.object({
+  installer_url: external_exports.string().optional().default(""),
+  package_size: external_exports.string().optional().default(""),
+  architectures: external_exports.array(external_exports.string()).default(["x64", "arm64"]),
+  database_type: external_exports.string().optional().default("SQLite Local"),
+  system_requirements: external_exports.string().optional().default("")
+});
+var PosSpecsSchema = external_exports.object({
+  printer_sizes: external_exports.array(external_exports.string()).default(["80mm", "58mm"]),
+  peripherals: external_exports.array(external_exports.string()).default(["barcode_scanner", "cash_drawer"]),
+  fiscal_compliant: external_exports.boolean().default(true),
+  offline_engine: external_exports.string().default("SQLite Local Engine"),
+  cloud_sync: external_exports.boolean().default(true)
+});
+var ErpSpecsSchema = external_exports.object({
+  modules: external_exports.array(external_exports.string()).default(["inventory", "sales", "invoicing", "accounting"]),
+  deployment_mode: external_exports.enum(["cloud", "on_premise", "hybrid"]).default("cloud"),
+  multi_branch: external_exports.boolean().default(true),
+  rbac_security: external_exports.boolean().default(true),
+  audit_trail: external_exports.boolean().default(true)
+});
 var ProjectSchema = external_exports.object({
   slug: external_exports.string().min(2, "\u0645\u0639\u0631\u0641 \u0627\u0644\u0631\u0627\u0628\u0637 \u064A\u062C\u0628 \u0623\u0646 \u064A\u0643\u0648\u0646 \u062D\u0631\u0641\u064A\u0646 \u0639\u0644\u0649 \u0627\u0644\u0623\u0642\u0644").regex(/^[a-z0-9-]+$/, "\u0645\u0639\u0631\u0641 \u0627\u0644\u0631\u0627\u0628\u0637 (Slug) \u064A\u062C\u0628 \u0623\u0646 \u064A\u062D\u062A\u0648\u064A \u0639\u0644\u0649 \u0623\u062D\u0631\u0641 \u0625\u0646\u062C\u0644\u064A\u0632\u064A\u0629 \u0635\u063A\u064A\u0631\u0629 \u0648\u0623\u0631\u0642\u0627\u0645 \u0648\u0634\u0631\u0637\u0627\u062A \u0641\u0642\u0637"),
   title_ar: external_exports.string().min(2, "\u0639\u0646\u0648\u0627\u0646 \u0627\u0644\u0645\u0634\u0631\u0648\u0639 \u0628\u0627\u0644\u0639\u0631\u0628\u064A\u0629 \u0645\u0637\u0644\u0648\u0628"),
@@ -16038,6 +16076,7 @@ var ProjectSchema = external_exports.object({
   download_url: external_exports.string().optional().nullable().default(""),
   enable_live_preview: external_exports.boolean().default(true),
   gallery_json: external_exports.array(ProjectGalleryItemSchema).default([]),
+  type_specs_json: external_exports.record(external_exports.any()).or(external_exports.string()).optional().default({}),
   tech_json: external_exports.array(external_exports.string()).default([]),
   cover_image: external_exports.string().min(1, "\u0635\u0648\u0631\u0629 \u0627\u0644\u063A\u0644\u0627\u0641 \u0645\u0637\u0644\u0648\u0628\u0629"),
   live_url: external_exports.string().optional().nullable().default(""),
@@ -16347,6 +16386,7 @@ async function publicRoutes(app) {
       download_url: projects.download_url,
       enable_live_preview: projects.enable_live_preview,
       gallery_json: projects.gallery_json,
+      type_specs_json: projects.type_specs_json,
       tech_json: projects.tech_json,
       cover_image: projects.cover_image,
       live_url: projects.live_url,
@@ -16361,7 +16401,9 @@ async function publicRoutes(app) {
       platforms: safeJsonParse(r.platforms_json, ["web"]),
       platforms_json: safeJsonParse(r.platforms_json, ["web"]),
       gallery: safeJsonParse(r.gallery_json, []),
-      gallery_json: safeJsonParse(r.gallery_json, [])
+      gallery_json: safeJsonParse(r.gallery_json, []),
+      type_specs: safeJsonParse(r.type_specs_json, {}),
+      type_specs_json: safeJsonParse(r.type_specs_json, {})
     }));
     return reply.send(formatted);
   });
@@ -16381,6 +16423,8 @@ async function publicRoutes(app) {
       platforms_json: safeJsonParse(project.platforms_json, ["web"]),
       gallery: safeJsonParse(project.gallery_json, []),
       gallery_json: safeJsonParse(project.gallery_json, []),
+      type_specs: safeJsonParse(project.type_specs_json, {}),
+      type_specs_json: safeJsonParse(project.type_specs_json, {}),
       images
     });
   });
@@ -16595,7 +16639,9 @@ async function adminRoutes(app) {
       platforms: safeJsonParse2(r.platforms_json, ["web"]),
       platforms_json: safeJsonParse2(r.platforms_json, ["web"]),
       gallery: safeJsonParse2(r.gallery_json, []),
-      gallery_json: safeJsonParse2(r.gallery_json, [])
+      gallery_json: safeJsonParse2(r.gallery_json, []),
+      type_specs: safeJsonParse2(r.type_specs_json, {}),
+      type_specs_json: safeJsonParse2(r.type_specs_json, {})
     })));
   });
   app.post("/projects", async (request, reply) => {
@@ -16625,6 +16671,7 @@ async function adminRoutes(app) {
       download_url: data.download_url || null,
       enable_live_preview: data.enable_live_preview,
       gallery_json: JSON.stringify(data.gallery_json),
+      type_specs_json: typeof data.type_specs_json === "string" ? data.type_specs_json : JSON.stringify(data.type_specs_json || {}),
       tech_json: JSON.stringify(data.tech_json),
       cover_image: data.cover_image,
       live_url: data.live_url || null,
@@ -16665,6 +16712,7 @@ async function adminRoutes(app) {
       download_url: data.download_url || null,
       enable_live_preview: data.enable_live_preview,
       gallery_json: JSON.stringify(data.gallery_json),
+      type_specs_json: typeof data.type_specs_json === "string" ? data.type_specs_json : JSON.stringify(data.type_specs_json || {}),
       tech_json: JSON.stringify(data.tech_json),
       cover_image: data.cover_image,
       live_url: data.live_url || null,

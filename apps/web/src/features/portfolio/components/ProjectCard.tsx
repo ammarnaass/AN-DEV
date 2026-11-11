@@ -28,9 +28,9 @@ export const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
       case "desktop":
         return locale === "ar" ? "برنامج مكتبي" : "Desktop App";
       case "pos":
-        return locale === "ar" ? "نظام كاشير" : "POS System";
+        return locale === "ar" ? "كاشير ونقاط بيع POS" : "POS & Retail";
       case "system":
-        return locale === "ar" ? "نظام مؤسسي" : "Enterprise System";
+        return locale === "ar" ? "نظام مؤسسي متكامل ERP" : "Enterprise ERP";
       case "web":
       default:
         return locale === "ar" ? "تطبيق ويب" : "Web App";

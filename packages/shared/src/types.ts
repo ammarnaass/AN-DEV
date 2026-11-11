@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { InquirySchema } from "./schemas/inquiry";
-import { ProjectSchema } from "./schemas/project";
+import { ProjectSchema, ProjectTypeSpecs } from "./schemas/project";
 import { PostSchema } from "./schemas/post";
 
 export type Inquiry = z.infer<typeof InquirySchema> & {
@@ -16,6 +16,7 @@ export type Project = z.infer<typeof ProjectSchema> & {
   created_at: string;
   updated_at: string;
   images?: ProjectImage[];
+  type_specs?: ProjectTypeSpecs;
 };
 
 export type ProjectImage = {

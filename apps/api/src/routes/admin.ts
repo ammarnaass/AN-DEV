@@ -98,7 +98,9 @@ export async function adminRoutes(app: FastifyInstance) {
       platforms: safeJsonParse(r.platforms_json, ["web"]),
       platforms_json: safeJsonParse(r.platforms_json, ["web"]),
       gallery: safeJsonParse(r.gallery_json, []),
-      gallery_json: safeJsonParse(r.gallery_json, [])
+      gallery_json: safeJsonParse(r.gallery_json, []),
+      type_specs: safeJsonParse(r.type_specs_json, {}),
+      type_specs_json: safeJsonParse(r.type_specs_json, {})
     })));
   });
 
@@ -131,6 +133,7 @@ export async function adminRoutes(app: FastifyInstance) {
       download_url: data.download_url || null,
       enable_live_preview: data.enable_live_preview,
       gallery_json: JSON.stringify(data.gallery_json),
+      type_specs_json: typeof data.type_specs_json === "string" ? data.type_specs_json : JSON.stringify(data.type_specs_json || {}),
       tech_json: JSON.stringify(data.tech_json),
       cover_image: data.cover_image,
       live_url: data.live_url || null,
@@ -177,6 +180,7 @@ export async function adminRoutes(app: FastifyInstance) {
         download_url: data.download_url || null,
         enable_live_preview: data.enable_live_preview,
         gallery_json: JSON.stringify(data.gallery_json),
+        type_specs_json: typeof data.type_specs_json === "string" ? data.type_specs_json : JSON.stringify(data.type_specs_json || {}),
         tech_json: JSON.stringify(data.tech_json),
         cover_image: data.cover_image,
         live_url: data.live_url || null,

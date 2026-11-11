@@ -6,6 +6,9 @@ import { ProjectKpis } from "../components/ProjectKpis";
 import { ProjectSpecsStrip } from "../components/ProjectSpecsStrip";
 import { ProjectLiveGateway } from "../components/ProjectLiveGateway";
 import { ProjectScreenshotGallery } from "../components/ProjectScreenshotGallery";
+import { PosHardwareCompatibility } from "../components/PosHardwareCompatibility";
+import { ErpModulesMatrix } from "../components/ErpModulesMatrix";
+import { MobileAppShowcase } from "../components/MobileAppShowcase";
 import { Button } from "../../../components/ui/Button";
 import {
   ArrowLeft,
@@ -152,6 +155,27 @@ export const ProjectDetailPage: React.FC = () => {
           />
         </div>
       ) : null}
+
+      {/* Type-Specialized Domain Showcase (POS hardware, ERP modules, Mobile QR/APK) */}
+      {(() => {
+        const typeSpecs =
+          (project as any).type_specs ||
+          (typeof (project as any).type_specs_json === "string"
+            ? JSON.parse((project as any).type_specs_json || "{}")
+            : (project as any).type_specs_json) ||
+          {};
+
+        if (project.project_type === "pos") {
+          return <PosHardwareCompatibility specs={typeSpecs} />;
+        }
+        if (project.project_type === "system") {
+          return <ErpModulesMatrix specs={typeSpecs} />;
+        }
+        if (project.project_type === "mobile") {
+          return <MobileAppShowcase specs={typeSpecs} downloadUrl={project.download_url || ""} title={title} />;
+        }
+        return null;
+      })()}
 
       {/* Engineering Impact KPI Grid Component */}
       <ProjectKpis />
