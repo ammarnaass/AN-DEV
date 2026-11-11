@@ -117,3 +117,4 @@ export const PostArabicTab: React.FC<PostArabicTabProps> = ({
     </div>
   );
 };
+

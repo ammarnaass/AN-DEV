@@ -21,3 +21,4 @@ export function appendMarkdownSyntax(
 ): string {
   return `${currentText}\n${prefix}${syntax}${suffix}\n`;
 }
+
