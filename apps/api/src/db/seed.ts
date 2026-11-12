@@ -81,10 +81,10 @@ export async function seedDatabase() {
     });
   }
 
-  // 5. Seed Bio Links
-  const existingLinks = await db.select().from(bio_links);
-  if (existingLinks.length === 0) {
-    for (const link of initialBioLinks) {
+  // 5. Seed Bio Links (ensure initial / essential links exist)
+  for (const link of initialBioLinks) {
+    const [existing] = await db.select().from(bio_links).where(eq(bio_links.url, link.url));
+    if (!existing) {
       await db.insert(bio_links).values({
         ...link,
         created_at: now,

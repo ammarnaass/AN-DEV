@@ -19,6 +19,7 @@ const mockBioData = {
     bio_page_bg_type: "mesh",
     whatsapp: "https://wa.me/213555000000",
     github: "https://github.com/an-dev",
+    tiktok: "https://www.tiktok.com/@an.dev2000",
   },
   links: [
     {
@@ -61,6 +62,26 @@ const mockBioData = {
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     },
+    {
+      id: 3,
+      title: "حساب تيك توك الرسمي | TikTok @an.dev2000",
+      url: "https://www.tiktok.com/@an.dev2000",
+      subtitle: "مقاطع برمجية سريعة وشروحات تقنية",
+      icon_or_image: "TikTok",
+      font_family: "cairo",
+      text_color: "#ffffff",
+      bg_color: "#010101",
+      border_color: "#fe2c55",
+      style_variant: "solid",
+      gradient_from: null,
+      gradient_to: null,
+      is_active: true,
+      is_featured: true,
+      sort_order: 30,
+      click_count: 58,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    },
   ],
 };
 
@@ -99,6 +120,10 @@ describe("BioLinksPage (Dual-Theme Adaptation)", () => {
     ).toBeInTheDocument();
     expect(screen.getByText("الموقع الرسمي لوكالة AN DEV")).toBeInTheDocument();
     expect(screen.getByText("معرض المشاريع التقنية")).toBeInTheDocument();
+    expect(
+      screen.getByText("حساب تيك توك الرسمي | TikTok @an.dev2000")
+    ).toBeInTheDocument();
+    expect(screen.getByTitle("Tiktok")).toBeInTheDocument();
   });
 
   it("toggles theme between dark and light mode when clicking theme button", () => {

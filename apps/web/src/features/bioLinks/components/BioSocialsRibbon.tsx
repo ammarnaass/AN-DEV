@@ -22,6 +22,10 @@ export function resolveSocialUrl(key: string, rawUrl: string): string {
       return rawUrl.includes("x.com") || rawUrl.includes("twitter.com") ? `https://${rawUrl}` : `https://x.com/${rawUrl.replace(/^@/, "")}`;
     case "youtube":
       return rawUrl.includes("youtube.com") ? `https://${rawUrl}` : `https://youtube.com/${rawUrl.startsWith("@") ? rawUrl : "@" + rawUrl}`;
+    case "tiktok":
+      return rawUrl.includes("tiktok.com")
+        ? (rawUrl.startsWith("http") ? rawUrl : `https://${rawUrl}`)
+        : `https://www.tiktok.com/${rawUrl.startsWith("@") ? rawUrl : "@" + rawUrl}`;
     default:
       return `https://${rawUrl}`;
   }

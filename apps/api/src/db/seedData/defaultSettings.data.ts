@@ -9,7 +9,7 @@ export const defaultSettings: Record<string, string> = {
   instagram: "https://instagram.com/andev.dz",
   twitter: "https://x.com/andev_dz",
   youtube: "https://youtube.com/@andev_dz",
-  tiktok: "https://tiktok.com/@andev_dz",
+  tiktok: "https://www.tiktok.com/@an.dev2000",
   discord: "",
   logo_image: "",
   logo_name_prefix: "AN",
@@ -41,5 +41,5 @@ export const defaultSettings: Record<string, string> = {
   bio_page_avatar: "/brand/logo-squircle.webp",
   bio_page_bg_type: "mesh",
   bio_page_bg_value: "#090d16",
-  bio_page_socials: "whatsapp,telegram,linkedin,github,facebook,instagram"
+  bio_page_socials: "whatsapp,telegram,linkedin,github,facebook,instagram,tiktok"
 };

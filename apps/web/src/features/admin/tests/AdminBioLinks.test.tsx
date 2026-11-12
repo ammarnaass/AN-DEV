@@ -149,5 +149,6 @@ describe("BioLinks Components & Page", () => {
 
     expect(screen.getByText("الهيدر والصورة الشخصية (Hero Header)")).toBeInTheDocument();
     expect(screen.getByText("نمط وخلفية الصفحة (Background Style)")).toBeInTheDocument();
+    expect(screen.getByText("Tiktok")).toBeInTheDocument();
   });
 });
